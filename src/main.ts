@@ -5,6 +5,7 @@ import axios from "axios";
 import keys from './keys'
 import router from './router/index'
 import './style.css'
+import 'qweather-icons/font/qweather-icons.css'
 import App from './App.vue'
 
 axios.interceptors.request.use((config) => {
@@ -12,6 +13,7 @@ axios.interceptors.request.use((config) => {
     console.log(config.baseURL+config.url)
     return config
 });
+
 createApp(App)
     .use(ElementPlus)
     .use(router)
