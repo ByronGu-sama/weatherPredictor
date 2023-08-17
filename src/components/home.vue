@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import hourlyWeatherPredictor from './hourlyPredictor/hourlyWeatherPredictorComponent.vue'
+import daysWeatherPredictor from './daysPredictor/daysPredictorComponent.vue'
 import {onMounted,ref} from "vue";
 import {ElMessage} from "element-plus";
 import request from "../request/Url.ts";
@@ -128,7 +129,11 @@ onMounted(() => {
         </div>
 
         <div class="bottom-ct2">2</div>
-        <div class="bottom-ct3">3</div>
+<!--        未来7天天气预报-->
+        <div class="bottom-ct3">
+          <daysWeatherPredictor :code="locationVal.value" :location-name="locationVal.label"></daysWeatherPredictor>
+        </div>
+
         <div class="bottom-ct4">4</div>
         <div class="bottom-ct5">5</div>
         <div class="bottom-ct6">6</div>

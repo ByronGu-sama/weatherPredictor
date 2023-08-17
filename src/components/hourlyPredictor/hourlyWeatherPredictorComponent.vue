@@ -12,7 +12,6 @@ const get24HaysWeatherPredictor = (value:string,label:string) => {
   axios.get(`${request.GET_WEATHER_PREDICTOR_24H}location=${value}`).then(res => {
     if(res.data.code == 200){
       hourPredictor.value = res.data.hourly
-      console.log(res.data.hourly)
       let temp:weatherInfo[] = []
       for (let i of res.data.hourly){
         temp.push({
@@ -32,15 +31,21 @@ interface weatherInfo{
 }
 
 const summarize24HWeather = (data:weatherInfo[]) => {
-  let count = 0                     //相同天气连续出现次数
-  let keyword = data[0].weather     //天气名称
-  let temp = []
-  let timespan = [data[0].time,'']  //天气持续时间段
+  let count = 0                          //相同天气连续出现次数
+  let keyword = data[0].weather          //天气名称
+  let temp = []                          //
+  let timespan = [data[0].time,'']       //天气持续时间段
+  data.push({weather:'aaa',time:'aaa'})  //防止判断出错
+
+  //整理数据
   for (let i of data){
     if(keyword === i.weather){
-      count++
+      ++count
       timespan[1] = i.time
     }else{
+      if(count === 1){
+        timespan[1] = timespan[0]
+      }
       temp.push({
         weather:keyword,
         span:timespan
@@ -50,7 +55,10 @@ const summarize24HWeather = (data:weatherInfo[]) => {
       count = 1
     }
   }
-  hourlyPredictorTitle.value = `${new Date(temp[0].span[0]).getHours()}点至${new Date(temp[0].span[1]).getHours()}点会${choiceVerbByWeather(temp[0].weather)}${temp[0].weather},${new Date(temp[1].span[0]).getHours()}点至${new Date(temp[1].span[1]).getHours()}点可能转${choiceVerbByWeather(temp[1].weather)}${temp[1].weather}`
+  if(temp.length === 1)
+    hourlyPredictorTitle.value = `${new Date(temp[0].span[0]).getHours()}点至${new Date(temp[0].span[1]).getHours()}点会${choiceVerbByWeather(temp[0].weather)}${temp[0].weather}`
+  else
+    hourlyPredictorTitle.value = `${new Date(temp[0].span[0]).getHours()}点至${new Date(temp[0].span[1]).getHours()}点会${choiceVerbByWeather(temp[0].weather)}${temp[0].weather},${new Date(temp[1].span[0]).getHours()}点至${new Date(temp[1].span[1]).getHours()}点可能转${temp[1].weather}`
 }
 
 //根据天气选择动词
