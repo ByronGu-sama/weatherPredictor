@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import hourlyWeatherPredictor from './hourlyPredictor/hourlyWeatherPredictorComponent.vue'
 import {onMounted,ref} from "vue";
 import {ElMessage} from "element-plus";
 import request from "../request/Url.ts";
@@ -9,13 +10,11 @@ interface ListItem {
   label: string
 }
 let locationOptions = ref<ListItem[]>([])                   //模糊搜索返回的地址信息
-let locationVal = ref<{value:string,label:string}>(null)    //用户选中的地址代号
+let locationVal = ref<{value:string,label:string}>({value:'',label:''})                       //用户选中的地址代号
 let locationName = ref<string>('')                          //用户选中的地址名称
 let loadingLocation = ref<boolean>(false)                   //是否正在获取地址模糊搜索信息
 let nowWeather = ref<any>('')                               //当前天气数据
 let daysPredictor = ref<any>(null)                          //七天天气预报
-let hourPredictor = ref<any>(null)                          //24小时天气预报
-let hourlyPredictorTitle = ref<string>('')                  //24小时天气预报总结标题
 
 //获取定位
 const getLocation = () => {
@@ -55,7 +54,6 @@ const getRemoteLocation = (val:string) => {
 const changeLocation = () => {
   getNowWeather(locationVal.value)
   get7DaysWeatherPredictor(locationVal.value)
-  get24HaysWeatherPredictor(locationVal.value)
 }
 
 //获取实时天气数据
@@ -75,61 +73,6 @@ const get7DaysWeatherPredictor = (location:{value:string,label:string}) => {
       daysPredictor.value = res.data.daily
     }
   })
-}
-
-//获取未来24小时天气预报
-const get24HaysWeatherPredictor = (location:{value:string,label:string}) => {
-  axios.get(`${request.GET_WEATHER_PREDICTOR_24H}location=${location.value}`).then(res => {
-    if(res.data.code == 200){
-      hourPredictor.value = res.data.hourly
-      console.log(res.data.hourly)
-      let temp:weatherInfo[] = []
-      for (let i of res.data.hourly){
-        temp.push({
-          weather:i.text,
-          time:i.fxTime
-        })
-      }
-      summarize24HWeather(temp)
-    }
-  })
-}
-
-//根据24小时天气预报总结未来大致天气情况
-interface weatherInfo{
-  weather:string,
-  time:string
-}
-const summarize24HWeather = (data:weatherInfo[]) => {
-  let count = 0                     //相同天气连续出现次数
-  let keyword = data[0].weather     //天气名称
-  let temp = []
-  let timespan = [data[0].time,'']  //天气持续时间段
-  for (let i of data){
-    if(keyword === i.weather){
-      count++
-      timespan[1] = i.time
-    }else{
-      temp.push({
-        weather:keyword,
-        span:timespan
-      })
-      keyword = i.weather
-      timespan = [i.time,'']
-      count = 1
-    }
-  }
-  console.log(temp)
-  hourlyPredictorTitle.value = `${new Date(temp[0].span[0]).getHours()}点至${new Date(temp[0].span[1]).getHours()}点会${choiceVerbByWeather(temp[0].weather)}${temp[0].weather},${new Date(temp[1].span[0]).getHours()}点至${new Date(temp[1].span[1]).getHours()}点可能${choiceVerbByWeather(temp[1].weather)}${temp[1].weather}`
-}
-
-//根据天气选择动词
-const choiceVerbByWeather = (word:string) => {
-  if(word.indexOf("雨") !== -1 || word.indexOf("雪") !== -1 || word.indexOf("冰雹") !== -1){
-    return '下'
-  }else{
-    return '是'
-  }
 }
 
 onMounted(() => {
@@ -181,23 +124,9 @@ onMounted(() => {
       <div class="home-bottom">
 <!--        未来24小时天气预报-->
         <div class="bottom-ct1">
-          <div class="predictor24Wrapper-title">
-            <span>{{ hourlyPredictorTitle }}</span>
-          </div>
-          <div class="predictor24Area">
-            <div v-for="i in hourPredictor" class="predictor24Wrapper">
-              <div class="predictor24Wrapper-m1">
-                {{new Date(i.fxTime).getHours()}}:00
-              </div>
-              <div class="predictor24Wrapper-m2">
-                <i :class="'qi-'+i.icon"/>
-              </div>
-              <div class="predictor24Wrapper-m3">
-                {{i.temp}}°
-              </div>
-            </div>
-          </div>
+          <hourlyWeatherPredictor :code="locationVal.value" :location-name="locationVal.label"></hourlyWeatherPredictor>
         </div>
+
         <div class="bottom-ct2">2</div>
         <div class="bottom-ct3">3</div>
         <div class="bottom-ct4">4</div>
@@ -216,6 +145,9 @@ onMounted(() => {
 </template>
 
 <style scoped>
+  ::-webkit-scrollbar{
+    display: none;
+  }
   body{
     margin: 0;
     padding: 0;
@@ -224,9 +156,6 @@ onMounted(() => {
     margin-left: 10px;
     margin-top: 10px;
     background-color: rgba(255,255,255,0.3);
-  }
-  ::-webkit-scrollbar{
-    display: none;
   }
   .home-main{
     width: 80vw;
@@ -297,43 +226,6 @@ onMounted(() => {
   .bottom-ct1{
     grid-column: 1/5;
     grid-row: 1/2;
-  }
-  .predictor24Area{
-    display: flex;
-    overflow-x: auto;
-  }
-  .predictor24Wrapper{
-    width: 60px;
-    height: 100%;
-    margin: 0 10px;
-    text-align: center;
-  }
-  .predictor24Wrapper > div{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .predictor24Wrapper-title{
-    width: 100%;
-    height: 36px;
-    text-align: left;
-  }
-  .predictor24Wrapper-title span{
-    margin: 0 0 0 10px;
-    line-height: 30px;
-  }
-  .predictor24Wrapper-m1{
-    display: flex;
-    width: 100%;
-    height: 36px;
-  }
-  .predictor24Wrapper-m2{
-    width: 100%;
-    height: 72px;
-  }
-  .predictor24Wrapper-m3{
-    width: 100%;
-    height: 36px;
   }
   .bottom-ct2{
     grid-column: 5/7;
