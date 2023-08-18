@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     DaysPredictorComponent: typeof import('./src/components/daysPredictor/daysPredictorComponent.vue')['default']
+    Divider: typeof import('./src/components/utils/divider.vue')['default']
     ElDivider: typeof import('element-plus/es')['ElDivider']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElSelect: typeof import('element-plus/es')['ElSelect']
