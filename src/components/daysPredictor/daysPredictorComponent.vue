@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import request from "../../request/Url";
 import axios from "axios";
-import {nextTick, onMounted, ref, watch} from "vue";
+import {nextTick, ref, watch} from "vue";
 
 let daysPredictor = ref<any>()                           //10天 天气预报
 let props = defineProps(['code','locationName'])
@@ -54,7 +54,7 @@ const calcTempTrend = async (val:{day:string,tempMin:number,tempMax:number,iconD
   let minTempRank = val.slice(0)      //最低温度排序
   let tempDiffRank = val.slice(0)     //温差排序
   let aveTempRank = val.slice(0)      //平均温度排序
-  let conclusionRank:any[] = []             //结果
+  let conclusionRank:any[] = []       //结果
 
   //按最高温度标序号  高 -> 低
   for(let i = 0;i < maxTempRank.length - 1;i++){
@@ -168,6 +168,7 @@ const calcMargin = (averageTempRank:number,tempDiffRank:number) => {
     margin:`0 0 0 ${pole*(10 - averageTempRank)}px`
   }
 }
+
 watch(() => [props.code,props.locationName],(n) => {
   get10DaysWeatherPredictor(n[0])
 })
@@ -267,5 +268,6 @@ watch(() => [props.code,props.locationName],(n) => {
    border: none;
    background-color: orange;
    border-radius: 4px;
+   transition: 0.1s linear;
  }
 </style>

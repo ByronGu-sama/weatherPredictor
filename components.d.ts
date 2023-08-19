@@ -16,5 +16,6 @@ declare module 'vue' {
     HourlyWeatherPredictorComponent: typeof import('./src/components/hourlyPredictor/hourlyWeatherPredictorComponent.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Uvi: typeof import('./src/components/uvi/uvi.vue')['default']
   }
 }
