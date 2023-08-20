@@ -14,6 +14,7 @@ declare module 'vue' {
     ElSelect: typeof import('element-plus/es')['ElSelect']
     Home: typeof import('./src/components/home.vue')['default']
     HourlyWeatherPredictorComponent: typeof import('./src/components/hourlyPredictor/hourlyWeatherPredictorComponent.vue')['default']
+    Pressure: typeof import('./src/components/pressure/pressure.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TrackSun: typeof import('./src/components/trackSun/trackSun.vue')['default']

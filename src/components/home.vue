@@ -3,6 +3,7 @@ import hourlyWeatherPredictor from './hourlyPredictor/hourlyWeatherPredictorComp
 import daysWeatherPredictor from './daysPredictor/daysPredictorComponent.vue'
 import uvi from './uvi/uvi.vue'
 import windDirection from './windDirection/windDirection.vue'
+import pressure from './pressure/pressure.vue'
 import {onMounted, ref, watch} from "vue";
 import {ElMessage} from "element-plus";
 import request from "../request/Url.ts";
@@ -161,7 +162,9 @@ onMounted(() => {
         <div class="bottom-ct9">9</div>
         <div class="bottom-ct10">10</div>
         <div class="bottom-ct11">11</div>
-        <div class="bottom-ct12">12</div>
+        <div class="bottom-ct12">
+          <pressure :code="locationVal.value" :location-name="locationVal.label"></pressure>
+        </div>
         <div class="bottom-ct13">13</div>
       </div>
     </div>

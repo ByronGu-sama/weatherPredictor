@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@icon-park/vue-next": "^1.4.2",
     "axios": "^1.4.0",
     "element-plus": "^2.3.9",
     "qweather-icons": "^1.4.0",
