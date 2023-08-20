@@ -51,7 +51,7 @@ watch(() => [props.code,props.locationName],(n) => {
 <template>
   <div class="uviMain" v-if="uviInfo">
     <div class="uviBody-top">
-      <i class="qi-100"></i>紫外线指数
+      <i class="qi-100"></i>&nbsp;紫外线指数
     </div>
     <div class="uviBody-middle">
       <div class="uviBody-middle-top">
@@ -114,6 +114,9 @@ watch(() => [props.code,props.locationName],(n) => {
   width: 90%;
   height: 6px;
   border-radius: 3px;
+  background: -webkit-linear-gradient(to right,rgb(110,212,94),rgb(247,205,71),rgb(240,148,60),rgb(235,85,90),rgb(185,93,217));
+  background: -moz-linear-gradient(to right,rgb(110,212,94),rgb(247,205,71),rgb(240,148,60),rgb(235,85,90),rgb(185,93,217));
+  background: -o-linear-gradient(to right,rgb(110,212,94),rgb(247,205,71),rgb(240,148,60),rgb(235,85,90),rgb(185,93,217));
   background: linear-gradient(to right,rgb(110,212,94),rgb(247,205,71),rgb(240,148,60),rgb(235,85,90),rgb(185,93,217));
   display: flex;
   align-items: center;

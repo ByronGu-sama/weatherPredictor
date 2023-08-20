@@ -189,13 +189,11 @@ watch(() => [props.code,props.locationName],(n) => {
         <div class="dpc-right-maxTemp">
           {{item.minTemp}}˚
         </div>
-
         <div class="dpc-right-trend">
           <div class="trendWrapper">
             <div class="trendBody" :style="{width:item.barWidth,margin:item.offset}"></div>
           </div>
         </div>
-
         <div class="dpc-right-minTemp">
           {{item.maxTemp}}˚
         </div>

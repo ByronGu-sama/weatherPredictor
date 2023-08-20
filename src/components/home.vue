@@ -2,7 +2,8 @@
 import hourlyWeatherPredictor from './hourlyPredictor/hourlyWeatherPredictorComponent.vue'
 import daysWeatherPredictor from './daysPredictor/daysPredictorComponent.vue'
 import uvi from './uvi/uvi.vue'
-import {onMounted,ref} from "vue";
+import windDirection from './windDirection/windDirection.vue'
+import {onMounted, ref, watch} from "vue";
 import {ElMessage} from "element-plus";
 import request from "../request/Url.ts";
 import axios from "axios";
@@ -27,12 +28,12 @@ const getLocation = () => {
         ElMessage({
           message:err.code == 1?'无法获取定位权限，请手动选择城市':err.code == 2?'获取定位失败，请手动选择城市':'获取位置超时，请手动选择城市',
           type:'warning'
-        })
+        });
       }
   )
 }
 
-//获取模糊搜索定位
+//获取手动定位数据集
 const getRemoteLocation = (val:string) => {
   if (!val)
     return
@@ -64,6 +65,7 @@ const getNowWeather = (location:{value:string,label:string}) => {
   axios.get(`${request.GET_NOW_WEATHER}location=${location.value}`).then(res => {
     if(res.data.code == 200){
       nowWeather.value = res.data.now
+      localStorage.setItem('nowWeather',JSON.stringify(res.data.now))
     }
   })
 }
@@ -77,8 +79,16 @@ const get7DaysWeatherPredictor = (location:{value:string,label:string}) => {
   })
 }
 
+watch(() => locationVal.value,(n) => {
+  localStorage.setItem('qwLocation',JSON.stringify(n))
+})
+
 onMounted(() => {
-  getLocation()
+  let location = localStorage.getItem('qwLocation')
+  if(location){
+    locationVal.value = JSON.parse(location)
+    changeLocation()
+  }
 })
 </script>
 
@@ -141,7 +151,11 @@ onMounted(() => {
         </div>
 
         <div class="bottom-ct5">5</div>
-        <div class="bottom-ct6">6</div>
+
+        <div class="bottom-ct6">
+          <windDirection :code="locationVal.value" :location-name="locationVal.label"></windDirection>
+        </div>
+
         <div class="bottom-ct7">7</div>
         <div class="bottom-ct8">8</div>
         <div class="bottom-ct9">9</div>

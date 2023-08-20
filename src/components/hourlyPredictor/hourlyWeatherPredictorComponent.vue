@@ -35,7 +35,7 @@ const summarize24HWeather = (data:weatherInfo[]) => {
   let keyword = data[0].weather          //天气名称
   let temp = []                          //
   let timespan = [data[0].time,'']       //天气持续时间段
-  data.push({weather:'aaa',time:'aaa'})  //防止判断出错
+  data.push({weather:'aaa',time:'aaa'})  //占位数据，防止判断出错
 
   //整理数据
   for (let i of data){
