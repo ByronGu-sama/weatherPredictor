@@ -40,7 +40,7 @@ const defenseTip = (level:string) => {
 //计算指示点左边距
 const calcMargin = (level:string) => {
   let barWidth = barWrap.value?.clientWidth
-  return 25*(parseInt(level)-1)/100*(barWidth-6)+'px'
+  return 25*(parseInt(level)-1)/100*(barWidth!-6)+'px'
 }
 
 watch(() => [props.code,props.locationName],(n) => {
@@ -49,8 +49,8 @@ watch(() => [props.code,props.locationName],(n) => {
 </script>
 
 <template>
-  <div class="uviMain" v-if="uviInfo">
-    <div class="uviBody-top">
+  <div class="module-main" v-if="uviInfo">
+    <div class="module-title">
       <i class="qi-100"></i>&nbsp;紫外线指数
     </div>
     <div class="uviBody-middle">
@@ -65,37 +65,16 @@ watch(() => [props.code,props.locationName],(n) => {
         </div>
       </div>
     </div>
-    <div class="uviBody-bottom">
+    <div class="bottom-tips">
       <span>{{defenseTip(uviInfo.level)}}</span>
     </div>
   </div>
 </template>
 
 <style scoped>
-.uviMain{
-  width: 100%;
-  height: 100%;
-  color: white;
-}
-.uviBody-top{
-  height: 30px;
-  width: 100%;
-  text-align: left;
-  margin-left: 5%;
-  font-size: 13px;
-  line-height: 30px;
-}
 .uviBody-middle{
   width: 100%;
   height: calc(100% - 60px);
-}
-.uviBody-bottom{
-  height: 30px;
-  width: 100%;
-  font-size: 12px;
-  text-align: left;
-  margin-left: 5%;
-  font-weight: bold;
 }
 .uviBody-middle-top{
   width: 100%;
@@ -107,8 +86,8 @@ watch(() => [props.code,props.locationName],(n) => {
   width: 100%;
   height: 30%;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 .uviBody-middle-bar{
   width: 90%;

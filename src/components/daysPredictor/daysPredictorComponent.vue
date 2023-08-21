@@ -191,7 +191,7 @@ watch(() => [props.code,props.locationName],(n) => {
         </div>
         <div class="dpc-right-trend">
           <div class="trendWrapper">
-            <div class="trendBody" :style="{width:item.barWidth,margin:item.offset}"></div>
+          <div class="trendBody" :style="{width:item.barWidth,margin:item.offset}"></div>
           </div>
         </div>
         <div class="dpc-right-minTemp">
@@ -217,9 +217,6 @@ watch(() => [props.code,props.locationName],(n) => {
    display: flex;
    flex-wrap: nowrap;
    height: 52px;
- }
- .dpcMain:last-child{
-   border-bottom: none;
  }
  .dpc-left,.dpc-middle,.dpc-right{
    display: flex;
@@ -264,7 +261,7 @@ watch(() => [props.code,props.locationName],(n) => {
  .trendBody{
    height: 100%;
    border: none;
-   background-color: orange;
+   background: rgba(255, 165, 0, 0.8);
    border-radius: 4px;
    transition: 0.1s linear;
  }

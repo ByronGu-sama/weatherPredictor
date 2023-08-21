@@ -1,22 +1,11 @@
 <script setup lang="ts">
-import request from '../../request/Url'
-import axios from "axios";
 import {onMounted, ref, watch} from "vue";
+import utils from "../../utils/requestUtils";
 import {ElMessage} from "element-plus";
 
 let nowWeather = ref()
 let props = defineProps(['code','locationName'])
 const BASIC_PRESSURE = 1013
-
-//获取实时天气数据
-const getNowWeather = (value:string) => {
-  axios.get(`${request.GET_NOW_WEATHER}location=${value}`).then(res => {
-    if(res.data.code == 200){
-      nowWeather.value = res.data.now
-      localStorage.setItem('nowWeather',JSON.stringify(res.data.now))
-    }
-  })
-}
 
 //计算指针角度
 const calcAngle = (pressure:any) => {
@@ -29,7 +18,7 @@ const calcAngle = (pressure:any) => {
     if(pressure >= 1015 ){
       return `rotate(${(pressure - BASIC_PRESSURE) * 120 / 65}deg)`
     }else{
-      return `rotate(${240 + (BASIC_PRESSURE - pressure) * 120 / 65}deg)`
+      return `rotate(${360 - (BASIC_PRESSURE - pressure) * 120 / 65}deg)`
     }
   }
 }
@@ -41,71 +30,54 @@ watch(() => [props.code,props.locationName],() => {
 })
 
 onMounted(() => {
-  let now = localStorage.getItem('nowWeather')
-  if(!now){
-    let location = localStorage.getItem('qwLocation')
-    if(location){
-      getNowWeather(JSON.parse(location).value)
-    }else{
-      ElMessage({
-        message:'获取气压数据失败',
-        type:'warning'
-      })
-    }
-  }else{
-    nowWeather.value = JSON.parse(now)
-    calcAngle(nowWeather.value.pressure)
-  }
+  utils.judgeIfHasNowWeather().then(res => {
+    nowWeather.value = res
+  }).catch(() => {
+    ElMessage({
+      message:"获取数据失败",
+      type:"warning"
+    })
+  })
 })
 </script>
 
 <template>
-  <div class="pressure-main" v-if="nowWeather">
-    <div class="pressure-title">
+  <div class="module-main" v-if="nowWeather">
+    <div class="module-title">
       <img src="../../assets/icons/pressure.svg">&nbsp;气压
     </div>
-    <div class="pressure-body">
-      <div class="pressure-ring"></div>
-      <div class="pressure-arrow" :style="{transform:calcAngle(nowWeather.pressure)}">
-        <div class="pressure-indicator"></div>
-      </div>
-      <div class="pressure-info">
-        {{nowWeather.pressure}}百帕
-      </div>
-      <div class="pressure-word">
-        <span>低</span>&emsp;&emsp;&emsp;&emsp;&emsp;
-        <span>高</span>
+    <div class="pressure-body-wrap">
+      <div class="pressure-body">
+        <div class="pressure-ring"></div>
+        <div class="pressure-arrow" :style="{transform:calcAngle(nowWeather.pressure)}">
+          <div class="pressure-indicator"></div>
+        </div>
+        <div class="pressure-info">
+          {{nowWeather.pressure}}百帕
+        </div>
+        <div class="pressure-word">
+          <span>低</span>&emsp;&emsp;&emsp;&emsp;&emsp;
+          <span>高</span>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.pressure-main{
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.module-title{
+  margin-top: 0;
 }
-.pressure-title{
-  text-align: left;
-  margin-left: 5%;
-  height: 30px;
+.pressure-body-wrap{
   width: 100%;
-  line-height: 30px;
-  font-size: 13px;
+  height: calc(100% - 30px);
   display: flex;
   align-items: center;
-  color: white;
-}
-.pressure-title img{
-  width: 13px;
-  height: 13px;
+  justify-content: center;
 }
 .pressure-body{
-  width: calc(100% - 50px);
-  height: calc(100% - 50px);
+  width: 70%;
+  height: calc((100% + 30px)*0.7);
   position: relative;
 }
 .pressure-ring{
@@ -139,7 +111,7 @@ onMounted(() => {
   width: 100%;
   height: 30px;
   position: absolute;
-  top: calc(80% - 15px);
+  top: calc(82% - 15px);
   text-align: center;
 }
 .pressure-info{
@@ -150,6 +122,5 @@ onMounted(() => {
   font-size: 14px;
   position: absolute;
   top: calc(50% - 15px);
-
 }
 </style>

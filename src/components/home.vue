@@ -4,6 +4,10 @@ import daysWeatherPredictor from './daysPredictor/daysPredictorComponent.vue'
 import uvi from './uvi/uvi.vue'
 import windDirection from './windDirection/windDirection.vue'
 import pressure from './pressure/pressure.vue'
+import apparentTemp from './apparentTemp/apparentTemp.vue'
+import humidity from './humidity/humidity.vue'
+import visibility from './visibility/visibility.vue'
+
 import {onMounted, ref, watch} from "vue";
 import {ElMessage} from "element-plus";
 import request from "../request/Url.ts";
@@ -149,24 +153,41 @@ onMounted(() => {
           <daysWeatherPredictor :code="locationVal.value" :location-name="locationVal.label"></daysWeatherPredictor>
         </div>
 
+<!--        紫外线强度-->
         <div class="bottom-ct4">
           <uvi :code="locationVal.value" :location-name="locationVal.label"></uvi>
         </div>
 
         <div class="bottom-ct5">5</div>
 
+<!--        风向/风力-->
         <div class="bottom-ct6">
           <windDirection :code="locationVal.value" :location-name="locationVal.label"></windDirection>
         </div>
 
         <div class="bottom-ct7">7</div>
         <div class="bottom-ct8">8</div>
-        <div class="bottom-ct9">9</div>
-        <div class="bottom-ct10">10</div>
-        <div class="bottom-ct11">11</div>
+
+<!--        体感温度-->
+        <div class="bottom-ct9">
+          <apparentTemp :code="locationVal.value" :location-name="locationVal.label"></apparentTemp>
+        </div>
+
+<!--        湿度/露点-->
+        <div class="bottom-ct10">
+          <humidity :code="locationVal.value" :location-name="locationVal.label"></humidity>
+        </div>
+
+<!--        可见度-->
+        <div class="bottom-ct11">
+          <visibility :code="locationVal.value" :location-name="locationVal.label"></visibility>
+        </div>
+
+<!--        大气压强-->
         <div class="bottom-ct12">
           <pressure :code="locationVal.value" :location-name="locationVal.label"></pressure>
         </div>
+
         <div class="bottom-ct13">13</div>
       </div>
     </div>

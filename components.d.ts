@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ApparentTemp: typeof import('./src/components/apparentTemp/apparentTemp.vue')['default']
     DaysPredictorComponent: typeof import('./src/components/daysPredictor/daysPredictorComponent.vue')['default']
     Divider: typeof import('./src/components/utils/divider.vue')['default']
     ElDivider: typeof import('element-plus/es')['ElDivider']
@@ -14,11 +15,13 @@ declare module 'vue' {
     ElSelect: typeof import('element-plus/es')['ElSelect']
     Home: typeof import('./src/components/home.vue')['default']
     HourlyWeatherPredictorComponent: typeof import('./src/components/hourlyPredictor/hourlyWeatherPredictorComponent.vue')['default']
+    Humidity: typeof import('./src/components/humidity/humidity.vue')['default']
     Pressure: typeof import('./src/components/pressure/pressure.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TrackSun: typeof import('./src/components/trackSun/trackSun.vue')['default']
     Uvi: typeof import('./src/components/uvi/uvi.vue')['default']
+    Visibility: typeof import('./src/components/visibility/visibility.vue')['default']
     WindDirection: typeof import('./src/components/windDirection/windDirection.vue')['default']
   }
 }

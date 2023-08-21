@@ -1,89 +1,64 @@
 <script setup lang="ts">
-import request from '../../request/Url'
-import axios from "axios";
 import {onMounted, ref, watch} from "vue";
+import utils from "../../utils/requestUtils";
 import {ElMessage} from "element-plus";
 
 let nowWeather = ref()
 let props = defineProps(['code','locationName'])
 
-//获取实时天气数据
-const getNowWeather = (value:string) => {
-  axios.get(`${request.GET_NOW_WEATHER}location=${value}`).then(res => {
-    if(res.data.code == 200){
-      nowWeather.value = res.data.now
-      localStorage.setItem('nowWeather',JSON.stringify(res.data.now))
-    }
-  })
-}
-
-watch(() => [props.code,props.locationName],(n) => {
-  console.log(n)
+watch(() => [props.code,props.locationName],() => {
   let now:any = localStorage.getItem('nowWeather')
   nowWeather.value = JSON.parse(now)
 })
 
 onMounted(() => {
-  let now = localStorage.getItem('nowWeather')
-  if(!now){
-    let location = localStorage.getItem('qwLocation')
-    if(location){
-      getNowWeather(JSON.parse(location).value)
-    }else{
-      ElMessage({
-        message:'获取风向数据失败',
-        type:'warning'
-      })
-    }
-  }else{
-    nowWeather.value = JSON.parse(now)
-  }
+  utils.judgeIfHasNowWeather().then(res => {
+    nowWeather.value = res
+  }).catch(() => {
+    ElMessage({
+      message:"获取数据失败",
+      type:"warning"
+    })
+  })
 })
 </script>
 
 <template>
-  <div class="windMain">
-    <div class="windTitle">
+  <div class="module-main">
+    <div class="module-title">
       <i class="qi-2352"></i>&nbsp;风向
     </div>
-    <div class="ringWrap">
-      <div class="wind-ring"></div>
-      <div class="ring-mask">
-        <span>东</span>
-        <span>南</span>
-        <span>西</span>
-        <span>北</span>
-      </div>
-      <div class="arrow">
-        <img src="../../assets/pic/arrow.png" :style="{transform:`rotate(${nowWeather?nowWeather.wind360:'0'}deg)`}">
-      </div>
-      <div class="wind-dashboard" v-if="nowWeather">
-        {{nowWeather.windScale}}级
+    <div class="ring-body">
+      <div class="ringWrap">
+        <div class="wind-ring"></div>
+        <div class="ring-mask">
+          <span>东</span>
+          <span>南</span>
+          <span>西</span>
+          <span>北</span>
+        </div>
+        <div class="arrow">
+          <img src="../../assets/pic/arrow.png" :style="{transform:`rotate(${nowWeather?nowWeather.wind360:'0'}deg)`}">
+        </div>
+        <div class="wind-dashboard" v-if="nowWeather">
+          {{nowWeather.windScale}}级
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.windMain{
+.ring-body{
   width: 100%;
-  height: 100%;
-  color: white;
+  height: calc(100% - 30px);
   display: flex;
+  align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-}
-.windTitle{
-  text-align: left;
-  margin-left: 5%;
-  height: 30px;
-  width: 100%;
-  line-height: 30px;
-  font-size: 13px;
 }
 .ringWrap{
-  width: calc(100% - 50px);
-  height: calc(100% - 50px);
+  width: 70%;
+  height: calc((100% + 30px)*0.7);
   position: relative;
 }
 .wind-ring{

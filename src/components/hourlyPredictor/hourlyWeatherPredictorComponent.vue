@@ -71,7 +71,7 @@ const choiceVerbByWeather = (word:string) => {
 }
 
 //监听props数据需要使用getter返回值形式才能触发
-watch(() => [props.code,props.locationName],(n,o) => {
+watch(() => [props.code,props.locationName],(n) => {
   get24HaysWeatherPredictor(n[0],n[1])
 })
 
