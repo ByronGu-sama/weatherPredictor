@@ -13,7 +13,7 @@
     padding: 0;
   }
   .main{
-    background:url("./assets/pic/bg.jpg") fixed;
+    background:url("./assets/pic/bg.jpg") fixed no-repeat;
     background-size: cover;
     width: 100vw;
     height: 100vh;

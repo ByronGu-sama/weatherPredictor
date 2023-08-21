@@ -13,12 +13,13 @@ interface ListItem {
   value: string
   label: string
 }
-let locationOptions = ref<ListItem[]>([])                   //模糊搜索返回的地址信息
+let locationOptions = ref<ListItem[]>([])                                                     //模糊搜索返回的地址信息
+let tempLocation = ref<{value:string,label:string}>({value:'',label:''})                      //临时地址代号
 let locationVal = ref<{value:string,label:string}>({value:'',label:''})                       //用户选中的地址代号
-let locationName = ref<string>('')                          //用户选中的地址名称
-let loadingLocation = ref<boolean>(false)                   //是否正在获取地址模糊搜索信息
-let nowWeather = ref<any>('')                               //当前天气数据
-let daysPredictor = ref<any>(null)                          //七天天气预报
+let locationName = ref<string>('')                                                            //用户选中的地址名称
+let loadingLocation = ref<boolean>(false)                                                     //是否正在获取地址模糊搜索信息
+let nowWeather = ref<any>('')                                                                 //当前天气数据
+let daysPredictor = ref<any>(null)                                                            //七天天气预报
 
 //获取定位
 const getLocation = () => {
@@ -56,8 +57,8 @@ const getRemoteLocation = (val:string) => {
 
 //用户手动选择位置回调函数
 const changeLocation = () => {
-  getNowWeather(locationVal.value)
-  get7DaysWeatherPredictor(locationVal.value)
+  getNowWeather(tempLocation.value)
+  get7DaysWeatherPredictor(tempLocation.value)
 }
 
 //获取实时天气数据
@@ -67,6 +68,7 @@ const getNowWeather = (location:{value:string,label:string}) => {
     if(res.data.code == 200){
       nowWeather.value = res.data.now
       localStorage.setItem('nowWeather',JSON.stringify(res.data.now))
+      locationVal.value = tempLocation.value
     }
   })
 }
@@ -98,7 +100,7 @@ onMounted(() => {
     <div class="home-top">
       <div class="home-top-left">
         <el-select
-            v-model="locationVal"
+            v-model="tempLocation"
             filterable
             remote
             placeholder="选取所在地区"
