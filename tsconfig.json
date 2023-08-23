@@ -5,7 +5,7 @@
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
-    "types": ["webpack-env", "vue-router"],
+    "types": ["webpack-env", "vue-router", "pinia-plugin-persist"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",

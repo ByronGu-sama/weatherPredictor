@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import request from '../../request/Url'
 
 </script>
 

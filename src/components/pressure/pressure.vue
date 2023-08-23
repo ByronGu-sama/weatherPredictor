@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import {onMounted, ref, watch} from "vue";
-import utils from "../../utils/requestUtils";
-import {ElMessage} from "element-plus";
+import {watch} from "vue";
+import {useWeatherStore} from "../../store/weatherEditor.ts";
 
-let nowWeather = ref()
-let props = defineProps(['code','locationName'])
 const BASIC_PRESSURE = 1013
+const weatherStore = useWeatherStore()
 
 //计算指针角度
 const calcAngle = (pressure:any) => {
@@ -22,38 +20,21 @@ const calcAngle = (pressure:any) => {
     }
   }
 }
-
-watch(() => [props.code,props.locationName],() => {
-  let now:any = localStorage.getItem('nowWeather')
-  nowWeather.value = JSON.parse(now)
-  calcAngle(nowWeather.value.pressure)
-})
-
-onMounted(() => {
-  utils.judgeIfHasNowWeather().then(res => {
-    nowWeather.value = res
-  }).catch(() => {
-    ElMessage({
-      message:"获取数据失败",
-      type:"warning"
-    })
-  })
-})
 </script>
 
 <template>
-  <div class="module-main" v-if="nowWeather">
+  <div class="module-main" v-if="weatherStore.weather">
     <div class="module-title">
       <img src="../../assets/icons/pressure.svg">&nbsp;气压
     </div>
     <div class="pressure-body-wrap">
       <div class="pressure-body">
         <div class="pressure-ring"></div>
-        <div class="pressure-arrow" :style="{transform:calcAngle(nowWeather.pressure)}">
+        <div class="pressure-arrow" :style="{transform:calcAngle(weatherStore.weather.pressure)}">
           <div class="pressure-indicator"></div>
         </div>
         <div class="pressure-info">
-          {{nowWeather.pressure}}百帕
+          {{weatherStore.weather.pressure}}百帕
         </div>
         <div class="pressure-word">
           <span>低</span>&emsp;&emsp;&emsp;&emsp;&emsp;

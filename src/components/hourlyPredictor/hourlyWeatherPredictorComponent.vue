@@ -1,44 +1,29 @@
 <script setup lang="ts">
-import {ref, watch} from "vue";
-import axios from 'axios'
-import request from "../../request/Url";
+import {onMounted, ref} from "vue";
+import {useWeatherStore} from "../../store/weatherEditor.ts";
 
 let hourPredictor = ref<any>('')                          //24小时天气预报
 let hourlyPredictorTitle = ref<string>('')                  //24小时天气预报总结标题
-let props = defineProps(['locationName','code'])
-
-//获取未来24小时天气预报
-const get24HaysWeatherPredictor = (value:string,label:string) => {
-  axios.get(`${request.GET_WEATHER_PREDICTOR_24H}location=${value}`).then(res => {
-    if(res.data.code == 200){
-      hourPredictor.value = res.data.hourly
-      let temp:weatherInfo[] = []
-      for (let i of res.data.hourly){
-        temp.push({
-          weather:i.text,
-          time:i.fxTime
-        })
-      }
-      summarize24HWeather(temp)
-    }
-  })
-}
+const weatherStore = useWeatherStore()
 
 //根据24小时天气预报总结未来大致天气情况
-interface weatherInfo{
-  weather:string,
-  time:string
-}
+const summarize24HWeather = (data:any) => {
+  let tempList = []
+  for (let i of data){
+    tempList.push({
+      weather:i.text,
+      time:i.fxTime
+    })
+  }
 
-const summarize24HWeather = (data:weatherInfo[]) => {
   let count = 0                          //相同天气连续出现次数
-  let keyword = data[0].weather          //天气名称
+  let keyword = tempList[0].weather          //天气名称
   let temp = []                          //
-  let timespan = [data[0].time,'']       //天气持续时间段
-  data.push({weather:'aaa',time:'aaa'})  //占位数据，防止判断出错
+  let timespan = [tempList[0].time,'']       //天气持续时间段
+  tempList.push({weather:'aaa',time:'aaa'})  //占位数据，防止判断出错
 
   //整理数据
-  for (let i of data){
+  for (let i of tempList){
     if(keyword === i.weather){
       ++count
       timespan[1] = i.time
@@ -70,11 +55,15 @@ const choiceVerbByWeather = (word:string) => {
   }
 }
 
-//监听props数据需要使用getter返回值形式才能触发
-watch(() => [props.code,props.locationName],(n) => {
-  get24HaysWeatherPredictor(n[0],n[1])
-})
 
+
+onMounted(() => {
+  let weather = weatherStore.hourlyWeather_24
+  if(weather){
+    hourPredictor.value = weather
+    summarize24HWeather(weather)
+  }
+})
 </script>
 
 <template>
@@ -84,7 +73,7 @@ watch(() => [props.code,props.locationName],(n) => {
     </div>
     <hr class="divider">
     <div class="predictor24Area">
-      <div v-for="i in hourPredictor" class="predictor24Wrapper">
+      <div v-for="i in weatherStore.hourlyWeather_24" class="predictor24Wrapper">
         <div class="predictor24Wrapper-m1">
           {{(new Date(i.fxTime).getHours())}}:00
         </div>

@@ -1,53 +1,69 @@
-import {ElMessage} from "element-plus";
 import request from "../request/Url";
 import axios from "axios";
-
-//判断浏览器本地缓存中是否存在nowWeather数据
-const judgeIfHasNowWeather = () => {
-    return new Promise((resolve, reject) => {
-        let now:any = localStorage.getItem('nowWeather')
-        if(!now){
-            let location:any = localStorage.getItem('qwLocation')
-            if(location){
-                getNowWeather(JSON.parse(location).value).then(res => {
-                    resolve(res)
-                }).catch(err => {
-                    reject(err)
-                })
-            }else{
-                reject(new Error("location param is null"))
-            }
-        }else{
-            resolve(JSON.parse(now))
-        }
-    })
-    }
 
 //获取实时天气数据
 const getNowWeather = (value:string) => {
     return new Promise((resolve, reject) => {
         axios.get(`${request.GET_NOW_WEATHER}location=${value}`).then(res => {
             if(res.data.code == 200){
-                localStorage.setItem('nowWeather',JSON.stringify(res.data.now))
                 resolve(res.data.now)
             }else{
-                ElMessage({
-                    message:'获取实时天气信息失败',
-                    type:'error'
-                })
                 reject(new Error("get weather data failed"))
             }
         }).catch((err) => {
-            ElMessage({
-                message:'获取数据时发生错误',
-                type:'error'
-            })
+            reject(err)
+        })
+    })
+}
+
+//获取24小时uvi数据
+const getUvi = (location:string) => {
+    return new Promise((resolve, reject) => {
+        axios.get(`${request.GET_UVI_24H}location=${location}&type=5`).then(res => {
+            if(res.data.code == 200){
+                resolve(res.data.daily[0])
+            }else{
+                reject(new Error('get uvi data failed'))
+            }
+        }).catch(err => {
+            reject(err)
+        })
+    })
+}
+
+//获取10日天气预报
+const get10DaysWeatherPredictor = (location:string) => {
+    return new Promise((resolve,reject) => {
+        axios.get(`${request.GET_WEATHER_PREDICTOR_10D}location=${location}`).then(res => {
+            if(res.data.code == 200){
+                resolve(res.data.daily)
+            }else{
+                reject(new Error('get 10 days weather predictor failed'))
+            }
+        }).catch(err => {
+            reject(err)
+        })
+    })
+}
+
+//获取未来24小时天气预报
+const get24HWeatherPredictor = (location:string) => {
+    return new Promise((resolve, reject) => {
+        axios.get(`${request.GET_WEATHER_PREDICTOR_24H}location=${location}`).then(res => {
+            if(res.data.code == 200){
+                resolve(res.data.hourly)
+            }else{
+                reject(new Error('get 24 hours weather failed'))
+            }
+        }).catch(err => {
             reject(err)
         })
     })
 }
 
 export default {
-    judgeIfHasNowWeather,
-    getNowWeather
+    getNowWeather,
+    getUvi,
+    get10DaysWeatherPredictor,
+    get24HWeatherPredictor,
 }

@@ -1,31 +1,10 @@
 <script setup lang="ts">
-import request from "../../request/Url";
-import axios from "axios";
-import {nextTick, ref, watch} from "vue";
+import {nextTick, onMounted, ref, watch} from "vue";
+import {useWeatherStore} from "../../store/weatherEditor.ts";
 
 let daysPredictor = ref<any>()                           //10天 天气预报
-let props = defineProps(['code','locationName'])
 let area = ref<HTMLElement>()
-
-//获取未来十天 天气预报
-const get10DaysWeatherPredictor = (value:string) => {
-  axios.get(`${request.GET_WEATHER_PREDICTOR_10D}location=${value}`).then(res => {
-    if(res.data.code == 200){
-      let temp = []
-      for(let i of res.data.daily){
-        temp.push({
-          day:i.fxDate,
-          tempMax:i.tempMax,
-          tempMin:i.tempMin,
-          iconDay:i.iconDay
-        })
-      }
-      calcTempTrend(temp).then((res) => {
-        daysPredictor.value = res
-      })
-    }
-  })
-}
+const weatherStore = useWeatherStore()
 
 //日期转换
 const processWeek = (val:string) => {
@@ -169,8 +148,30 @@ const calcMargin = (averageTempRank:number,tempDiffRank:number) => {
   }
 }
 
-watch(() => [props.code,props.locationName],(n) => {
-  get10DaysWeatherPredictor(n[0])
+//处理数据
+const processData = (data:any) => {
+  let temp:any[] = []
+  for(let i of data){
+    temp.push({
+      day:i.fxDate,
+      tempMax:i.tempMax,
+      tempMin:i.tempMin,
+      iconDay:i.iconDay
+    })
+  }
+  calcTempTrend(temp).then(res => {
+    daysPredictor.value = res
+  })
+}
+
+watch(() => weatherStore.daysWeather_10,(n) => {
+  if(n){
+    processData(weatherStore.daysWeather_10)
+  }
+})
+
+onMounted(() => {
+  processData(weatherStore.daysWeather_10)
 })
 </script>
 

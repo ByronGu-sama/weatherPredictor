@@ -1,4 +1,44 @@
 <script setup lang="ts">
+import {useLocationStore} from "./store/locationEditor";
+import {useWeatherStore} from "./store/weatherEditor.ts";
+import {useUviStore} from "./store/uviEditor.ts";
+import {onMounted} from "vue";
+import {ElMessage} from "element-plus";
+
+const locationStore = useLocationStore()
+const weatherStore = useWeatherStore()
+const uviStore = useUviStore()
+let location = locationStore.getLocation
+
+//获取定位
+const getLocation = () => {
+  navigator.geolocation.getCurrentPosition((position) => {
+        // console.log(position)
+      },
+      err => {
+        ElMessage({
+          message:err.code == 1?'无法获取定位权限，请手动选择城市':err.code == 2?'获取定位失败，请手动选择城市':'获取位置超时，请手动选择城市',
+          type:'warning'
+        });
+      }
+  )
+}
+
+onMounted(() => {
+  if(location){
+    weatherStore.updateNowWeather(location)
+    weatherStore.update10DaysWeather(location)
+    weatherStore.update24HoursWeather(location)
+    uviStore.updateUvi(location)
+  }else{
+    locationStore.updateLocation('101010100')
+    weatherStore.updateNowWeather('101010100')
+    weatherStore.update10DaysWeather('101010100')
+    weatherStore.update24HoursWeather('101010100')
+    uviStore.updateUvi('101010100')
+  }
+  getLocation()
+})
 </script>
 
 <template>

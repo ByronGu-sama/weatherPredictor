@@ -1,25 +1,9 @@
 <script setup lang="ts">
-import {ref, watch} from "vue";
-import axios from "axios";
-import request from '../../request/Url'
-import {ElMessage} from "element-plus";
-let props = defineProps(['code','locationName'])
-let uviInfo = ref<any>()
-let barWrap = ref<HTMLElement>()
+import {ref} from "vue";
+import {useUviStore} from "../../store/uviEditor";
 
-//获取uvi数据
-const getUvi = (location:string) => {
-  axios.get(`${request.GET_UVI_24H}location=${location}&type=5`).then(res => {
-    if(res.data.code == 200){
-      uviInfo.value = res.data.daily[0]
-    }else{
-      ElMessage({
-        message:'获取紫外线指数失败',
-        type:"error"
-      })
-    }
-  })
-}
+let barWrap = ref<HTMLElement>()
+const uviStore = useUviStore()
 
 //根据紫外线强度返回防护建议
 const defenseTip = (level:string) => {
@@ -42,31 +26,27 @@ const calcMargin = (level:string) => {
   let barWidth = barWrap.value?.clientWidth
   return 25*(parseInt(level)-1)/100*(barWidth!-6)+'px'
 }
-
-watch(() => [props.code,props.locationName],(n) => {
-  getUvi(n[0])
-})
 </script>
 
 <template>
-  <div class="module-main" v-if="uviInfo">
+  <div class="module-main" v-if="uviStore.uvi">
     <div class="module-title">
       <i class="qi-100"></i>&nbsp;紫外线指数
     </div>
     <div class="uviBody-middle">
       <div class="uviBody-middle-top">
-        <span style="font-size: 20px;margin-left: 15px">{{uviInfo.level*2}}</span>
+        <span style="font-size: 20px;margin-left: 15px">{{uviStore.uvi.level*2}}</span>
         <br>
-        <span style="font-size: 25px;margin-left: 10px">{{uviInfo.category}}</span>
+        <span style="font-size: 25px;margin-left: 10px">{{uviStore.uvi.category}}</span>
       </div>
       <div class="uviBody-middle-bottom">
         <div class="uviBody-middle-bar" ref="barWrap">
-          <div class="uviIndicator" :style="{marginLeft:calcMargin(uviInfo.level)}"></div>
+          <div class="uviIndicator" :style="{marginLeft:calcMargin(uviStore.uvi.level)}"></div>
         </div>
       </div>
     </div>
     <div class="bottom-tips">
-      <span>{{defenseTip(uviInfo.level)}}</span>
+      <span>{{defenseTip(uviStore.uvi.level)}}</span>
     </div>
   </div>
 </template>

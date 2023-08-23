@@ -1,26 +1,7 @@
 <script setup lang="ts">
-import {onMounted, ref, watch} from "vue";
-import utils from "../../utils/requestUtils";
-import {ElMessage} from "element-plus";
+import {useWeatherStore} from "../../store/weatherEditor.ts";
 
-let nowWeather = ref()
-let props = defineProps(['code','locationName'])
-
-watch(() => [props.code,props.locationName],() => {
-  let now:any = localStorage.getItem('nowWeather')
-  nowWeather.value = JSON.parse(now)
-})
-
-onMounted(() => {
-  utils.judgeIfHasNowWeather().then(res => {
-    nowWeather.value = res
-  }).catch(() => {
-    ElMessage({
-      message:"获取数据失败",
-      type:"warning"
-    })
-  })
-})
+const weatherStore = useWeatherStore()
 </script>
 
 <template>
@@ -38,10 +19,10 @@ onMounted(() => {
           <span>北</span>
         </div>
         <div class="arrow">
-          <img src="../../assets/pic/arrow.png" :style="{transform:`rotate(${nowWeather?nowWeather.wind360:'0'}deg)`}">
+          <img src="../../assets/pic/arrow.png" :style="{transform:`rotate(${weatherStore.weather?weatherStore.weather.wind360:'0'}deg)`}">
         </div>
-        <div class="wind-dashboard" v-if="nowWeather">
-          {{nowWeather.windScale}}级
+        <div class="wind-dashboard" v-if="weatherStore.weather">
+          {{weatherStore.weather.windScale}}级
         </div>
       </div>
     </div>

@@ -1,38 +1,19 @@
 <script setup lang="ts">
-import {ref, watch, onMounted} from "vue";
-import utils from "../../utils/requestUtils";
-import {ElMessage} from "element-plus";
+import {useWeatherStore} from "../../store/weatherEditor.ts";
 
-let props = defineProps(['code','locationName'])
-let nowWeather = ref()
-
-watch(() => [props.code,props.locationName],() => {
-  let now:any = localStorage.getItem('nowWeather')
-  nowWeather.value = JSON.parse(now)
-})
-
-onMounted(() => {
-  utils.judgeIfHasNowWeather().then(res => {
-    nowWeather.value = res
-  }).catch(() => {
-    ElMessage({
-      message:"获取数据失败",
-      type:"warning"
-    })
-  })
-})
+const weatherStore = useWeatherStore()
 </script>
 
 <template>
-  <div class="module-main" v-if="nowWeather">
+  <div class="module-main" v-if="weatherStore.weather">
     <div class="module-title">
       <img src="../../assets/icons/humidity.svg" style="width: 13px;height: 13px">&nbsp;湿度
     </div>
-    <div class="humidity-body" v-if="nowWeather.humidity">
-      {{nowWeather.humidity}}%
+    <div class="humidity-body" v-if="weatherStore.weather.humidity">
+      {{weatherStore.weather.humidity}}%
     </div>
-    <div class="bottom-tips" v-if="nowWeather.dew">
-      目前露点温度为{{nowWeather.dew}}˚
+    <div class="bottom-tips" v-if="weatherStore.weather.dew">
+      目前露点温度为{{weatherStore.weather.dew}}˚
     </div>
   </div>
 </template>

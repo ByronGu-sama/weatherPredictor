@@ -7,11 +7,16 @@ import pressure from './pressure/pressure.vue'
 import apparentTemp from './apparentTemp/apparentTemp.vue'
 import humidity from './humidity/humidity.vue'
 import visibility from './visibility/visibility.vue'
-
-import {onMounted, ref, watch} from "vue";
-import {ElMessage} from "element-plus";
+import {ref} from "vue";
 import request from "../request/Url.ts";
 import axios from "axios";
+import {useWeatherStore} from "../store/weatherEditor.ts";
+import {useLocationStore} from "../store/locationEditor";
+import {useUviStore} from "../store/uviEditor";
+
+const weatherStore = useWeatherStore()
+const locationStore = useLocationStore()
+const uviStore = useUviStore()
 
 interface ListItem {
   value: string
@@ -22,22 +27,6 @@ let tempLocation = ref<{value:string,label:string}>({value:'',label:''})        
 let locationVal = ref<{value:string,label:string}>({value:'',label:''})                       //用户选中的地址代号
 let locationName = ref<string>('')                                                            //用户选中的地址名称
 let loadingLocation = ref<boolean>(false)                                                     //是否正在获取地址模糊搜索信息
-let nowWeather = ref<any>('')                                                                 //当前天气数据
-let daysPredictor = ref<any>(null)                                                            //七天天气预报
-
-//获取定位
-const getLocation = () => {
-  navigator.geolocation.getCurrentPosition((position) => {
-        // console.log(position)
-      },
-      err => {
-        ElMessage({
-          message:err.code == 1?'无法获取定位权限，请手动选择城市':err.code == 2?'获取定位失败，请手动选择城市':'获取位置超时，请手动选择城市',
-          type:'warning'
-        });
-      }
-  )
-}
 
 //获取手动定位数据集
 const getRemoteLocation = (val:string) => {
@@ -59,44 +48,15 @@ const getRemoteLocation = (val:string) => {
   })
 }
 
-//用户手动选择位置回调函数
+//用户手动选择位置回调函数 刷新所有天气数据
 const changeLocation = () => {
-  getNowWeather(tempLocation.value)
-  get7DaysWeatherPredictor(tempLocation.value)
+  locationStore.updateLocation(tempLocation.value.value)
+  weatherStore.updateNowWeather(tempLocation.value.value)
+  weatherStore.update10DaysWeather(tempLocation.value.value)
+  weatherStore.update24HoursWeather(tempLocation.value.value)
+  uviStore.updateUvi(tempLocation.value.value)
+  locationName.value = tempLocation.value.label
 }
-
-//获取实时天气数据
-const getNowWeather = (location:{value:string,label:string}) => {
-  locationName.value = location.label
-  axios.get(`${request.GET_NOW_WEATHER}location=${location.value}`).then(res => {
-    if(res.data.code == 200){
-      nowWeather.value = res.data.now
-      localStorage.setItem('nowWeather',JSON.stringify(res.data.now))
-      locationVal.value = tempLocation.value
-    }
-  })
-}
-
-//获取未来七天天气预报
-const get7DaysWeatherPredictor = (location:{value:string,label:string}) => {
-  axios.get(`${request.GET_WEATHER_PREDICTOR_7D}location=${location.value}`).then(res => {
-    if(res.data.code == 200){
-      daysPredictor.value = res.data.daily
-    }
-  })
-}
-
-watch(() => locationVal.value,(n) => {
-  localStorage.setItem('qwLocation',JSON.stringify(n))
-})
-
-onMounted(() => {
-  let location = localStorage.getItem('qwLocation')
-  if(location){
-    locationVal.value = JSON.parse(location)
-    changeLocation()
-  }
-})
 </script>
 
 <template>
@@ -125,18 +85,17 @@ onMounted(() => {
       <div class="home-top-right">
 
       </div>
-
     </div>
     <div class="scrollArea">
       <div class="home-middle">
         <p style="font-size: 30px;line-height: 25px;margin: 0">我的位置</p>
-        <p style="font-size: 20px;line-height: 15px;margin: 15px">{{locationName||'请选择位置'}}</p>
-        <p style="font-size: 31px;line-height: 20px;margin: 15px">{{nowWeather.temp}}°</p>
-        <div class="tempWrapper">
+        <p style="font-size: 20px;line-height: 15px;margin: 15px">{{locationName||'北京'}}</p>
+        <p style="font-size: 31px;line-height: 20px;margin: 15px">{{weatherStore.weather.temp}}°</p>
+        <div class="tempWrapper" v-if="weatherStore.daysWeather_10">
           <span class="tempTitle">最高温度</span>
-          <span class="tempBody" v-if="daysPredictor">{{daysPredictor[0].tempMax}}°</span>
+          <span class="tempBody">{{weatherStore.daysWeather_10[0].tempMax}}°</span>
           <span class="tempTitle">最低温度</span>
-          <span class="tempBody" v-if="daysPredictor">{{daysPredictor[0].tempMin}}°</span>
+          <span class="tempBody">{{weatherStore.daysWeather_10[0].tempMin}}°</span>
         </div>
       </div>
 
@@ -150,19 +109,19 @@ onMounted(() => {
 
 <!--        未来7天天气预报-->
         <div class="bottom-ct3">
-          <daysWeatherPredictor :code="locationVal.value" :location-name="locationVal.label"></daysWeatherPredictor>
+          <daysWeatherPredictor></daysWeatherPredictor>
         </div>
 
 <!--        紫外线强度-->
         <div class="bottom-ct4">
-          <uvi :code="locationVal.value" :location-name="locationVal.label"></uvi>
+          <uvi></uvi>
         </div>
 
         <div class="bottom-ct5">5</div>
 
 <!--        风向/风力-->
         <div class="bottom-ct6">
-          <windDirection :code="locationVal.value" :location-name="locationVal.label"></windDirection>
+          <windDirection></windDirection>
         </div>
 
         <div class="bottom-ct7">7</div>
@@ -170,22 +129,22 @@ onMounted(() => {
 
 <!--        体感温度-->
         <div class="bottom-ct9">
-          <apparentTemp :code="locationVal.value" :location-name="locationVal.label"></apparentTemp>
+          <apparentTemp></apparentTemp>
         </div>
 
 <!--        湿度/露点-->
         <div class="bottom-ct10">
-          <humidity :code="locationVal.value" :location-name="locationVal.label"></humidity>
+          <humidity></humidity>
         </div>
 
 <!--        可见度-->
         <div class="bottom-ct11">
-          <visibility :code="locationVal.value" :location-name="locationVal.label"></visibility>
+          <visibility></visibility>
         </div>
 
 <!--        大气压强-->
         <div class="bottom-ct12">
-          <pressure :code="locationVal.value" :location-name="locationVal.label"></pressure>
+          <pressure></pressure>
         </div>
 
         <div class="bottom-ct13">13</div>

@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import {onMounted, ref, watch} from "vue";
-import utils from "../../utils/requestUtils";
-import {ElMessage} from "element-plus";
+import {useWeatherStore} from "../../store/weatherEditor.ts";
 
-let nowWeather = ref()
-let props = defineProps(['code','locationName'])
+const weatherStore = useWeatherStore()
 
 //判断能见度
 const determineVisibility = (vis:any) => {
@@ -24,33 +21,18 @@ const determineVisibility = (vis:any) => {
       return '能见度极好'
   }
 }
-watch(() => [props.code,props.locationName],() => {
-  let now:any = localStorage.getItem('nowWeather')
-  nowWeather.value = JSON.parse(now)
-})
-
-onMounted(() => {
-  utils.judgeIfHasNowWeather().then(res => {
-    nowWeather.value = res
-  }).catch(() => {
-    ElMessage({
-      message:"获取数据失败",
-      type:"warning"
-    })
-  })
-})
 </script>
 
 <template>
-  <div class="module-main" v-if="nowWeather">
+  <div class="module-main" v-if="weatherStore.weather">
     <div class="module-title">
       <img src="../../assets/icons/visibility.svg" style="width: 13px;height: 13px">&nbsp;能见度
     </div>
     <div class="visibility-middle">
-      {{nowWeather.vis}}公里
+      {{weatherStore.weather.vis}}公里
     </div>
     <div class="visibility-bottom">
-      {{determineVisibility(nowWeather.vis)}}
+      {{determineVisibility(weatherStore.weather.vis)}}
     </div>
   </div>
 </template>
