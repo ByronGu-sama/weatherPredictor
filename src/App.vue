@@ -1,19 +1,21 @@
 <script setup lang="ts">
 import {useLocationStore} from "./store/locationEditor";
-import {useWeatherStore} from "./store/weatherEditor.ts";
-import {useUviStore} from "./store/uviEditor.ts";
+import {useWeatherStore} from "./store/weatherEditor";
+import {useUviStore} from "./store/uviEditor";
+import {useAstronomyStore} from "./store/astronomyEditor.ts";
 import {onMounted} from "vue";
 import {ElMessage} from "element-plus";
 
 const locationStore = useLocationStore()
 const weatherStore = useWeatherStore()
 const uviStore = useUviStore()
+const astronomyStore = useAstronomyStore()
 let location = locationStore.getLocation
 
 //获取定位
 const getLocation = () => {
   navigator.geolocation.getCurrentPosition((position) => {
-        // console.log(position)
+        console.log(position)
       },
       err => {
         ElMessage({
@@ -25,17 +27,25 @@ const getLocation = () => {
 }
 
 onMounted(() => {
+  navigator.geolocation.getCurrentPosition((position) => {
+    console.log(position)
+  })
   if(location){
     weatherStore.updateNowWeather(location)
     weatherStore.update10DaysWeather(location)
     weatherStore.update24HoursWeather(location)
+    // weatherStore.updateHistoricalWeather(location)
     uviStore.updateUvi(location)
+    astronomyStore.updateMoonPhase(location)
+
   }else{
     locationStore.updateLocation('101010100')
     weatherStore.updateNowWeather('101010100')
     weatherStore.update10DaysWeather('101010100')
     weatherStore.update24HoursWeather('101010100')
+    // weatherStore.updateHistoricalWeather('101010100')
     uviStore.updateUvi('101010100')
+    astronomyStore.updateMoonPhase('101010100')
   }
   getLocation()
 })
@@ -60,5 +70,9 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     align-items: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
 </style>

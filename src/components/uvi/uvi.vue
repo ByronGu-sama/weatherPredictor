@@ -13,7 +13,7 @@ const defenseTip = (level:string) => {
     case '2':
       return '紫外线弱,做好一般防晒'
     case '3':
-      return '紫外线强度中等,减少户外活动'
+      return '紫外线强度中等,减少出门'
     case '4':
       return '紫外线较强,做好物理防晒'
     case '5':

@@ -7,12 +7,18 @@ import pressure from './pressure/pressure.vue'
 import apparentTemp from './apparentTemp/apparentTemp.vue'
 import humidity from './humidity/humidity.vue'
 import visibility from './visibility/visibility.vue'
+import tempTrend from './tempTrend/tempTrend.vue'
+import moonPhase from './moonPhase/moonPhase.vue'
+import trackSun from './trackSun/trackSun.vue'
+
 import {ref} from "vue";
-import request from "../request/Url.ts";
+import request from "../request/Url";
 import axios from "axios";
-import {useWeatherStore} from "../store/weatherEditor.ts";
+import {useWeatherStore} from "../store/weatherEditor";
 import {useLocationStore} from "../store/locationEditor";
 import {useUviStore} from "../store/uviEditor";
+import requestUtils from "../utils/requestUtils";
+import commonUtils from "../utils/commonUtils";
 
 const weatherStore = useWeatherStore()
 const locationStore = useLocationStore()
@@ -56,6 +62,24 @@ const changeLocation = () => {
   weatherStore.update24HoursWeather(tempLocation.value.value)
   uviStore.updateUvi(tempLocation.value.value)
   locationName.value = tempLocation.value.label
+  getWeatherWarning(tempLocation.value.value)
+}
+
+//获取灾害预警
+const getWeatherWarning = (location:string) => {
+  requestUtils.getWeatherWarning(location).then((res:any) => {
+    if(res.length > 0){
+      let temp = []
+      for(let i of res){
+        temp.push({
+          title:i.title,
+          content:i.text,
+          type:'warning',
+        })
+      }
+      commonUtils.pushNotification(temp,5000)
+    }
+  })
 }
 </script>
 
@@ -87,7 +111,7 @@ const changeLocation = () => {
       </div>
     </div>
     <div class="scrollArea">
-      <div class="home-middle">
+      <div class="home-middle" v-if="weatherStore.weather">
         <p style="font-size: 30px;line-height: 25px;margin: 0">我的位置</p>
         <p style="font-size: 20px;line-height: 15px;margin: 15px">{{locationName||'北京'}}</p>
         <p style="font-size: 31px;line-height: 20px;margin: 15px">{{weatherStore.weather.temp}}°</p>
@@ -117,14 +141,22 @@ const changeLocation = () => {
           <uvi></uvi>
         </div>
 
-        <div class="bottom-ct5">5</div>
+<!--        太阳轨迹-->
+        <div class="bottom-ct5">
+          <trackSun></trackSun>
+        </div>
 
 <!--        风向/风力-->
         <div class="bottom-ct6">
           <windDirection></windDirection>
         </div>
 
-        <div class="bottom-ct7">7</div>
+<!--        月相-->
+        <div class="bottom-ct7">
+          <moonPhase></moonPhase>
+        </div>
+
+<!--        降水-->
         <div class="bottom-ct8">8</div>
 
 <!--        体感温度-->
@@ -147,7 +179,10 @@ const changeLocation = () => {
           <pressure></pressure>
         </div>
 
-        <div class="bottom-ct13">13</div>
+<!--        温度趋势-->
+        <div class="bottom-ct13">
+          <tempTrend></tempTrend>
+        </div>
       </div>
     </div>
   </div>
