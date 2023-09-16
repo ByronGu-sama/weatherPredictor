@@ -17,6 +17,7 @@ declare module 'vue' {
     HourlyWeatherPredictorComponent: typeof import('./src/components/hourlyPredictor/hourlyWeatherPredictorComponent.vue')['default']
     Humidity: typeof import('./src/components/humidity/humidity.vue')['default']
     MoonPhase: typeof import('./src/components/moonPhase/moonPhase.vue')['default']
+    Precipitation: typeof import('./src/components/precipitation/precipitation.vue')['default']
     Pressure: typeof import('./src/components/pressure/pressure.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {useWeatherStore} from "../../store/weatherEditor";
-import {nextTick, onMounted, ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 
 const weatherStore = useWeatherStore()
 let xAxis:any = ref('')
 let yAxis:any = ref('')
+let refreshTimer:any = null
 const INIT_X = 10    //x轴左右安全距离
 
 // 计算太阳的x轴坐标
@@ -39,11 +40,18 @@ const calcYAxis = (x:number) =>{
   //y轴坐标百分比
   let yPercent = (3/5*Math.sin(xPercentWithPI))/1.5707
   //y轴坐标  40为y轴高度
-  yAxis.value = yPercent*40-5+'px'
+  yAxis.value = 40*(1-yPercent)-5+'px'
 }
 
 onMounted(() => {
   calcXAxis()
+  refreshTimer = setInterval(() => {
+    calcXAxis()
+  },1000*60)
+})
+
+onUnmounted(() => {
+  clearInterval(refreshTimer)
 })
 </script>
 

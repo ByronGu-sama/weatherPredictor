@@ -10,6 +10,7 @@ import visibility from './visibility/visibility.vue'
 import tempTrend from './tempTrend/tempTrend.vue'
 import moonPhase from './moonPhase/moonPhase.vue'
 import trackSun from './trackSun/trackSun.vue'
+import precipitation from './precipitation/precipitation.vue'
 
 import {ref} from "vue";
 import request from "../request/Url";
@@ -157,7 +158,9 @@ const getWeatherWarning = (location:string) => {
         </div>
 
 <!--        降水-->
-        <div class="bottom-ct8">8</div>
+        <div class="bottom-ct8">
+          <precipitation></precipitation>
+        </div>
 
 <!--        体感温度-->
         <div class="bottom-ct9">

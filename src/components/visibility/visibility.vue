@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {useWeatherStore} from "../../store/weatherEditor.ts";
+import {useWeatherStore} from "../../store/weatherEditor";
 
 const weatherStore = useWeatherStore()
 

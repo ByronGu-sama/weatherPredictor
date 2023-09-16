@@ -17,7 +17,7 @@ const getSpecificMoonPhase = () => {
       <img src="../../assets/icons/moon.svg" style="width: 13px;height: 13px">&nbsp;{{getSpecificMoonPhase()[1]}}
     </div>
     <div class="moon-middle">
-      <i :class='`qi-${getSpecificMoonPhase()[0]}`'></i>
+      <img src="../../assets/pic/moonPhase/35.png" class="moon">
     </div>
   </div>
 </template>
@@ -27,5 +27,13 @@ const getSpecificMoonPhase = () => {
   width: 100%;
   height: calc(100% - 30px);
   color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.moon{
+  width: 120px;
+  height: 120px;
+
 }
 </style>

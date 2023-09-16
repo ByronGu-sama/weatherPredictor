@@ -10,5 +10,4 @@ export default<any>{
     GET_WEATHER_WARNING:API+'/v7/warning/now?',                        //获取灾害预警
     GET_HISTORICAL_WEATHER_10D:API+'/v7/historical/weather?',          //获取历史天气数据
     GET_MOON_PHASE:API+'/v7/astronomy/moon?',                          //月相
-
 }
