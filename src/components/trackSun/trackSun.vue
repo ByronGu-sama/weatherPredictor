@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import {useWeatherStore} from "../../store/weatherEditor";
-import {onMounted, ref} from "vue";
+import {nextTick, onMounted, ref} from "vue";
 
 const weatherStore = useWeatherStore()
 let xAxis:any = ref('')
 let yAxis:any = ref('')
+const INIT_X = 10    //x轴左右安全距离
 
-// 计算太阳在x轴上的坐标位置
-const clacXAxis = () => {
-  const INIT_X = 10
+// 计算太阳的x轴坐标
+const calcXAxis = () => {
   let now = new Date()
   let today = weatherStore.daysWeather_10[0]
   let sunrise = today.sunrise.split(':')
@@ -26,21 +26,31 @@ const clacXAxis = () => {
   let nowMinute = (now.getHours()-sunrise[0])*60+now.getMinutes()
   // 从日出开始过了多长时间（百分比）
   let percentage = parseFloat((nowMinute / toMinute).toFixed(4))
+  //太阳在x轴上的位置  5:太阳半径
+  let X_Axis_Coordinate = INIT_X+160*percentage-5
+  xAxis.value = X_Axis_Coordinate+'px'
+  calcYAxis(X_Axis_Coordinate)
+}
 
-  xAxis = INIT_X+160*percentage-5+'px'
-
-  console.log(xAxis)
+// 计算太阳的y轴坐标
+const calcYAxis = (x:number) =>{
+  //x轴坐标百分比和PI的乘积
+  let xPercentWithPI = (x-INIT_X+5)/160*Math.PI
+  //y轴坐标百分比
+  let yPercent = (3/5*Math.sin(xPercentWithPI))/1.5707
+  //y轴坐标  40为y轴高度
+  yAxis.value = yPercent*40-5+'px'
 }
 
 onMounted(() => {
-  clacXAxis()
+  calcXAxis()
 })
 </script>
 
 <template>
   <div class="module-main">
     <div class="module-title">
-      <img src="../../assets/icons/sunset.svg">&emsp;日落
+      <img src="../../assets/icons/sunset.svg">&nbsp;日落
     </div>
     <div class="sunset-bottom">
       <div class="sunset-time">
@@ -79,7 +89,6 @@ onMounted(() => {
   height: 70px;
   overflow: hidden;
   position: relative;
-  background-color: #535bf2;
 }
 .trackSun-horizon{
   width: 100%;
@@ -94,6 +103,7 @@ onMounted(() => {
   border-radius: 5px;
   background-color: #ffffff;
   box-shadow: 0 0 8px white;
+  transition: linear all 0.1s;
   position: absolute;
   top: 0;
   left: 0;

@@ -8,7 +8,6 @@ interface notification{
 //通知推送
 const pushNotification = (data:notification[],gap:number):void => {
     let timer:any = null
-    console.log(data)
     if(data.length>0){
         let i:number = 0
         ElNotification({
