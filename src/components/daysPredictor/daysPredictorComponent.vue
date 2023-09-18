@@ -170,7 +170,7 @@ watch(() => weatherStore.daysWeather_10,(n) => {
   }
 })
 
-onMounted(() => {
+nextTick(() => {
   processData(weatherStore.daysWeather_10)
 })
 </script>

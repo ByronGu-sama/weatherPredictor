@@ -96,6 +96,7 @@ button:focus-visible {
   font-size: 13px;
   display: flex;
   align-items: center;
+  color: rgba(255,255,255,0.8);
 }
 .module-title > img{
   width: 13px;

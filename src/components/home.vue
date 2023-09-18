@@ -1,25 +1,25 @@
 <script setup lang="ts">
 import hourlyWeatherPredictor from './hourlyPredictor/hourlyWeatherPredictorComponent.vue'
 import daysWeatherPredictor from './daysPredictor/daysPredictorComponent.vue'
-import uvi from './uvi/uvi.vue'
+import precipitation from './precipitation/precipitation.vue'
 import windDirection from './windDirection/windDirection.vue'
-import pressure from './pressure/pressure.vue'
 import apparentTemp from './apparentTemp/apparentTemp.vue'
-import humidity from './humidity/humidity.vue'
 import visibility from './visibility/visibility.vue'
 import tempTrend from './tempTrend/tempTrend.vue'
 import moonPhase from './moonPhase/moonPhase.vue'
+import pressure from './pressure/pressure.vue'
+import humidity from './humidity/humidity.vue'
 import trackSun from './trackSun/trackSun.vue'
-import precipitation from './precipitation/precipitation.vue'
+import uvi from './uvi/uvi.vue'
 
-import {ref} from "vue";
-import request from "../request/Url";
-import axios from "axios";
 import {useWeatherStore} from "../store/weatherEditor";
 import {useLocationStore} from "../store/locationEditor";
-import {useUviStore} from "../store/uviEditor";
 import requestUtils from "../utils/requestUtils";
+import {useUviStore} from "../store/uviEditor";
 import commonUtils from "../utils/commonUtils";
+import request from "../request/Url";
+import axios from "axios";
+import {ref} from "vue";
 
 const weatherStore = useWeatherStore()
 const locationStore = useLocationStore()
@@ -61,6 +61,7 @@ const changeLocation = () => {
   weatherStore.updateNowWeather(tempLocation.value.value)
   weatherStore.update10DaysWeather(tempLocation.value.value)
   weatherStore.update24HoursWeather(tempLocation.value.value)
+  weatherStore.updateHistoricalWeather(tempLocation.value.value,commonUtils.calcPreviousDays(7)!)
   uviStore.updateUvi(tempLocation.value.value)
   locationName.value = tempLocation.value.label
   getWeatherWarning(tempLocation.value.value)

@@ -3,9 +3,9 @@ import {useWeatherStore} from "../../store/weatherEditor";
 import {onMounted, onUnmounted, ref} from "vue";
 
 const weatherStore = useWeatherStore()
-let xAxis:any = ref('')
-let yAxis:any = ref('')
-let refreshTimer:any = null
+let xAxis:any = ref('5px')
+let yAxis:any = ref('35px')
+let refreshTimer:any = null 
 const INIT_X = 10    //x轴左右安全距离
 
 // 计算太阳的x轴坐标

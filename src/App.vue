@@ -5,6 +5,7 @@ import {useUviStore} from "./store/uviEditor";
 import {useAstronomyStore} from "./store/astronomyEditor.ts";
 import {onMounted} from "vue";
 import {ElMessage} from "element-plus";
+import commonUtils from "./utils/commonUtils.ts";
 
 const locationStore = useLocationStore()
 const weatherStore = useWeatherStore()
@@ -34,7 +35,7 @@ onMounted(() => {
     weatherStore.updateNowWeather(location)
     weatherStore.update10DaysWeather(location)
     weatherStore.update24HoursWeather(location)
-    // weatherStore.updateHistoricalWeather(location)
+    weatherStore.updateHistoricalWeather(location,commonUtils.calcPreviousDays(7)!)
     uviStore.updateUvi(location)
     astronomyStore.updateMoonPhase(location)
 
@@ -43,7 +44,7 @@ onMounted(() => {
     weatherStore.updateNowWeather('101010100')
     weatherStore.update10DaysWeather('101010100')
     weatherStore.update24HoursWeather('101010100')
-    // weatherStore.updateHistoricalWeather('101010100')
+    weatherStore.updateHistoricalWeather('101010100',commonUtils.calcPreviousDays(7)!)
     uviStore.updateUvi('101010100')
     astronomyStore.updateMoonPhase('101010100')
   }

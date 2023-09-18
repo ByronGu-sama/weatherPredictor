@@ -9,8 +9,13 @@ const calcFuturePrecipitation_24h = (data:any) => {
   for (let i of data){
     precipSum+=parseFloat(i.precip)
   }
-  return (precipSum/24).toFixed(1)
+  let precip = (precipSum/24).toFixed(1)
+  if(precip == '0.0'){
+    return 0
+  }
+  return precip
 }
+
 </script>
 
 <template>
@@ -20,7 +25,7 @@ const calcFuturePrecipitation_24h = (data:any) => {
     </div>
     <div class="precip-content">
       <div class="precip-content-top">
-        <span>{{weatherStore.weather.precip}}毫米</span>
+        <span>{{weatherStore.weather.precip=='0.0'?0:weatherStore.weather.precip}}毫米</span>
         <br>
         <span>当前</span>
       </div>
@@ -35,7 +40,6 @@ const calcFuturePrecipitation_24h = (data:any) => {
 .precip-content{
   width: 100%;
   height: calc(100% - 30px);
-  overflow: hidden;
 }
 .precip-content-top{
   width: 100%;
@@ -43,7 +47,7 @@ const calcFuturePrecipitation_24h = (data:any) => {
   text-align: left;
 }
 .precip-content-top span:nth-child(1){
-  font-size: 25px;
+  font-size: 30px;
   font-weight: bold;
   margin-left: 5px;
 }

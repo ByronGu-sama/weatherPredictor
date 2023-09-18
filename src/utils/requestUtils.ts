@@ -77,24 +77,21 @@ const getWeatherWarning = (location:string) => {
 }
 
 //获取历史天气数据
-const getHistoricalWeather = (location:string) => {
-    let date = new Date(new Date())
-    let temp = new Date(date.setDate(date.getDate()-10))
-    let year = temp.getFullYear()+''
-    let tempMonth = temp.getMonth()+1
-    let month = tempMonth<10?'0'+tempMonth:tempMonth
-    let day = temp.getDate()+''
-    let present = year+month+day
+const getHistoricalWeather = (location:string,days:string[]) => {
     return new Promise((resolve, reject) => {
-        axios.get(`${request.GET_HISTORICAL_WEATHER_10D}location=${location}&date=${present}`).then(res => {
-            if(res.data.code == 200){
-                resolve(res.data)
-            }else{
-                reject(new Error('get historical weather failed'))
-            }
-        }).catch(err => {
-            reject(err)
-        })
+        let daysList:any[] = []
+        for(let i of days){
+            axios.get(`${request.GET_HISTORICAL_WEATHER_10D}location=${location}&date=${i}`).then(res => {
+                if(res.data.code == 200){
+                    daysList.push(res.data)
+                }else{
+                    reject(new Error('get historical weather failed'))
+                }
+            }).catch(err => {
+                reject(err)
+            })
+        }
+        resolve(daysList)
     })
 }
 
@@ -107,7 +104,6 @@ const getMoonPhase = (location:string) => {
     let month:string = tempMonth<10?'0'+tempMonth:tempMonth+''
     let day:string = temp.getDate()< 10?'0'+temp.getDate():temp.getDate()+''
     let present:string = year+month+day
-
     return new Promise((resolve, reject) => {
         axios.get(`${request.GET_MOON_PHASE}location=${location}&date=${present}`).then(res => {
             if(res.data.code == 200){
