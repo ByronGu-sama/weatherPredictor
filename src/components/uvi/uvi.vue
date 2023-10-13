@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {ref, unref} from "vue";
 import {useWeatherIndicesStore} from "../../store/weatherIndicesEditor.ts";
-
+import { ClickOutside as vClickOutside } from 'element-plus'
+import uviGraph from './uviGraph.vue'
 let barWrap = ref<HTMLElement>()
+let bodyRef = ref()
+const popoverRef = ref()
 const weatherIndicesStore = useWeatherIndicesStore()
+
+const onClickOutside = () => {
+  unref(popoverRef).popperRef?.delayHide?.()
+}
 
 //根据紫外线强度返回防护建议
 const defenseTip = (level:string) => {
@@ -30,28 +37,58 @@ const calcMargin = (level:string) => {
 
 <template>
   <div class="module-main" v-if="weatherIndicesStore.uviIndex">
-    <div class="module-title">
-      <i class="qi-100"></i>&nbsp;紫外线指数
-    </div>
-    <div class="uviBody-middle">
-      <div class="uviBody-middle-top">
-        <span style="font-size: 20px;margin-left: 15px">{{weatherIndicesStore.uviIndex.level*2}}</span>
-        <br>
-        <span style="font-size: 25px;margin-left: 10px">{{weatherIndicesStore.uviIndex.category}}</span>
+    <div class="uvi-main" v-click-outside="onClickOutside" ref="bodyRef">
+      <div class="module-title">
+        <i class="qi-100"></i>&nbsp;紫外线指数
       </div>
-      <div class="uviBody-middle-bottom">
-        <div class="uviBody-middle-bar" ref="barWrap">
-          <div class="uviIndicator" :style="{marginLeft:calcMargin(weatherIndicesStore.uviIndex.level)}"></div>
+      <div class="uviBody-middle">
+        <div class="uviBody-middle-top">
+          <span style="font-size: 20px;margin-left: 15px">{{weatherIndicesStore.uviIndex.level*2}}</span>
+          <br>
+          <span style="font-size: 25px;margin-left: 10px">{{weatherIndicesStore.uviIndex.category}}</span>
+        </div>
+        <div class="uviBody-middle-bottom">
+          <div class="uviBody-middle-bar" ref="barWrap">
+            <div class="uviIndicator" :style="{marginLeft:calcMargin(weatherIndicesStore.uviIndex.level)}"></div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="bottom-tips">
-      <span>{{defenseTip(weatherIndicesStore.uviIndex.level)}}</span>
+      <div class="bottom-tips">
+        <span>{{defenseTip(weatherIndicesStore.uviIndex.level)}}</span>
+      </div>
+
+      <el-popover
+          ref="popoverRef"
+          :virtual-ref="bodyRef"
+          trigger="click"
+          placement="left"
+          virtual-triggering
+          width="350"
+          transition="el-fade-in-linear"
+      >
+        <el-scrollbar :max-height="260">
+          <div class="vis-popup">
+            <div class="vis-popup-middle">
+              <uviGraph width="320px" height="300px"></uviGraph>
+            </div>
+            <el-divider />
+            <div class="vis-popup-bottom">
+              <span class="popup-title">关于紫外线强度</span>
+              <br>
+              <span class="popup-tips">通常规定，夜间紫外线指数为0，在热带或高原地区、晴天无云时紫外线最强。紫外线指数值越大，表示紫外线辐射对人体危害越大，也表示在较短时间内对皮肤的伤害愈强。</span>
+            </div>
+          </div>
+        </el-scrollbar>
+      </el-popover>
     </div>
   </div>
 </template>
 
 <style scoped>
+.uvi-main{
+  width: 100%;
+  height: 100%;
+}
 .uviBody-middle{
   width: 100%;
   height: calc(100% - 60px);

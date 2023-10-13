@@ -30,6 +30,7 @@ declare module 'vue' {
     Test: typeof import('./src/components/test/test.vue')['default']
     TrackSun: typeof import('./src/components/trackSun/trackSun.vue')['default']
     Uvi: typeof import('./src/components/uvi/uvi.vue')['default']
+    UviGraph: typeof import('./src/components/uvi/uviGraph.vue')['default']
     VisGraph: typeof import('./src/components/visibility/visGraph.vue')['default']
     Visibility: typeof import('./src/components/visibility/visibility.vue')['default']
     WeatherChart: typeof import('./src/components/bigDataChart/weatherChart.vue')['default']
