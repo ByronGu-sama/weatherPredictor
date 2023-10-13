@@ -12,6 +12,7 @@ export const useWeatherStore =  defineStore('nowWeather',() => {
     const hourlyWeather_24 = ref<any>()
     //10天历史天气
     const historicalWeather = ref<any>()
+
     const getNowWeather = computed(() => weather.value)
     const getDaysWeather_10 = computed(() => daysWeather_10.value)
     const getHourlyWeather_24 = computed(() => hourlyWeather_24.value)

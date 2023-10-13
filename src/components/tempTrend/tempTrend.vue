@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useWeatherStore} from "../../store/weatherEditor";
-import {onMounted, ref, watch} from "vue";
+import {ref, watch} from "vue";
 
 const weatherStore = useWeatherStore()
 let show = ref<boolean>(false)
@@ -25,8 +25,8 @@ const calcGap = () => {
 * @Description 计算温差
 */
 const handleTempDiff = () => {
-  let tempDiff = weatherStore.daysWeather_10[0].tempMax - calcGap()
- return tempDiff >= 0?'+'+tempDiff.toFixed(0):'-'+tempDiff.toFixed(0)
+  let tempDiff = Math.round(weatherStore.daysWeather_10[0].tempMax - calcGap())
+  return tempDiff >= 0?'+'+tempDiff.toFixed(0):tempDiff.toFixed(0)
 }
 
 /*
@@ -35,7 +35,7 @@ const handleTempDiff = () => {
 * @Description 根据温差返回特定语句
 */
 const processTips = () => {
-  let tempDiff = weatherStore.daysWeather_10[0].tempMax - calcGap()
+  let tempDiff = Math.round(weatherStore.daysWeather_10[0].tempMax - calcGap())
     if (tempDiff > 0){
       return '高于周均最高温'
     }else if(tempDiff < 0){
@@ -66,7 +66,7 @@ watch(()=>weatherStore.historicalWeather.length>=7,() => {
       <div class="trend-tips">
         <span>今天:{{weatherStore.daysWeather_10[0].tempMax}}˚</span>
         <br>
-        <span>平均值:{{calcGap().toFixed(0)}}˚</span>
+        <span>平均值:{{Math.round(calcGap())}}˚</span>
       </div>
     </div>
   </div>

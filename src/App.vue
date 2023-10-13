@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {useLocationStore} from "./store/locationEditor";
 import {useWeatherStore} from "./store/weatherEditor";
-import {useUviStore} from "./store/uviEditor";
+import {useWeatherIndicesStore} from "./store/weatherIndicesEditor.ts";
 import {useAstronomyStore} from "./store/astronomyEditor.ts";
 import {onMounted} from "vue";
 import {ElMessage} from "element-plus";
@@ -9,7 +9,7 @@ import commonUtils from "./utils/commonUtils.ts";
 
 const locationStore = useLocationStore()
 const weatherStore = useWeatherStore()
-const uviStore = useUviStore()
+const weatherIndicesStore = useWeatherIndicesStore()
 const astronomyStore = useAstronomyStore()
 let location = locationStore.getLocation
 
@@ -36,7 +36,7 @@ onMounted(() => {
     weatherStore.update10DaysWeather(location)
     weatherStore.update24HoursWeather(location)
     weatherStore.updateHistoricalWeather(location,commonUtils.calcPreviousDays(7)!)
-    uviStore.updateUvi(location)
+    weatherIndicesStore.updateUvi(location)
     astronomyStore.updateMoonPhase(location)
 
   }else{
@@ -45,7 +45,7 @@ onMounted(() => {
     weatherStore.update10DaysWeather('101010100')
     weatherStore.update24HoursWeather('101010100')
     weatherStore.updateHistoricalWeather('101010100',commonUtils.calcPreviousDays(7)!)
-    uviStore.updateUvi('101010100')
+    weatherIndicesStore.updateUvi('101010100')
     astronomyStore.updateMoonPhase('101010100')
   }
   getLocation()
@@ -64,8 +64,6 @@ onMounted(() => {
     padding: 0;
   }
   .main{
-    background:url("./assets/pic/bg.jpg") fixed no-repeat;
-    background-size: cover;
     width: 100vw;
     height: 100vh;
     display: flex;

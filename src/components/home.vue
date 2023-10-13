@@ -3,6 +3,7 @@ import hourlyWeatherPredictor from './hourlyPredictor/hourlyWeatherPredictorComp
 import daysWeatherPredictor from './daysPredictor/daysPredictorComponent.vue'
 import precipitation from './precipitation/precipitation.vue'
 import windDirection from './windDirection/windDirection.vue'
+import weatherChart from './bigDataChart/weatherChart.vue'
 import apparentTemp from './apparentTemp/apparentTemp.vue'
 import visibility from './visibility/visibility.vue'
 import tempTrend from './tempTrend/tempTrend.vue'
@@ -12,18 +13,19 @@ import humidity from './humidity/humidity.vue'
 import trackSun from './trackSun/trackSun.vue'
 import uvi from './uvi/uvi.vue'
 
-import {useWeatherStore} from "../store/weatherEditor";
+import {useWeatherIndicesStore} from "../store/weatherIndicesEditor.ts";
 import {useLocationStore} from "../store/locationEditor";
+import {useWeatherStore} from "../store/weatherEditor";
 import requestUtils from "../utils/requestUtils";
-import {useUviStore} from "../store/uviEditor";
 import commonUtils from "../utils/commonUtils";
 import request from "../request/Url";
 import axios from "axios";
 import {ref} from "vue";
+import router from "../router";
 
 const weatherStore = useWeatherStore()
 const locationStore = useLocationStore()
-const uviStore = useUviStore()
+const weatherIndicesStore = useWeatherIndicesStore()
 
 interface ListItem {
   value: string
@@ -34,6 +36,7 @@ let tempLocation = ref<{value:string,label:string}>({value:'',label:''})        
 let locationVal = ref<{value:string,label:string}>({value:'',label:''})                       //用户选中的地址代号
 let locationName = ref<string>('')                                                            //用户选中的地址名称
 let loadingLocation = ref<boolean>(false)                                                     //是否正在获取地址模糊搜索信息
+let showChart = ref<boolean>(false)                                                           //显示风云图
 
 //获取手动定位数据集
 const getRemoteLocation = (val:string) => {
@@ -62,7 +65,7 @@ const changeLocation = () => {
   weatherStore.update10DaysWeather(tempLocation.value.value)
   weatherStore.update24HoursWeather(tempLocation.value.value)
   weatherStore.updateHistoricalWeather(tempLocation.value.value,commonUtils.calcPreviousDays(7)!)
-  uviStore.updateUvi(tempLocation.value.value)
+  weatherIndicesStore.updateUvi(tempLocation.value.value)
   locationName.value = tempLocation.value.label
   getWeatherWarning(tempLocation.value.value)
 }
@@ -83,109 +86,117 @@ const getWeatherWarning = (location:string) => {
     }
   })
 }
+
+//切换显示效果
+const shiftGraph = () => {
+  router.push('/weatherChart')
+}
 </script>
 
 <template>
-  <div class="home-main">
-    <div class="home-top">
-      <div class="home-top-left">
-        <el-select
-            v-model="tempLocation"
-            filterable
-            remote
-            placeholder="选取所在地区"
-            :remote-method="getRemoteLocation"
-            :loading="loadingLocation"
-            @change="changeLocation"
-        >
-          <el-option
-              v-for="item in locationOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item"
-          />
-        </el-select>
-      </div>
-      <div class="home-top-middle">
-      </div>
-      <div class="home-top-right">
+  <div class="home-wrap">
+    <button @click="shiftGraph()" class="home-shift-button" style="z-index: 999">风云图</button>
+    <div class="home-main" v-if="!showChart">
+      <div class="home-top">
+        <div class="home-top-left">
+          <el-select
+              v-model="tempLocation"
+              filterable
+              remote
+              placeholder="选取所在地区"
+              :remote-method="getRemoteLocation"
+              :loading="loadingLocation"
+              @change="changeLocation"
+          >
+            <el-option
+                v-for="item in locationOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item"
+            />
+          </el-select>
+        </div>
+        <div class="home-top-middle">
+        </div>
+        <div class="home-top-right">
 
-      </div>
-    </div>
-    <div class="scrollArea">
-      <div class="home-middle" v-if="weatherStore.weather">
-        <p style="font-size: 30px;line-height: 25px;margin: 0">我的位置</p>
-        <p style="font-size: 20px;line-height: 15px;margin: 15px">{{locationName||'北京'}}</p>
-        <p style="font-size: 31px;line-height: 20px;margin: 15px">{{weatherStore.weather.temp}}°</p>
-        <div class="tempWrapper" v-if="weatherStore.daysWeather_10">
-          <span class="tempTitle">最高温度</span>
-          <span class="tempBody">{{weatherStore.daysWeather_10[0].tempMax}}°</span>
-          <span class="tempTitle">最低温度</span>
-          <span class="tempBody">{{weatherStore.daysWeather_10[0].tempMin}}°</span>
         </div>
       </div>
-
-      <div class="home-bottom">
-<!--        未来24小时天气预报-->
-        <div class="bottom-ct1">
-          <hourlyWeatherPredictor :code="locationVal.value" :location-name="locationVal.label"></hourlyWeatherPredictor>
+      <div class="scrollArea">
+        <div class="home-middle" v-if="weatherStore.weather">
+          <p style="font-size: 30px;line-height: 30px;margin: 0">我的位置</p>
+          <p style="font-size: 20px;line-height: 15px;margin: 15px">{{locationName||'北京'}}</p>
+          <p style="font-size: 31px;line-height: 20px;margin: 15px">{{weatherStore.weather.temp}}°</p>
+          <div class="tempWrapper" v-if="weatherStore.daysWeather_10">
+            <span class="tempTitle">最高温度</span>
+            <span class="tempBody">{{weatherStore.daysWeather_10[0].tempMax}}°</span>
+            <span class="tempTitle">最低温度</span>
+            <span class="tempBody">{{weatherStore.daysWeather_10[0].tempMin}}°</span>
+          </div>
         </div>
 
-        <div class="bottom-ct2">2</div>
+        <div class="home-bottom">
+  <!--        未来24小时天气预报-->
+          <div class="bottom-ct1">
+            <hourlyWeatherPredictor :code="locationVal.value" :location-name="locationVal.label"></hourlyWeatherPredictor>
+          </div>
 
-<!--        未来7天天气预报-->
-        <div class="bottom-ct3">
-          <daysWeatherPredictor></daysWeatherPredictor>
-        </div>
+          <div class="bottom-ct2">2</div>
 
-<!--        紫外线强度-->
-        <div class="bottom-ct4">
-          <uvi></uvi>
-        </div>
+  <!--        未来7天天气预报-->
+          <div class="bottom-ct3">
+            <daysWeatherPredictor></daysWeatherPredictor>
+          </div>
 
-<!--        太阳轨迹-->
-        <div class="bottom-ct5">
-          <trackSun></trackSun>
-        </div>
+  <!--        紫外线强度-->
+          <div class="bottom-ct4">
+            <uvi></uvi>
+          </div>
 
-<!--        风向/风力-->
-        <div class="bottom-ct6">
-          <windDirection></windDirection>
-        </div>
+  <!--        太阳轨迹-->
+          <div class="bottom-ct5">
+            <trackSun></trackSun>
+          </div>
 
-<!--        月相-->
-        <div class="bottom-ct7">
-          <moonPhase></moonPhase>
-        </div>
+  <!--        风向/风力-->
+          <div class="bottom-ct6">
+            <windDirection></windDirection>
+          </div>
 
-<!--        降水-->
-        <div class="bottom-ct8">
-          <precipitation></precipitation>
-        </div>
+  <!--        月相-->
+          <div class="bottom-ct7">
+            <moonPhase></moonPhase>
+          </div>
 
-<!--        体感温度-->
-        <div class="bottom-ct9">
-          <apparentTemp></apparentTemp>
-        </div>
+  <!--        降水-->
+          <div class="bottom-ct8">
+            <precipitation></precipitation>
+          </div>
 
-<!--        湿度/露点-->
-        <div class="bottom-ct10">
-          <humidity></humidity>
-        </div>
+  <!--        体感温度-->
+          <div class="bottom-ct9">
+            <apparentTemp></apparentTemp>
+          </div>
 
-<!--        可见度-->
-        <div class="bottom-ct11">
-          <visibility></visibility>
-        </div>
+  <!--        湿度/露点-->
+          <div class="bottom-ct10">
+            <humidity></humidity>
+          </div>
 
-<!--        大气压强-->
-        <div class="bottom-ct12">
-          <pressure></pressure>
-        </div>
+  <!--        可见度-->
+          <div class="bottom-ct11">
+            <visibility></visibility>
+          </div>
 
-<!--        温度趋势-->
-        <div class="bottom-ct13">
-          <tempTrend></tempTrend>
+  <!--        大气压强-->
+          <div class="bottom-ct12">
+            <pressure></pressure>
+          </div>
+
+  <!--        温度趋势-->
+          <div class="bottom-ct13">
+            <tempTrend></tempTrend>
+          </div>
         </div>
       </div>
     </div>
@@ -193,10 +204,100 @@ const getWeatherWarning = (location:string) => {
 </template>
 
 <style scoped>
+.m1-enter-from{
+  left: -150%;
+  top: -150%;
+}
+.m1-enter-active{
+  animation: cloudMove1 1s;
+}
+.m1-enter-to{
+  left: -20%;
+  top: -40%;
+}
+.m1-leave-active{
+  animation: cloudMove1 1s reverse;
+}
+.m2-enter-from{
+  left: -150%;
+  top: -150%;
+}
+.m2-enter-active{
+  animation: cloudMove2 1s;
+}
+.m2-enter-to{
+  left: -5%;
+  top: -50%;
+}
+.m2-leave-active{
+  animation: cloudMove2 1s reverse;
+}
+.m3-enter-from{
+  left: -150%;
+  top: -150%;
+}
+.m3-enter-active{
+  animation: cloudMove3 1s;
+}
+.m3-enter-to{
+  left: -10%;
+  top: 5%;
+  rotate: 10deg;
+}
+.m3-leave-active{
+  animation: cloudMove3 1s reverse;
+}
+.m4-enter-from{
+  right: -150%;
+  top: -150%;
+}
+.m4-enter-active{
+  animation: cloudMove4 1s;
+}
+.m4-enter-to{
+  right: -40%;
+  top: -15%;
+  rotate: 10deg;
+}
+.m4-leave-active{
+  animation: cloudMove4 1s reverse;
+}
+.m5-enter-from{
+  right: -150%;
+  top: -150%;
+}
+.m5-enter-active{
+  animation: cloudMove5 1s;
+}
+.m5-enter-to{
+  right: -80%;
+  top: 5%;
+}
+.m5-leave-active{
+  animation: cloudMove5 1s reverse;
+}
+.m6-enter-from{
+  right: -150%;
+  top: -150%;
+}
+.m6-enter-active{
+  animation: cloudMove6 1s;
+}
+.m6-enter-to{
+  right: 10%;
+  top: 5%;
+}
+.m6-leave-active{
+  animation: cloudMove6 1s reverse;
+}
+
+
   ::-webkit-scrollbar{
     display: none;
   }
   body{
+    background:url("../assets/pic/bg.jpg") fixed no-repeat;
+    background-size: cover;
     margin: 0;
     padding: 0;
   }
@@ -204,6 +305,33 @@ const getWeatherWarning = (location:string) => {
     margin-left: 10px;
     margin-top: 10px;
     background-color: rgba(255,255,255,0.3);
+  }
+  .home-wrap{
+    width: 100vw;
+    height: 100vh;
+    background:url("../assets/pic/bg.jpg") fixed no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  .home-shift-button{
+    width: 80px;
+    height: 40px;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: linear 0.1s;
+  }
+  .home-shift-button:hover {
+    color: #e3fafa;
   }
   .home-main{
     width: 80vw;
@@ -265,7 +393,7 @@ const getWeatherWarning = (location:string) => {
     display: grid;
     grid-template-rows: repeat(4,180px);
     grid-template-columns: repeat(6,180px);
-    grid-gap: 10px;
+    grid-gap: 15px;
   }
   .home-bottom > div{
     border-radius: 8px;

@@ -6,7 +6,7 @@ export default<any>{
     GET_WEATHER_PREDICTOR_7D:API+'/v7/weather/7d?',                //未来七天 天气预报
     GET_WEATHER_PREDICTOR_10D:API+'/v7/weather/10d?',              //未来十五天 天气预报
     GET_WEATHER_PREDICTOR_24H:API+'/v7/weather/24h?',              //未来24小时天气预报
-    GET_UVI_24H:API+'/v7/indices/1d?',                             //未来24小时uvi
+    GET_INDICES_INDEX_24H:API+'/v7/indices/1d?',                   //未来24小时天气指数
     GET_WEATHER_WARNING:API+'/v7/warning/now?',                    //获取灾害预警
     GET_HISTORICAL_WEATHER_10D:API+'/v7/historical/weather?',      //获取历史天气数据
     GET_MOON_PHASE:API+'/v7/astronomy/moon?',                      //月相

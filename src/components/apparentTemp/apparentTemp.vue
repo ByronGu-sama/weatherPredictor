@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import {useWeatherStore} from "../../store/weatherEditor.ts";
+import {useWeatherIndicesStore} from "../../store/weatherIndicesEditor.ts";
 
 const weatherStore = useWeatherStore()
-</script>
+const weatherIndicesStore = useWeatherIndicesStore()
 
+const handleClothIndex = (index:any) => {
+  console.log(index)
+}
+</script>
 <template>
   <div class="module-main" v-if="weatherStore.weather">
     <div class="module-title">
@@ -13,6 +18,7 @@ const weatherStore = useWeatherStore()
       {{weatherStore.weather.feelsLike}}˚
     </div>
     <div class="bottom-tips">
+      {{handleClothIndex(weatherIndicesStore.clothIndex)}}
       潮湿使人感觉更热
     </div>
   </div>

@@ -19,7 +19,7 @@ const calcFuturePrecipitation_24h = (data:any) => {
 </script>
 
 <template>
-  <div class="module-main">
+  <div class="module-main" v-if="weatherStore.hourlyWeather_24">
     <div class="module-title">
       <img src="../../assets/icons/precipitation.svg" style="width: 13px;height: 13px">&nbsp;降水
     </div>

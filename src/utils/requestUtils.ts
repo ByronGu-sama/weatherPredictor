@@ -19,11 +19,26 @@ const getNowWeather = (value:string) => {
 //获取24小时uvi数据
 const getUvi = (location:string) => {
     return new Promise((resolve, reject) => {
-        axios.get(`${request.GET_UVI_24H}location=${location}&type=5`).then(res => {
+        axios.get(`${request.GET_INDICES_INDEX_24H}location=${location}&type=5`).then(res => {
             if(res.data.code == 200){
                 resolve(res.data.daily[0])
             }else{
-                reject(new Error('get uvi data failed'))
+                reject(new Error('get uvi index failed'))
+            }
+        }).catch(err => {
+            reject(err)
+        })
+    })
+}
+
+//获取数穿衣指数
+const getClothIndex = (location:string) => {
+    return new Promise((resolve, reject) => {
+        axios.get(`${request.GET_INDICES_INDEX_24H}location=${location}&type=3`).then(res => {
+            if(res.data.code == 200){
+                resolve(res.data.daily[0])
+            }else{
+                reject(new Error('get cloth index failed'))
             }
         }).catch(err => {
             reject(err)
@@ -124,4 +139,5 @@ export default {
     getWeatherWarning,
     getHistoricalWeather,
     getMoonPhase,
+    getClothIndex,
 }

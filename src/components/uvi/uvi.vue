@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {useUviStore} from "../../store/uviEditor";
+import {useWeatherIndicesStore} from "../../store/weatherIndicesEditor.ts";
 
 let barWrap = ref<HTMLElement>()
-const uviStore = useUviStore()
+const weatherIndicesStore = useWeatherIndicesStore()
 
 //根据紫外线强度返回防护建议
 const defenseTip = (level:string) => {
@@ -29,24 +29,24 @@ const calcMargin = (level:string) => {
 </script>
 
 <template>
-  <div class="module-main" v-if="uviStore.uvi">
+  <div class="module-main" v-if="weatherIndicesStore.uviIndex">
     <div class="module-title">
       <i class="qi-100"></i>&nbsp;紫外线指数
     </div>
     <div class="uviBody-middle">
       <div class="uviBody-middle-top">
-        <span style="font-size: 20px;margin-left: 15px">{{uviStore.uvi.level*2}}</span>
+        <span style="font-size: 20px;margin-left: 15px">{{weatherIndicesStore.uviIndex.level*2}}</span>
         <br>
-        <span style="font-size: 25px;margin-left: 10px">{{uviStore.uvi.category}}</span>
+        <span style="font-size: 25px;margin-left: 10px">{{weatherIndicesStore.uviIndex.category}}</span>
       </div>
       <div class="uviBody-middle-bottom">
         <div class="uviBody-middle-bar" ref="barWrap">
-          <div class="uviIndicator" :style="{marginLeft:calcMargin(uviStore.uvi.level)}"></div>
+          <div class="uviIndicator" :style="{marginLeft:calcMargin(weatherIndicesStore.uviIndex.level)}"></div>
         </div>
       </div>
     </div>
     <div class="bottom-tips">
-      <span>{{defenseTip(uviStore.uvi.level)}}</span>
+      <span>{{defenseTip(weatherIndicesStore.uviIndex.level)}}</span>
     </div>
   </div>
 </template>
