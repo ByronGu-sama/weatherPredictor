@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import {watch} from "vue";
 import {useWeatherStore} from "../../store/weatherEditor.ts";
+import { ClickOutside as vClickOutside } from 'element-plus'
+import pressureGraph from './pressureGraph.vue'
+import {ref, unref} from "vue";
 
 const BASIC_PRESSURE = 1013
 const weatherStore = useWeatherStore()
+const popoverRef = ref()
+let bodyRef = ref()
 
+const onClickOutside = () => {
+  unref(popoverRef).popperRef?.delayHide?.()
+}
 //计算指针角度
 const calcAngle = (pressure:any) => {
   pressure = parseInt(pressure)
@@ -24,28 +31,58 @@ const calcAngle = (pressure:any) => {
 
 <template>
   <div class="module-main" v-if="weatherStore.weather">
-    <div class="module-title">
-      <img src="../../assets/icons/pressure.svg">&nbsp;气压
-    </div>
-    <div class="pressure-body-wrap">
-      <div class="pressure-body">
-        <div class="pressure-ring"></div>
-        <div class="pressure-arrow" :style="{transform:calcAngle(weatherStore.weather.pressure)}">
-          <div class="pressure-indicator"></div>
-        </div>
-        <div class="pressure-info">
-          {{weatherStore.weather.pressure}}百帕
-        </div>
-        <div class="pressure-word">
-          <span>低</span>&emsp;&emsp;&emsp;&emsp;&emsp;
-          <span>高</span>
+    <div class="pressure-main" v-click-outside="onClickOutside" ref="bodyRef">
+      <div class="module-title">
+        <img src="../../assets/icons/pressure.svg">&nbsp;气压
+      </div>
+      <div class="pressure-body-wrap">
+        <div class="pressure-body">
+          <div class="pressure-ring"></div>
+          <div class="pressure-arrow" :style="{transform:calcAngle(weatherStore.weather.pressure)}">
+            <div class="pressure-indicator"></div>
+          </div>
+          <div class="pressure-info">
+            {{weatherStore.weather.pressure}}百帕
+          </div>
+          <div class="pressure-word">
+            <span>低</span>&emsp;&emsp;&emsp;&emsp;&emsp;
+            <span>高</span>
+          </div>
         </div>
       </div>
     </div>
+
+    <el-popover
+        ref="popoverRef"
+        :virtual-ref="bodyRef"
+        trigger="click"
+        placement="left"
+        virtual-triggering
+        width="350"
+        transition="el-fade-in-linear"
+    >
+      <el-scrollbar :max-height="260">
+        <div class="vis-popup">
+          <div class="vis-popup-middle">
+            <pressureGraph width="320px" height="300px"></pressureGraph>
+          </div>
+          <el-divider />
+          <div class="vis-popup-bottom">
+            <span class="popup-title">关于大气压强</span>
+            <br>
+            <span class="popup-tips"></span>
+          </div>
+        </div>
+      </el-scrollbar>
+    </el-popover>
   </div>
 </template>
 
 <style scoped>
+.pressure-main{
+  width: 100%;
+  height: 100%;
+}
 .module-title{
   margin-top: 0;
 }

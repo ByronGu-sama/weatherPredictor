@@ -24,6 +24,7 @@ declare module 'vue' {
     PrecipGraph: typeof import('./src/components/precipitation/precipGraph.vue')['default']
     Precipitation: typeof import('./src/components/precipitation/precipitation.vue')['default']
     Pressure: typeof import('./src/components/pressure/pressure.vue')['default']
+    PressureGraph: typeof import('./src/components/pressure/pressureGraph.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TempTrend: typeof import('./src/components/tempTrend/tempTrend.vue')['default']
