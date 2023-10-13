@@ -21,6 +21,7 @@ declare module 'vue' {
     HumidityGraph: typeof import('./src/components/humidity/humidityGraph.vue')['default']
     MoonPhase: typeof import('./src/components/moonPhase/moonPhase.vue')['default']
     NotFound: typeof import('./src/components/notFound/notFound.vue')['default']
+    PrecipGraph: typeof import('./src/components/precipitation/precipGraph.vue')['default']
     Precipitation: typeof import('./src/components/precipitation/precipitation.vue')['default']
     Pressure: typeof import('./src/components/pressure/pressure.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

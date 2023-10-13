@@ -6,49 +6,25 @@ import commonUtils from "../../utils/commonUtils";
 
 let echartsRef = ref()
 const weatherStore = useWeatherStore()
-let week = []
-let humidity = []
+let hour = []
+let precip = []
 let lineChart = null
 let lineOption = ({
   title: {
-    text: '湿度'
+    text: '降水'
   },
   xAxis: {
     type:'category',
-    boundaryGap:false,
-    data: week,
+    data: hour,
   },
   yAxis: {
-    name:'%',
+    name:'mm/h',
     min:0,
-    max:100,
-    interval:10,
   },
   series: [
     {
-      type:'line',
-      data: humidity,
-      smooth:true,
-      areaStyle: {
-        color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-          {
-            offset: 0,
-            color: 'rgb(128, 255, 165)'
-          },
-          {
-            offset: 0.4,
-            color: 'rgb(1, 191, 236)'
-          },
-          {
-            offset: 0.8,
-            color: 'rgb(62,106,217)'
-          },
-          {
-            offset: 1,
-            color: 'rgb(169,98,255)'
-          }
-        ])
-      },
+      type:'bar',
+      data: precip,
       symbol:'none'
     }
   ],
@@ -75,11 +51,11 @@ const handleData = () => {
   let temp = weatherStore.hourlyWeather_24
   for(let i of temp){
     let tempHour = new Date(i.fxTime)
-    week.push(tempHour.getHours())
-    if(i.humidity){
-      humidity.push(i.humidity)
+    hour.push(tempHour.getHours())
+    if(i.precip){
+      precip.push(parseFloat(i.precip))
     }else{
-      humidity.push(60)
+      precip.push(0)
     }
   }
 }
@@ -93,12 +69,12 @@ watch(() => weatherStore.hourlyWeather_24,(n) => {
   if (lineChart){
     if (n){
       setTimeout(() => {
-        week.splice(0)
-        humidity.splice(0)
+        hour.splice(0)
+        precip.splice(0)
         handleData()
-        lineOption.series.data = humidity
+        lineOption.series.data = precip
         lineChart.setOption(lineOption)
-      },200)
+      },800)
     }
   }else{
     lineChart = echarts.init(echartsRef.value);
@@ -108,15 +84,17 @@ watch(() => weatherStore.hourlyWeather_24,(n) => {
 })
 
 onMounted(() => {
-  handleData()
-  createChart()
+  setTimeout(() => {
+    handleData()
+    createChart()
+  },2000)
 })
 </script>
 
 <template>
   <div class="echarts-box">
     <div ref="echartsRef" style="width: 320px;height: 300px"></div>
-    <span class="humidity-tips">当前空气{{commonUtils.determineHumidity(weatherStore.hourlyWeather_24[0].humidity)}}</span>
+    <span></span>
   </div>
 </template>
 <style>

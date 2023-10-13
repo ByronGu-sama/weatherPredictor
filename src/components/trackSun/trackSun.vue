@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useWeatherStore} from "../../store/weatherEditor";
-import {nextTick, onMounted, onUnmounted, ref} from "vue";
+import {nextTick, onMounted, onUnmounted, ref, watch} from "vue";
 
 const weatherStore = useWeatherStore()
 let xAxis:any = ref('5px')
@@ -43,11 +43,16 @@ const calcYAxis = (x:number) =>{
   yAxis.value = 40*(1-yPercent)-5+'px'
 }
 
-nextTick(() => {
-  calcXAxis()
-  refreshTimer = setInterval(() => {
+watch(() => weatherStore.daysWeather_10,() => {
+  if(weatherStore.daysWeather_10?.length>1){
     calcXAxis()
-  },1000*60)
+    refreshTimer = setInterval(() => {
+      calcXAxis()
+    },1000*60)
+  }
+},{
+  immediate:true,
+  deep:true
 })
 
 onUnmounted(() => {

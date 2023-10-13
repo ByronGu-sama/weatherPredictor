@@ -3,7 +3,7 @@ import {useWeatherStore} from "../../store/weatherEditor";
 import { ClickOutside as vClickOutside } from 'element-plus'
 import visGraph from './visGraph.vue'
 import {ref, unref} from "vue";
-import commonUtils from "../../utils/commonUtils.ts";
+import commonUtils from "../../utils/commonUtils";
 
 const weatherStore = useWeatherStore()
 let bodyRef = ref()
@@ -39,9 +39,6 @@ const onClickOutside = () => {
     >
       <el-scrollbar :max-height="260">
         <div class="vis-popup">
-          <div class="vis-popup-top">
-
-          </div>
           <div class="vis-popup-middle">
             <visGraph width="320px" height="300px"></visGraph>
           </div>

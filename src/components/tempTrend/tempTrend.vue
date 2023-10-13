@@ -3,7 +3,6 @@ import {useWeatherStore} from "../../store/weatherEditor";
 import {ref, watch} from "vue";
 
 const weatherStore = useWeatherStore()
-let show = ref<boolean>(false)
 
 /*
 * @Author:ByronGu
@@ -15,7 +14,6 @@ const calcGap = () => {
   for (let i = 0; i < weatherStore.historicalWeather.length; i++){
     temp += parseFloat(weatherStore.historicalWeather[i].weatherDaily.tempMax)
   }
-  show.value = true
   return temp / 7
 }
 
@@ -53,7 +51,7 @@ watch(()=>weatherStore.historicalWeather.length>=7,() => {
 </script>
 
 <template>
-  <div class="module-main" v-if="show">
+  <div class="module-main" v-if="weatherStore.daysWeather_10">
     <div class="module-title">
       <img src="../../assets/icons/trend.svg">&emsp;平均
     </div>

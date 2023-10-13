@@ -36,9 +36,6 @@ const weatherStore = useWeatherStore()
     >
       <el-scrollbar :max-height="260">
         <div class="humidity-popup">
-          <div class="humidity-popup-top">
-
-          </div>
           <div class="humidity-popup-middle">
             <humidityGraph width="350px" height="300px"></humidityGraph>
           </div>
