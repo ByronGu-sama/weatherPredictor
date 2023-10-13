@@ -1,10 +1,26 @@
 <script setup>
 import * as echarts from "echarts";
-import {onMounted, defineProps, ref} from "vue";
+import {onMounted, ref} from "vue";
 import {useWeatherStore} from "../../store/weatherEditor";
+import commonUtils from "../../utils/commonUtils";
 
-// let props = defineProps(["width", "height"])
 let echartsRef = ref()
+const weatherStore = useWeatherStore()
+let week = []
+let vis = []
+
+//处理天气数据
+const handleData = () => {
+  let temp = weatherStore.daysWeather_10.slice(0,6)
+  for(let i of temp){
+    week.push(commonUtils.processWeek(i.fxDate))
+    if(i.vis){
+      vis.push(i.vis)
+    }else{
+      vis.push(20)
+    }
+  }
+}
 
 const createChart = () => {
   let lineChart = echarts.init(echartsRef.value);
@@ -12,35 +28,62 @@ const createChart = () => {
     title: {
       text: '能见度'
     },
-    tooltip: {},
     xAxis: {
-      data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+      data: week
     },
-    yAxis: {},
+    yAxis: {
+      name:'km',
+      min:0,
+      max:45,
+      interval:5,
+      boundaryGap:[0,'10%']
+    },
     series: [
       {
         type: 'line',
-        data: [5, 20, 36, 10, 10, 20],
+        data: vis,
         smooth:true,
         symbol:'none'
       }
-    ]
-  })
+    ],
+    tooltip: {
+      trigger: 'axis',
+        backgroundColor: 'rgba(32, 33, 36,.7)',
+        borderColor: 'rgba(32, 33, 36,0.20)',
+        borderWidth: 1,
+        textStyle: {
+        color: '#fff',
+          fontSize: '12'
+        },
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#6a7985'
+          }
+        },
+    }
+
+})
   lineChart.setOption(lineOption)
-  lineChart.on('mousemove',(param) => {
-    console.log(param)
-  })
 }
 
 onMounted(() => {
+  handleData()
   createChart()
 })
 </script>
 
 <template>
   <div class="echarts-box">
-<!--    <div ref="echartsRef" :style="{ width: props.width, height: props.height }"></div>-->
-    <div ref="echartsRef" style="width: 200px;height: 200px"></div>
-
+    <div ref="echartsRef" style="width: 320px;height: 300px"></div>
+    <span class="vis-tips">今天{{commonUtils.determineVisibility(weatherStore.daysWeather_10[0].vis)}}</span>
   </div>
 </template>
+<style>
+.vis-tips{
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 16px;
+  margin-left: 5px;
+}
+</style>

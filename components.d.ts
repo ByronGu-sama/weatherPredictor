@@ -18,6 +18,7 @@ declare module 'vue' {
     Home: typeof import('./src/components/home.vue')['default']
     HourlyWeatherPredictorComponent: typeof import('./src/components/hourlyPredictor/hourlyWeatherPredictorComponent.vue')['default']
     Humidity: typeof import('./src/components/humidity/humidity.vue')['default']
+    HumidityGraph: typeof import('./src/components/humidity/humidityGraph.vue')['default']
     MoonPhase: typeof import('./src/components/moonPhase/moonPhase.vue')['default']
     NotFound: typeof import('./src/components/notFound/notFound.vue')['default']
     Precipitation: typeof import('./src/components/precipitation/precipitation.vue')['default']

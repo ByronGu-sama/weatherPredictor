@@ -1,31 +1,11 @@
 <script setup lang="ts">
-import {nextTick, onMounted, ref, watch} from "vue";
+import {nextTick, ref, watch} from "vue";
 import {useWeatherStore} from "../../store/weatherEditor.ts";
+import commonUtils from "../../utils/commonUtils.ts";
 
 let daysPredictor = ref<any>()                           //10天 天气预报
 let area = ref<HTMLElement>()
 const weatherStore = useWeatherStore()
-
-//日期转换
-const processWeek = (val:string) => {
-  let week:number = new Date(val).getDay()
-  switch (week){
-    case 1:
-      return '周一'
-    case 2:
-      return '周二'
-    case 3:
-      return '周三'
-    case 4:
-      return '周四'
-    case 5:
-      return '周五'
-    case 6:
-      return '周六'
-    case 0:
-      return '周日'
-  }
-}
 
 //计算未来10天每日温差及温度范围在整体数据中的趋势
 const calcTempTrend = async (val:{day:string,tempMin:number,tempMax:number,iconDay:string}[]) => {
@@ -181,7 +161,7 @@ nextTick(() => {
     <hr class="divider">
     <div v-for="(item,index) in daysPredictor" :key="index" v-if="daysPredictor">
       <div class="dpc-left">
-        {{index==0?'今天':processWeek(item.date)}}
+        {{index==0?'今天':commonUtils.processWeek(item.date)}}
       </div>
       <div class="dpc-middle">
         <i :class="'qi-'+item.iconDay"/>

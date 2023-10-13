@@ -3,6 +3,7 @@ import {useWeatherStore} from "../../store/weatherEditor";
 import { ClickOutside as vClickOutside } from 'element-plus'
 import visGraph from './visGraph.vue'
 import {ref, unref} from "vue";
+import commonUtils from "../../utils/commonUtils.ts";
 
 const weatherStore = useWeatherStore()
 let bodyRef = ref()
@@ -11,29 +12,11 @@ const onClickOutside = () => {
   unref(popoverRef).popperRef?.delayHide?.()
 }
 //判断能见度
-const determineVisibility = (vis:any) => {
-  vis = parseInt(vis)
-  switch (vis){
-    case vis < 1:
-      return '能见度几乎为零'
-    case vis < 10:
-      return '能见度差'
-    case vis < 15:
-      return '能见度较差'
-    case vis < 20:
-      return '能见度一般'
-    case vis < 25:
-      return '能见度好'
-    default:
-      return '能见度极好'
-  }
-}
-
 </script>
 
 <template>
   <div class="module-main" v-if="weatherStore.weather">
-    <div class="test-main" v-click-outside="onClickOutside" ref="bodyRef">
+    <div class="vis-main" v-click-outside="onClickOutside" ref="bodyRef">
       <div class="module-title">
         <img src="../../assets/icons/visibility.svg" style="width: 13px;height: 13px">&nbsp;能见度
       </div>
@@ -41,7 +24,7 @@ const determineVisibility = (vis:any) => {
         {{weatherStore.weather.vis}}公里
       </div>
       <div class="visibility-bottom">
-        {{determineVisibility(weatherStore.weather.vis)}}
+        {{commonUtils.determineVisibility(weatherStore.weather.vis)}}
       </div>
     </div>
 
@@ -51,7 +34,7 @@ const determineVisibility = (vis:any) => {
         trigger="click"
         placement="left"
         virtual-triggering
-        width="260"
+        width="350"
         transition="el-fade-in-linear"
     >
       <el-scrollbar :max-height="260">
@@ -60,7 +43,7 @@ const determineVisibility = (vis:any) => {
 
           </div>
           <div class="vis-popup-middle">
-            <visGraph width="230px" height="230px"></visGraph>
+            <visGraph width="320px" height="300px"></visGraph>
           </div>
           <el-divider />
           <div class="vis-popup-bottom">
@@ -75,7 +58,7 @@ const determineVisibility = (vis:any) => {
 </template>
 
 <style scoped>
-.test-main{
+.vis-main{
   width: 100%;
   height: 100%;
 }

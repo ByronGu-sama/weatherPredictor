@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useWeatherStore} from "../../store/weatherEditor";
-import {onMounted, onUnmounted, ref} from "vue";
+import {nextTick, onMounted, onUnmounted, ref} from "vue";
 
 const weatherStore = useWeatherStore()
 let xAxis:any = ref('5px')
@@ -43,7 +43,7 @@ const calcYAxis = (x:number) =>{
   yAxis.value = 40*(1-yPercent)-5+'px'
 }
 
-onMounted(() => {
+nextTick(() => {
   calcXAxis()
   refreshTimer = setInterval(() => {
     calcXAxis()
@@ -56,9 +56,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="module-main">
+  <div class="module-main" v-if="weatherStore.daysWeather_10">
     <div class="module-title">
-      <img src="../../assets/icons/sunset.svg">&nbsp;日落
+      <img src="../../assets/icons/sunset.svg" alt="">&nbsp;日落
     </div>
     <div class="sunset-bottom">
       <div class="sunset-time">
