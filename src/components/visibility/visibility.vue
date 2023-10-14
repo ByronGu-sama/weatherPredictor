@@ -6,8 +6,10 @@ import {ref, unref} from "vue";
 import commonUtils from "../../utils/commonUtils";
 
 const weatherStore = useWeatherStore()
-let bodyRef = ref()
 const popoverRef = ref()
+let bodyRef = ref()
+let render = ref(false)
+
 const onClickOutside = () => {
   unref(popoverRef).popperRef?.delayHide?.()
 }
@@ -15,7 +17,7 @@ const onClickOutside = () => {
 </script>
 
 <template>
-  <div class="module-main" v-if="weatherStore.weather">
+  <div class="module-main" v-if="weatherStore.weather?.vis">
     <div class="vis-main" v-click-outside="onClickOutside" ref="bodyRef">
       <div class="module-title">
         <img src="../../assets/icons/visibility.svg" style="width: 13px;height: 13px">&nbsp;能见度
@@ -36,11 +38,13 @@ const onClickOutside = () => {
         virtual-triggering
         width="350"
         transition="el-fade-in-linear"
+        @after-enter="render = true"
+        @after-leave="render = false"
     >
       <el-scrollbar :max-height="260">
         <div class="vis-popup">
           <div class="vis-popup-middle">
-            <visGraph width="320px" height="300px"></visGraph>
+            <visGraph width="320px" height="300px" :render="render"></visGraph>
           </div>
           <el-divider />
           <div class="vis-popup-bottom">

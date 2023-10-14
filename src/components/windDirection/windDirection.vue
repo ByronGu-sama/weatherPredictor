@@ -5,7 +5,7 @@ const weatherStore = useWeatherStore()
 </script>
 
 <template>
-  <div class="module-main">
+  <div class="module-main" v-if="weatherStore.weather?.windScale">
     <div class="module-title">
       <i class="qi-2352"></i>&nbsp;风向
     </div>

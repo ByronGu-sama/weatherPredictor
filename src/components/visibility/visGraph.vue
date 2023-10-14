@@ -1,14 +1,16 @@
 <script setup>
 import * as echarts from "echarts";
-import {onMounted, ref, watch,nextTick} from "vue";
+import {onUnmounted, ref, watch,defineProps} from "vue";
 import {useWeatherStore} from "../../store/weatherEditor";
 import commonUtils from "../../utils/commonUtils";
 
-let echartsRef = ref()
 const weatherStore = useWeatherStore()
+let echartsRef = ref()
+let props = defineProps(['render'])
 let week = []
 let vis = []
 let lineChart = null
+
 let lineOption = ({
   title: {
     text: '能见度'
@@ -51,50 +53,52 @@ let lineOption = ({
 
 //处理天气数据
 const handleData = () => {
-  let temp = weatherStore.daysWeather_10.slice(0,6)
-  for(let i of temp){
-    week.push(commonUtils.processWeek(i.fxDate))
-    if(i.vis){
-      vis.push(i.vis)
-    }else{
-      vis.push(20)
+  if(weatherStore.daysWeather_10?.length > 6){
+    let temp = weatherStore.daysWeather_10.slice(0,6)
+    for(let i of temp){
+      week.push(commonUtils.processWeek(i.fxDate))
+      if(i.vis){
+        vis.push(i.vis)
+      }else{
+        vis.push(20)
+      }
     }
   }
 }
 
 const createChart = () => {
-  lineChart = echarts.init(echartsRef.value);
-  lineChart.setOption(lineOption,true)
+  if(!lineChart){
+    lineChart = echarts.init(echartsRef.value);
+    lineChart.setOption(lineOption,true)
+  }
 }
 
-// 获取新数据后需要通过改变原始数组触发echarts自动更新
-watch(() => weatherStore.daysWeather_10,(n) => {
-  if (lineChart){
-    if (n.length >= 6){
-      setTimeout(() => {
-        week.splice(0)
-        vis.splice(0)
-        handleData()
-        lineOption.series.data = vis
-        lineChart.setOption(lineOption)
-      },200)
+watch(() => props.render,(n) => {
+  if (n && weatherStore.daysWeather_10?.length > 6) {
+    //已初始化过的图表通过重新设置数据触发更新
+    if (lineChart) {
+      week.splice(0)
+      vis.splice(0)
+      handleData()
+      lineChart.setOption(lineOption, true)
+    } else {
+      handleData()
+      createChart()
     }
-  }else{
-    lineChart = echarts.init(echartsRef.value);
   }
 },{
-  deep:true
+  immediate:true
 })
-onMounted(() => {
-  handleData()
-  createChart()
+
+onUnmounted(() => {
+  lineChart.dispose()
 })
 </script>
 
 <template>
   <div class="echarts-box">
     <div ref="echartsRef" style="width: 320px;height: 300px"></div>
-    <span class="vis-tips">今天{{commonUtils.determineVisibility(weatherStore.daysWeather_10[0].vis)}}</span>
+    <span class="vis-tips">今天{{commonUtils.determineVisibility(weatherStore.daysWeather_10[0]?.vis)}}</span>
   </div>
 </template>
 <style>

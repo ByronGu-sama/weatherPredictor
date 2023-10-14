@@ -61,7 +61,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="module-main" v-if="weatherStore.daysWeather_10">
+  <div class="module-main" v-if="weatherStore.daysWeather_10?.length > 9">
     <div class="module-title">
       <img src="../../assets/icons/sunset.svg" alt="">&nbsp;日落
     </div>

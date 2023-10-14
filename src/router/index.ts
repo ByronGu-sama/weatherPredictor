@@ -7,11 +7,6 @@ const routes = [
         component:() => import("../components/home.vue")
     },
     {
-        path:'/test',
-        name:'test',
-        component:() => import("../components/test/test.vue")
-    },
-    {
         path:'/weatherChart',
         name:'风云图',
         component:() => import("../components/bigDataChart/weatherChart.vue")

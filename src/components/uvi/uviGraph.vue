@@ -1,14 +1,16 @@
 <script setup>
 import * as echarts from "echarts";
-import {onMounted, ref, watch} from "vue";
+import {onUnmounted, ref, watch, defineProps} from "vue";
 import {useWeatherStore} from "../../store/weatherEditor";
 import commonUtils from "../../utils/commonUtils";
 
-let echartsRef = ref()
 const weatherStore = useWeatherStore()
+let echartsRef = ref()
+let props = defineProps(['render'])
 let week = []
-let uviIndex = []
+let uvIndex = []
 let lineChart = null
+
 let lineOption = ({
   title: {
     text: '紫外线强度'
@@ -23,7 +25,7 @@ let lineOption = ({
   series: [
     {
       type: 'line',
-      data: uviIndex,
+      data: uvIndex,
       smooth:true,
       symbol:'none',
       areaStyle:{
@@ -58,9 +60,9 @@ const handleData = () => {
   for(let i of temp){
     week.push(commonUtils.processWeek(i.fxDate))
     if(i.uvIndex){
-      uviIndex.push(i.uvIndex)
+      uvIndex.push(i.uvIndex)
     }else{
-      uviIndex.push(20)
+      uvIndex.push(20)
     }
   }
 }
@@ -70,27 +72,25 @@ const createChart = () => {
   lineChart.setOption(lineOption,true)
 }
 
-// 获取新数据后需要通过改变原始数组触发echarts自动更新
-watch(() => weatherStore.daysWeather_10,(n) => {
-  if (lineChart){
-    if (n.length >= 6){
-      setTimeout(() => {
-        week.splice(0)
-        uvIndex.splice(0)
-        handleData()
-        lineOption.series.data = uvIndex
-        lineChart.setOption(lineOption)
-      },200)
+watch(() => props.render,(n) => {
+  if (n && weatherStore.daysWeather_10?.length > 9) {
+    //已初始化过的图表通过重新设置数据触发更新
+    if (lineChart) {
+      week.splice(0)
+      uvIndex.splice(0)
+      handleData()
+      lineChart.setOption(lineOption, true)
+    } else {
+      handleData()
+      createChart()
     }
-  }else{
-    lineChart = echarts.init(echartsRef.value);
   }
 },{
-  deep:true
+  immediate:true
 })
-onMounted(() => {
-  handleData()
-  createChart()
+
+onUnmounted(() => {
+  lineChart.dispose()
 })
 </script>
 
@@ -99,11 +99,3 @@ onMounted(() => {
     <div ref="echartsRef" style="width: 320px;height: 300px"></div>
   </div>
 </template>
-<style>
-.vis-tips{
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 16px;
-  margin-left: 5px;
-}
-</style>

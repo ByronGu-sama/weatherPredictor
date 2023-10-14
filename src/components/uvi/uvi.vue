@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import {ref, unref} from "vue";
-import {useWeatherIndicesStore} from "../../store/weatherIndicesEditor.ts";
+import {useWeatherIndicesStore} from "../../store/weatherIndicesEditor";
+import {useWeatherStore} from "../../store/weatherEditor";
 import { ClickOutside as vClickOutside } from 'element-plus'
 import uviGraph from './uviGraph.vue'
+
+let render = ref(false)
 let barWrap = ref<HTMLElement>()
 let bodyRef = ref()
 const popoverRef = ref()
 const weatherIndicesStore = useWeatherIndicesStore()
+const weatherStore = useWeatherStore()
 
 const onClickOutside = () => {
   unref(popoverRef).popperRef?.delayHide?.()
@@ -36,7 +40,7 @@ const calcMargin = (level:string) => {
 </script>
 
 <template>
-  <div class="module-main" v-if="weatherIndicesStore.uviIndex">
+  <div class="module-main" v-if="weatherStore.daysWeather_10?.length > 9">
     <div class="uvi-main" v-click-outside="onClickOutside" ref="bodyRef">
       <div class="module-title">
         <i class="qi-100"></i>&nbsp;紫外线指数
@@ -65,11 +69,13 @@ const calcMargin = (level:string) => {
           virtual-triggering
           width="350"
           transition="el-fade-in-linear"
+          @after-enter="render = true"
+          @after-leave="render = false"
       >
         <el-scrollbar :max-height="260">
           <div class="vis-popup">
             <div class="vis-popup-middle">
-              <uviGraph width="320px" height="300px"></uviGraph>
+              <uviGraph width="320px" height="300px" :render="render"></uviGraph>
             </div>
             <el-divider />
             <div class="vis-popup-bottom">

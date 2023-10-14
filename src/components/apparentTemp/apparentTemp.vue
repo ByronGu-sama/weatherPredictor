@@ -3,14 +3,10 @@ import {useWeatherStore} from "../../store/weatherEditor.ts";
 import {useWeatherIndicesStore} from "../../store/weatherIndicesEditor.ts";
 
 const weatherStore = useWeatherStore()
-const weatherIndicesStore = useWeatherIndicesStore()
 
-const handleClothIndex = (index:any) => {
-  console.log(index)
-}
 </script>
 <template>
-  <div class="module-main" v-if="weatherStore.weather">
+  <div class="module-main" v-if="weatherStore.weather?.feelsLike">
     <div class="module-title">
       <img src="../../assets/icons/thermometer.svg" style="width: 13px;height: 13px"/>&nbsp;体感温度
     </div>
@@ -18,7 +14,6 @@ const handleClothIndex = (index:any) => {
       {{weatherStore.weather.feelsLike}}˚
     </div>
     <div class="bottom-tips">
-      {{handleClothIndex(weatherIndicesStore.clothIndex)}}
       潮湿使人感觉更热
     </div>
   </div>

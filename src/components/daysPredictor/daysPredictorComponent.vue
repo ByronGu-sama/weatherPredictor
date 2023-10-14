@@ -145,7 +145,7 @@ const processData = (data:any) => {
 }
 
 watch(() => weatherStore.daysWeather_10,() => {
-  if(weatherStore.daysWeather_10?.length>=10){
+  if(weatherStore.daysWeather_10?.length >= 9){
     processData(weatherStore.daysWeather_10)
   }
 },{
@@ -155,7 +155,7 @@ watch(() => weatherStore.daysWeather_10,() => {
 </script>
 
 <template>
-  <div class="dpcMain"  style="text-align: left" ref="area" v-if="weatherStore.daysWeather_10">
+  <div class="dpcMain"  style="text-align: left" ref="area" v-if="weatherStore.daysWeather_10?.length > 9">
     <span style="margin: 5px 0 0 15px;line-height: 36px;font-weight: bold">未来10日天气预报</span>
     <hr class="divider">
     <div v-for="(item,index) in daysPredictor" :key="index" v-if="daysPredictor">

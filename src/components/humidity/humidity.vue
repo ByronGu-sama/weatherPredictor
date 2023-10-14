@@ -4,16 +4,18 @@ import humidityGraph from './humidityGraph.vue'
 import {ref, unref} from "vue";
 import { ClickOutside as vClickOutside } from 'element-plus'
 
-let bodyRef = ref()
 const popoverRef = ref()
+const weatherStore = useWeatherStore()
+let bodyRef = ref()
+let render = ref(false)
+
 const onClickOutside = () => {
   unref(popoverRef).popperRef?.delayHide?.()
 }
-const weatherStore = useWeatherStore()
 </script>
 
 <template>
-  <div class="module-main" v-if="weatherStore.hourlyWeather_24">
+  <div class="module-main" v-if="weatherStore.hourlyWeather_24?.length>23">
     <div class="humidity-main" v-click-outside="onClickOutside" ref="bodyRef">
       <div class="module-title">
         <img src="../../assets/icons/humidity.svg" style="width: 13px;height: 13px" alt="">&nbsp;湿度
@@ -33,11 +35,12 @@ const weatherStore = useWeatherStore()
         virtual-triggering
         width="350"
         transition="el-fade-in-linear"
-    >
+        @after-enter="render = true"
+        @after-leave="render = false">
       <el-scrollbar :max-height="260">
         <div class="humidity-popup">
           <div class="humidity-popup-middle">
-            <humidityGraph width="350px" height="300px"></humidityGraph>
+            <humidityGraph width="350px" height="300px" :render="render"></humidityGraph>
           </div>
           <el-divider />
           <div class="humidity-popup-bottom">

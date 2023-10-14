@@ -67,7 +67,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div v-if="weatherStore.hourlyWeather_24?.length>23">
     <div class="predictor24Wrapper-title">
       <span>{{ hourlyPredictorTitle }}</span>
     </div>

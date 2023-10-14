@@ -8,6 +8,7 @@ const BASIC_PRESSURE = 1013
 const weatherStore = useWeatherStore()
 const popoverRef = ref()
 let bodyRef = ref()
+let render = ref(false)
 
 const onClickOutside = () => {
   unref(popoverRef).popperRef?.delayHide?.()
@@ -30,7 +31,7 @@ const calcAngle = (pressure:any) => {
 </script>
 
 <template>
-  <div class="module-main" v-if="weatherStore.weather">
+  <div class="module-main" v-if="weatherStore.hourlyWeather_24?.length > 23">
     <div class="pressure-main" v-click-outside="onClickOutside" ref="bodyRef">
       <div class="module-title">
         <img src="../../assets/icons/pressure.svg">&nbsp;气压
@@ -60,11 +61,13 @@ const calcAngle = (pressure:any) => {
         virtual-triggering
         width="350"
         transition="el-fade-in-linear"
+        @after-enter="render = true"
+        @after-leave="render = false"
     >
       <el-scrollbar :max-height="260">
         <div class="vis-popup">
           <div class="vis-popup-middle">
-            <pressureGraph width="320px" height="300px"></pressureGraph>
+            <pressureGraph width="320px" height="300px" :render="render"></pressureGraph>
           </div>
           <el-divider />
           <div class="vis-popup-bottom">

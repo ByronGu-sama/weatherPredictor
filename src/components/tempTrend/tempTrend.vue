@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useWeatherStore} from "../../store/weatherEditor";
-import {ref, watch} from "vue";
+import {watch} from "vue";
 
 const weatherStore = useWeatherStore()
 
@@ -51,7 +51,7 @@ watch(()=>weatherStore.historicalWeather.length>=7,() => {
 </script>
 
 <template>
-  <div class="module-main" v-if="weatherStore.daysWeather_10">
+  <div class="module-main" v-if="weatherStore.daysWeather_10?.length > 9">
     <div class="module-title">
       <img src="../../assets/icons/trend.svg">&emsp;平均
     </div>

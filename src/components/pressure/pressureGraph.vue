@@ -1,14 +1,16 @@
 <script setup>
 import * as echarts from "echarts";
-import {onMounted, ref, watch} from "vue";
+import {onUnmounted, ref, watch, defineProps} from "vue";
 import {useWeatherStore} from "../../store/weatherEditor";
 import commonUtils from "../../utils/commonUtils";
 
-let echartsRef = ref()
 const weatherStore = useWeatherStore()
+let props = defineProps(['render'])
+let echartsRef = ref()
 let hour = []
 let pressure = []
 let lineChart = null
+
 let lineOption = ({
   title: {
     text: '大气压强'
@@ -72,27 +74,25 @@ const createChart = () => {
   lineChart.setOption(lineOption,true)
 }
 
-// 获取新数据后需要通过改变原始数组触发echarts自动更新
-watch(() => weatherStore.hourlyWeather_24,(n) => {
-  if (lineChart){
-    if (n.length >= 24){
-      setTimeout(() => {
-        hour.splice(0)
-        pressure.splice(0)
-        handleData()
-        lineOption.series.data = pressure
-        lineChart.setOption(lineOption)
-      },200)
+watch(() => props.render,(n) => {
+  if (n && weatherStore.hourlyWeather_24?.length > 23) {
+    //已初始化过的图表通过重新设置数据触发更新
+    if (lineChart) {
+      hour.splice(0)
+      pressure.splice(0)
+      handleData()
+      lineChart.setOption(lineOption, true)
+    } else {
+      handleData()
+      createChart()
     }
-  }else{
-    lineChart = echarts.init(echartsRef.value);
   }
 },{
-  deep:true
+  immediate:true
 })
-onMounted(() => {
-  handleData()
-  createChart()
+
+onUnmounted(() => {
+  lineChart.dispose()
 })
 </script>
 

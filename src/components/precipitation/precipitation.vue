@@ -7,6 +7,7 @@ import {ref, unref} from "vue";
 const weatherStore = useWeatherStore()
 const popoverRef = ref()
 let bodyRef = ref()
+let render = ref(false)
 
 const onClickOutside = () => {
   unref(popoverRef).popperRef?.delayHide?.()
@@ -28,7 +29,7 @@ const calcFuturePrecipitation_24h = (data:any) => {
 </script>
 
 <template>
-  <div class="module-main" v-if="weatherStore.hourlyWeather_24">
+  <div class="module-main" v-if="weatherStore.hourlyWeather_24?.length>1 && weatherStore.weather?.precip">
     <div class="precip-main" v-click-outside="onClickOutside" ref="bodyRef">
       <div class="module-title">
         <img src="../../assets/icons/precipitation.svg" style="width: 13px;height: 13px" alt="">&nbsp;降水
@@ -53,11 +54,13 @@ const calcFuturePrecipitation_24h = (data:any) => {
         virtual-triggering
         width="350"
         transition="el-fade-in-linear"
+        @after-enter="render = true"
+        @after-leave="render = false"
     >
       <el-scrollbar :max-height="260">
         <div class="vis-popup">
           <div class="vis-popup-middle">
-            <precipGraph width="320px" height="300px"></precipGraph>
+            <precipGraph width="320px" height="300px" :render="render"></precipGraph>
           </div>
           <div class="vis-popup-bottom">
             <span class="popup-tips">未来24小时降水总量预计为{{(parseFloat(calcFuturePrecipitation_24h(weatherStore.hourlyWeather_24))*24).toFixed(1)}}毫米</span>
