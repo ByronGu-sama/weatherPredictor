@@ -59,7 +59,7 @@ const calcAngle = (pressure:any) => {
         trigger="click"
         placement="left"
         virtual-triggering
-        width="350"
+        width="400"
         transition="el-fade-in-linear"
         @after-enter="render = true"
         @after-leave="render = false"
@@ -67,7 +67,7 @@ const calcAngle = (pressure:any) => {
       <el-scrollbar :max-height="260">
         <div class="vis-popup">
           <div class="vis-popup-middle">
-            <pressureGraph width="320px" height="300px" :render="render"></pressureGraph>
+            <pressureGraph width="330px" height="300px" :render="render"></pressureGraph>
           </div>
           <el-divider />
           <div class="vis-popup-bottom">

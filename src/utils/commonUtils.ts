@@ -105,7 +105,7 @@ const processWeek = (val:string) => {
 const determineVisibility = (vis:any) => {
     vis = parseInt(vis)
     if(vis){
-        switch (vis){
+        switch (true){
             case vis < 1:
                 return '能见度几乎为零'
             case vis < 10:
@@ -120,7 +120,7 @@ const determineVisibility = (vis:any) => {
                 return '能见度极好'
         }
     }else{
-        return '能见度好'
+        return '暂无数据'
     }
 }
 
@@ -177,8 +177,6 @@ const calcApparentTemperature = (t:number,v:number,rh:number) => {
 * @Description 根据湿度和气温返回相应的提示语
 */
 const handleTipsAboutT_and_H = (t:number | string,h:number | string) => {
-    console.log(t)
-    console.log(h)
     if((typeof t == 'number' || 'string') && (typeof h == 'number' || 'string')){
         t = typeof t == 'number' ?t:parseFloat(t)
         h = typeof h == 'number' ?t:parseInt(h)

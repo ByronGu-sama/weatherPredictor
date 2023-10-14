@@ -16,8 +16,13 @@ let lineOption = ({
     text: '紫外线强度'
   },
   xAxis: {
+    name:'时间',
     data: week,
     boundaryGap:false,
+    nameTextStyle:{
+      padding:[0,0,0,-10],
+      verticalAlign:'top'
+    }
   },
   yAxis: {
     name:'UVI',
@@ -90,7 +95,8 @@ watch(() => props.render,(n) => {
 })
 
 onUnmounted(() => {
-  lineChart.dispose()
+  if (lineChart)
+    lineChart.dispose()
 })
 </script>
 

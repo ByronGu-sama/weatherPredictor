@@ -37,5 +37,6 @@ declare module 'vue' {
     Visibility: typeof import('./src/components/visibility/visibility.vue')['default']
     WeatherChart: typeof import('./src/components/bigDataChart/weatherChart.vue')['default']
     WindDirection: typeof import('./src/components/windDirection/windDirection.vue')['default']
+    WindDirectionGraph: typeof import('./src/components/windDirection/windDirectionGraph.vue')['default']
   }
 }

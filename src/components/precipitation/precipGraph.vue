@@ -15,8 +15,13 @@ let lineOption = ({
     text: '降水'
   },
   xAxis: {
+    name:'时间',
     type:'category',
     data: hour,
+    nameTextStyle:{
+      padding:[0,0,0,-10],
+      verticalAlign:'top'
+    }
   },
   yAxis: {
     name:'mm/h',
@@ -87,7 +92,8 @@ watch(() => props.render,(n) => {
 })
 
 onUnmounted(() => {
-  lineChart.dispose()
+  if (lineChart)
+    lineChart.dispose()
 })
 </script>
 

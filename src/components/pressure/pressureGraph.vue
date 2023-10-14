@@ -16,11 +16,23 @@ let lineOption = ({
     text: '大气压强'
   },
   xAxis: {
-    data: hour
+    data: hour,
+    name:'时间',
+    nameTextStyle:{
+      padding:[0,0,0,-10],
+      verticalAlign:'top'
+    }
   },
   yAxis: {
     name:'百帕',
-    min:600
+    min:600,
+    axisLabel:{
+      formatter:(val) => {
+        return val + ' '
+      },
+      verticalAlign: 'right',
+      fontSize: '10px'
+    }
   },
   series: [
     {
@@ -95,17 +107,18 @@ watch(() => props.render,(n) => {
 })
 
 onUnmounted(() => {
-  lineChart.dispose()
+  if (lineChart)
+    lineChart.dispose()
 })
 </script>
 
 <template>
   <div class="echarts-box">
-    <div ref="echartsRef" style="width: 320px;height: 300px"></div>
+    <div ref="echartsRef" style="width: 330px;height: 300px"></div>
     <span class="vis-tips">今天{{commonUtils.determineVisibility(weatherStore.daysWeather_10[0].vis)}}</span>
   </div>
 </template>
-<style>
+<style scoped>
 .vis-tips{
   font-size: 16px;
   font-weight: bold;

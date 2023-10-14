@@ -1,35 +1,77 @@
 <script setup lang="ts">
-import {useWeatherStore} from "../../store/weatherEditor.ts";
+import {useWeatherStore} from "../../store/weatherEditor";
+import { ClickOutside as vClickOutside } from 'element-plus'
+import windDirectionGraph from './windDirectionGraph.vue'
+import {ref, unref} from "vue";
 
 const weatherStore = useWeatherStore()
+const popoverRef = ref()
+let bodyRef = ref()
+let render = ref(false)
+
+const onClickOutside = () => {
+  unref(popoverRef).popperRef?.delayHide?.()
+}
 </script>
 
 <template>
   <div class="module-main" v-if="weatherStore.weather?.windScale">
-    <div class="module-title">
-      <i class="qi-2352"></i>&nbsp;风向
-    </div>
-    <div class="ring-body">
-      <div class="ringWrap">
-        <div class="wind-ring"></div>
-        <div class="ring-mask">
-          <span>东</span>
-          <span>南</span>
-          <span>西</span>
-          <span>北</span>
-        </div>
-        <div class="arrow">
-          <img src="../../assets/pic/arrow.png" :style="{transform:`rotate(${weatherStore.weather?weatherStore.weather.wind360:'0'}deg)`}">
-        </div>
-        <div class="wind-dashboard" v-if="weatherStore.weather">
-          {{weatherStore.weather.windScale}}级
+    <div class="wind-main" v-click-outside="onClickOutside" ref="bodyRef">
+      <div class="module-title">
+        <i class="qi-2352"></i>&nbsp;风向
+      </div>
+      <div class="ring-body">
+        <div class="ringWrap">
+          <div class="wind-ring"></div>
+          <div class="ring-mask">
+            <span>东</span>
+            <span>南</span>
+            <span>西</span>
+            <span>北</span>
+          </div>
+          <div class="arrow">
+            <img src="../../assets/pic/arrow.png" :style="{transform:`rotate(${weatherStore.weather?weatherStore.weather.wind360:'0'}deg)`}">
+          </div>
+          <div class="wind-dashboard" v-if="weatherStore.weather">
+            {{weatherStore.weather.windScale}}级
+          </div>
         </div>
       </div>
     </div>
+
+    <el-popover
+        ref="popoverRef"
+        :virtual-ref="bodyRef"
+        trigger="click"
+        placement="left"
+        virtual-triggering
+        width="360"
+        transition="el-fade-in-linear"
+        @after-enter="render = true"
+        @after-leave="render = false"
+    >
+      <el-scrollbar :max-height="260">
+        <div class="vis-popup">
+          <div class="vis-popup-middle">
+            <windDirectionGraph width="330px" height="300px" :render="render"></windDirectionGraph>
+          </div>
+          <el-divider />
+          <div class="vis-popup-bottom">
+            <span class="popup-title">关于能见度</span>
+            <br>
+            <span class="popup-tips">能见度，是指人能将目标物从背景中识别出来的最大距离。不考虑光照强度或障碍物，能见度10公里以上为良好</span>
+          </div>
+        </div>
+      </el-scrollbar>
+    </el-popover>
   </div>
 </template>
 
 <style scoped>
+.wind-main{
+  width: 100%;
+  height: 100%;
+}
 .ring-body{
   width: 100%;
   height: calc(100% - 30px);

@@ -16,12 +16,17 @@ let lineOption = ({
     text: '湿度'
   },
   xAxis: {
+    name:'时间',
     type:'category',
     boundaryGap:false,
     data: week,
+    nameTextStyle:{
+      padding:[0,0,0,-10],
+      verticalAlign:'top'
+    }
   },
   yAxis: {
-    name:'%',
+    name:'湿度',
     min:0,
     max:100,
     interval:10,
@@ -112,7 +117,8 @@ watch(() => props.render,(n) => {
 })
 
 onUnmounted(() => {
-  lineChart.dispose()
+  if (lineChart)
+    lineChart.dispose()
 })
 </script>
 

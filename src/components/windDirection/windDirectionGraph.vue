@@ -7,34 +7,57 @@ import commonUtils from "../../utils/commonUtils";
 const weatherStore = useWeatherStore()
 let echartsRef = ref()
 let props = defineProps(['render'])
-let week = []
-let vis = []
+let hour = []
+let maxWScale = []
+let minWScale = []
+let windDir = []
+let windSpeed = []
 let lineChart = null
 
 let lineOption = ({
-  title: {
-    text: '能见度'
-  },
+  title: {},
   xAxis: {
     name:'时间',
-    data: week,
+    data: hour,
     nameTextStyle:{
       padding:[0,0,0,-10],
       verticalAlign:'top'
     }
   },
   yAxis: {
-    name:'km',
+    name:'风速等级',
     min:0,
-    max:45,
-    interval:5,
+    max:17
   },
   series: [
     {
+      name:'最高(级)',
       type: 'line',
-      data: vis,
+      data: maxWScale,
       smooth:true,
       symbol:'none'
+    }, {
+      name:'最低(级)',
+      type: 'line',
+      data: minWScale,
+      smooth:true,
+      symbol:'none'
+    }, {
+      name:'风速(km/h)',
+      type: 'line',
+      data: windSpeed,
+      symbol:'none',
+      lineStyle:{
+        width:'0'
+      }
+    }, {
+      name:'风向',
+      type: 'line',
+      data: windDir,
+      symbol:'none',
+      lineStyle:{
+        width:'0'
+      }
     }
   ],
   tooltip: {
@@ -51,24 +74,22 @@ let lineOption = ({
       label: {
         backgroundColor: '#6a7985'
       }
-    },
-    valueFormatter:(val) => {
-      return val + 'km'
     }
   }
 })
 
 //处理天气数据
 const handleData = () => {
-  if(weatherStore.daysWeather_10?.length > 6){
-    let temp = weatherStore.daysWeather_10.slice(0,6)
+  if(weatherStore.hourlyWeather_24?.length > 23){
+    let temp = weatherStore.hourlyWeather_24
     for(let i of temp){
-      week.push(commonUtils.processWeek(i.fxDate))
-      if(i.vis){
-        vis.push(i.vis)
-      }else{
-        vis.push(20)
-      }
+      let tempHour = new Date(i.fxTime)
+      hour.push(tempHour.getHours())
+      let windScale = i.windScale.split('-')
+      maxWScale.push(windScale[1] || 3)
+      minWScale.push(windScale[0] || 2)
+      windDir.push(i.windDir || '')
+      windSpeed.push(i.windSpeed || 15)
     }
   }
 }
@@ -81,11 +102,14 @@ const createChart = () => {
 }
 
 watch(() => props.render,(n) => {
-  if (n && weatherStore.daysWeather_10?.length > 6) {
+  if (n && weatherStore.hourlyWeather_24?.length > 23) {
     //已初始化过的图表通过重新设置数据触发更新
     if (lineChart) {
-      week.splice(0)
-      vis.splice(0)
+      hour.splice(0)
+      maxWScale.splice(0)
+      maxWScale.splice(0)
+      windSpeed.splice(0)
+      windDir.splice(0)
       handleData()
       lineChart.setOption(lineOption, true)
     } else {
@@ -98,14 +122,14 @@ watch(() => props.render,(n) => {
 })
 
 onUnmounted(() => {
-  if (lineChart)
+  if(lineChart)
     lineChart.dispose()
 })
 </script>
 
 <template>
   <div class="echarts-box">
-    <div ref="echartsRef" style="width: 320px;height: 300px"></div>
+    <div ref="echartsRef" style="width: 320px;height: 300px;margin-right: 10px"></div>
     <span class="vis-tips">今天{{commonUtils.determineVisibility(weatherStore.daysWeather_10[0]?.vis)}}</span>
   </div>
 </template>

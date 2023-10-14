@@ -18,6 +18,11 @@ let lineOption = ({
   },
   xAxis: {
     data: hour,
+    name:'时间',
+    nameTextStyle:{
+      padding:[0,0,0,-10],
+      verticalAlign:'top'
+    }
   },
   yAxis: {
     name:'温度',
@@ -42,7 +47,7 @@ let lineOption = ({
       smooth:true,
       symbol:'none',
       areaStyle:{
-        color:'transparent'
+        color:'#d7ffc3'
       }
     }
   ],
@@ -70,8 +75,8 @@ let lineOption = ({
 //处理天气数据
 const handleData = () => {
   if(weatherStore.hourlyWeather_24?.length > 23){
-    let temp = weatherStore.hourlyWeather_24
-    for(let i of temp){
+    let t = weatherStore.hourlyWeather_24
+    for(let i of t){
       let tempHour = new Date(i.fxTime)
       hour.push(tempHour.getHours())
       if(i.temp && i.windSpeed && i.humidity){
@@ -94,10 +99,8 @@ const getAT = (a,b,c) => {
 }
 
 const createChart = () => {
-  if(!lineChart){
-    lineChart = echarts.init(echartsRef.value);
-    lineChart.setOption(lineOption,true)
-  }
+  lineChart = echarts.init(echartsRef.value);
+  lineChart.setOption(lineOption,true)
 }
 
 watch(() => props.render,(n) => {
@@ -119,7 +122,8 @@ watch(() => props.render,(n) => {
 })
 
 onUnmounted(() => {
-  lineChart.dispose()
+  if (lineChart)
+    lineChart.dispose()
 })
 </script>
 
