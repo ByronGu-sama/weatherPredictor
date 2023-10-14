@@ -3,7 +3,6 @@ import hourlyWeatherPredictor from './hourlyPredictor/hourlyWeatherPredictorComp
 import daysWeatherPredictor from './daysPredictor/daysPredictorComponent.vue'
 import precipitation from './precipitation/precipitation.vue'
 import windDirection from './windDirection/windDirection.vue'
-import weatherChart from './bigDataChart/weatherChart.vue'
 import apparentTemp from './apparentTemp/apparentTemp.vue'
 import visibility from './visibility/visibility.vue'
 import tempTrend from './tempTrend/tempTrend.vue'
@@ -91,6 +90,10 @@ const getWeatherWarning = (location:string) => {
 const shiftGraph = () => {
   router.push('/weatherChart')
 }
+
+const toTips = () => {
+  router.push('/tips')
+}
 </script>
 
 <template>
@@ -119,7 +122,7 @@ const shiftGraph = () => {
         <div class="home-top-middle">
         </div>
         <div class="home-top-right">
-
+          <button @click="toTips">Tips</button>
         </div>
       </div>
       <div class="scrollArea">
@@ -204,94 +207,92 @@ const shiftGraph = () => {
 </template>
 
 <style scoped>
-.m1-enter-from{
-  left: -150%;
-  top: -150%;
-}
-.m1-enter-active{
-  animation: cloudMove1 1s;
-}
-.m1-enter-to{
-  left: -20%;
-  top: -40%;
-}
-.m1-leave-active{
-  animation: cloudMove1 1s reverse;
-}
-.m2-enter-from{
-  left: -150%;
-  top: -150%;
-}
-.m2-enter-active{
-  animation: cloudMove2 1s;
-}
-.m2-enter-to{
-  left: -5%;
-  top: -50%;
-}
-.m2-leave-active{
-  animation: cloudMove2 1s reverse;
-}
-.m3-enter-from{
-  left: -150%;
-  top: -150%;
-}
-.m3-enter-active{
-  animation: cloudMove3 1s;
-}
-.m3-enter-to{
-  left: -10%;
-  top: 5%;
-  rotate: 10deg;
-}
-.m3-leave-active{
-  animation: cloudMove3 1s reverse;
-}
-.m4-enter-from{
-  right: -150%;
-  top: -150%;
-}
-.m4-enter-active{
-  animation: cloudMove4 1s;
-}
-.m4-enter-to{
-  right: -40%;
-  top: -15%;
-  rotate: 10deg;
-}
-.m4-leave-active{
-  animation: cloudMove4 1s reverse;
-}
-.m5-enter-from{
-  right: -150%;
-  top: -150%;
-}
-.m5-enter-active{
-  animation: cloudMove5 1s;
-}
-.m5-enter-to{
-  right: -80%;
-  top: 5%;
-}
-.m5-leave-active{
-  animation: cloudMove5 1s reverse;
-}
-.m6-enter-from{
-  right: -150%;
-  top: -150%;
-}
-.m6-enter-active{
-  animation: cloudMove6 1s;
-}
-.m6-enter-to{
-  right: 10%;
-  top: 5%;
-}
-.m6-leave-active{
-  animation: cloudMove6 1s reverse;
-}
-
-
+  .m1-enter-from{
+    left: -150%;
+    top: -150%;
+  }
+  .m1-enter-active{
+    animation: cloudMove1 1s;
+  }
+  .m1-enter-to{
+    left: -20%;
+    top: -40%;
+  }
+  .m1-leave-active{
+    animation: cloudMove1 1s reverse;
+  }
+  .m2-enter-from{
+    left: -150%;
+    top: -150%;
+  }
+  .m2-enter-active{
+    animation: cloudMove2 1s;
+  }
+  .m2-enter-to{
+    left: -5%;
+    top: -50%;
+  }
+  .m2-leave-active{
+    animation: cloudMove2 1s reverse;
+  }
+  .m3-enter-from{
+    left: -150%;
+    top: -150%;
+  }
+  .m3-enter-active{
+    animation: cloudMove3 1s;
+  }
+  .m3-enter-to{
+    left: -10%;
+    top: 5%;
+    rotate: 10deg;
+  }
+  .m3-leave-active{
+    animation: cloudMove3 1s reverse;
+  }
+  .m4-enter-from{
+    right: -150%;
+    top: -150%;
+  }
+  .m4-enter-active{
+    animation: cloudMove4 1s;
+  }
+  .m4-enter-to{
+    right: -40%;
+    top: -15%;
+    rotate: 10deg;
+  }
+  .m4-leave-active{
+    animation: cloudMove4 1s reverse;
+  }
+  .m5-enter-from{
+    right: -150%;
+    top: -150%;
+  }
+  .m5-enter-active{
+    animation: cloudMove5 1s;
+  }
+  .m5-enter-to{
+    right: -80%;
+    top: 5%;
+  }
+  .m5-leave-active{
+    animation: cloudMove5 1s reverse;
+  }
+  .m6-enter-from{
+    right: -150%;
+    top: -150%;
+  }
+  .m6-enter-active{
+    animation: cloudMove6 1s;
+  }
+  .m6-enter-to{
+    right: 10%;
+    top: 5%;
+  }
+  .m6-leave-active{
+    animation: cloudMove6 1s reverse;
+  }
   ::-webkit-scrollbar{
     display: none;
   }
@@ -355,6 +356,15 @@ const shiftGraph = () => {
   }
   .home-top-right{
     flex: 1;
+  }
+  .home-top-right button{
+    height: 30px;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.59);
+    font-size: 16px;
+    float: right;
   }
   .home-middle{
     width: 100%;

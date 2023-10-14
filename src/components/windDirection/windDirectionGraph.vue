@@ -130,7 +130,7 @@ onUnmounted(() => {
 <template>
   <div class="echarts-box">
     <div ref="echartsRef" style="width: 320px;height: 300px;margin-right: 10px"></div>
-    <span class="vis-tips">今天{{commonUtils.determineVisibility(weatherStore.daysWeather_10[0]?.vis)}}</span>
+    <span class="vis-tips">当前风力{{weatherStore.weather.windScale}}级，{{weatherStore.weather.windDir}}</span>
   </div>
 </template>
 <style>

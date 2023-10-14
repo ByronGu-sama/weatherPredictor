@@ -2,6 +2,7 @@
 import {useWeatherStore} from "../../store/weatherEditor";
 import { ClickOutside as vClickOutside } from 'element-plus'
 import windDirectionGraph from './windDirectionGraph.vue'
+import windClassification from "../../utils/windClassification";
 import {ref, unref} from "vue";
 
 const weatherStore = useWeatherStore()
@@ -57,9 +58,36 @@ const onClickOutside = () => {
           </div>
           <el-divider />
           <div class="vis-popup-bottom">
-            <span class="popup-title">关于能见度</span>
+            <span class="popup-title">关于风速</span>
             <br>
-            <span class="popup-tips">能见度，是指人能将目标物从背景中识别出来的最大距离。不考虑光照强度或障碍物，能见度10公里以上为良好</span>
+            <span class="popup-tips">风速指的是单位时间内空气沿水平方向流动的距离。一般来讲，风速越大，风力等级越高，风的破坏性越大。</span>
+            <el-divider />
+            <span class="popup-title">蒲福风级</span>
+            <br>
+            <div class="windTypeWrap">
+
+              <div class="windTypeBody">
+                <div class="windTypeBody-left">级</div>
+                <div class="windTypeBody-middle">描述</div>
+                <div class="windTypeBody-right">公里/时</div>
+              </div>
+
+              <div class="windTypeBodyWrap" v-for="(i,index) in windClassification" :key="index">
+                <div class="windTypeBody">
+                  <div class="windTypeBody-left">
+                    <div class="windClassificationCircle" :style="{backgroundColor:i.color}"></div>
+                  </div>
+                  <div class="windTypeBody-middle">
+                    <span>{{i.desc}}</span>
+                  </div>
+                  <div class="windTypeBody-right">
+                    <span>{{i.scope}}</span>
+                  </div>
+                </div>
+                <el-divider v-show="index !== 12" />
+              </div>
+
+            </div>
           </div>
         </div>
       </el-scrollbar>
@@ -148,5 +176,40 @@ const onClickOutside = () => {
   justify-content: center;
   font-size: 16px;
   font-weight: bold;
+}
+.windTypeWrap{
+  width: 100%;
+  height: 100px;
+}
+.windTypeBodyWrap{
+  width: 100%;
+}
+.windTypeBody{
+  width: 100%;
+  height: 30px;
+  display: flex;
+}
+.windTypeBody > div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.windTypeBody-left{
+  flex: 1;
+}
+.windTypeBody-middle{
+  flex: 3;
+}
+.windTypeBody-right{
+  flex: 1;
+}
+.windClassificationCircle{
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  border: none;
+}
+.el-divider--horizontal{
+  margin: 5px 0;
 }
 </style>
