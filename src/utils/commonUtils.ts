@@ -157,11 +157,75 @@ const determineHumidity = (humidity:any) => {
         return '偏潮'
     }
 }
+
+/*
+* @Author:ByronGu
+* @Date:2023/10/14
+* @param t 温度 ˚C
+* @param v 风速（m/s）
+* @param rh 相对湿度（%）
+* @Description  体感温度计算公式
+*/
+const calcApparentTemperature = (t:number,v:number,rh:number) => {
+    return 1.07 * t + 0.2 * (rh / 100 * 6.105 * Math.exp(17.27 * t / (237.7 + t))) - 0.65 * v - 2.7
+}
+
+/*
+* @Author:ByronGu
+* @Date:2023/10/14
+* @param
+* @Description 根据湿度和气温返回相应的提示语
+*/
+const handleTipsAboutT_and_H = (t:number | string,h:number | string) => {
+    console.log(t)
+    console.log(h)
+    if((typeof t == 'number' || 'string') && (typeof h == 'number' || 'string')){
+        t = typeof t == 'number' ?t:parseFloat(t)
+        h = typeof h == 'number' ?t:parseInt(h)
+    }else{
+        return '类型错误'
+    }
+    if(h > 60){
+        switch (true){
+            case t > 30:
+                return '天气闷热难耐'
+            case t > 25:
+                return '潮湿使人感觉更热'
+            case t > 20:
+                return '潮湿使人感觉更凉快'
+            case t > 10:
+                return '潮湿使人感觉更冷'
+            default:
+                return '湿冷空气来临，记得多添一件衣服'
+        }
+    }else if(h < 30){
+        if(t < 15){
+            return '空气干燥，注意静电哦'
+        }else{
+            return '空气干燥'
+        }
+    }else{
+        switch (true){
+            case t > 30:
+                return '高温天气谨防中暑哦'
+            case t > 25:
+                return '天气温热，适合放松哦'
+            case t > 20:
+                return '温度宜人，多出门亲近大自然吧'
+            case t > 10:
+                return '气温较低，注意别感冒哦'
+            default:
+                return '天气寒冷，记得多添一件衣服'
+        }
+    }
+}
 export default {
     pushNotification,
     calcPreviousDays,
     processWeek,
     determineVisibility,
     determineHumidity,
+    calcApparentTemperature,
+    handleTipsAboutT_and_H,
 
 }

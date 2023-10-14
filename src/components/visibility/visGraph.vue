@@ -23,7 +23,6 @@ let lineOption = ({
     min:0,
     max:45,
     interval:5,
-    boundaryGap:[0,'10%']
   },
   series: [
     {
@@ -48,6 +47,9 @@ let lineOption = ({
         backgroundColor: '#6a7985'
       }
     },
+    valueFormatter:(val) => {
+      return val + 'km'
+    }
   }
 })
 

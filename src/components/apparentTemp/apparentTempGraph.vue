@@ -1,39 +1,48 @@
 <script setup>
 import * as echarts from "echarts";
-import {onUnmounted, ref, watch, defineProps} from "vue";
+import {onUnmounted, ref, watch,defineProps} from "vue";
 import {useWeatherStore} from "../../store/weatherEditor";
 import commonUtils from "../../utils/commonUtils";
 
 const weatherStore = useWeatherStore()
-let props = defineProps(['render'])
 let echartsRef = ref()
+let props = defineProps(['render'])
 let hour = []
-let pressure = []
+let AT = []
+let temperature = []
 let lineChart = null
 
 let lineOption = ({
   title: {
-    text: '大气压强'
+    text: '体感温度'
   },
   xAxis: {
-    data: hour
+    data: hour,
   },
   yAxis: {
-    name:'百帕',
-    min:600
+    name:'温度',
   },
   series: [
     {
+      name:'气温',
       type: 'line',
-      data: pressure,
+      data: temperature,
       smooth:true,
       symbol:'none',
       areaStyle:{
-        color:'rgba(245,232,253,0.76)',
+        color:'#c6fff6'
       },
       lineStyle:{
-        width:2,
-        color:'#d997ff'
+        color:'#97e5ff'
+      }
+    },{
+      name:'体感温度',
+      type: 'line',
+      data: AT,
+      smooth:true,
+      symbol:'none',
+      areaStyle:{
+        color:'transparent'
       }
     }
   ],
@@ -53,28 +62,42 @@ let lineOption = ({
       }
     },
     valueFormatter:(val) => {
-      return val + '百帕'
+      return val+'˚C'
     }
   }
 })
 
 //处理天气数据
 const handleData = () => {
-  let temp = weatherStore.hourlyWeather_24
-  for(let i of temp){
-    let tempHour = new Date(i.fxTime)
-    hour.push(tempHour.getHours())
-    if(i.pressure){
-      pressure.push(i.pressure)
-    }else{
-      pressure.push(1015)
+  if(weatherStore.hourlyWeather_24?.length > 23){
+    let temp = weatherStore.hourlyWeather_24
+    for(let i of temp){
+      let tempHour = new Date(i.fxTime)
+      hour.push(tempHour.getHours())
+      if(i.temp && i.windSpeed && i.humidity){
+        AT.push(getAT(i.temp,i.windSpeed,i.humidity).toFixed(1))
+        temperature.push(i.temp)
+      }else{
+        AT.push(20)
+        temperature.push(20)
+      }
     }
   }
 }
 
+//获取体感温度
+const getAT = (a,b,c) => {
+  let t = parseInt(a)
+  let v = parseInt(b)/60/60*1000
+  let rh = parseInt(c)
+  return commonUtils.calcApparentTemperature(t,v,rh)
+}
+
 const createChart = () => {
-  lineChart = echarts.init(echartsRef.value);
-  lineChart.setOption(lineOption,true)
+  if(!lineChart){
+    lineChart = echarts.init(echartsRef.value);
+    lineChart.setOption(lineOption,true)
+  }
 }
 
 watch(() => props.render,(n) => {
@@ -82,7 +105,8 @@ watch(() => props.render,(n) => {
     //已初始化过的图表通过重新设置数据触发更新
     if (lineChart) {
       hour.splice(0)
-      pressure.splice(0)
+      AT.splice(0)
+      temperature.splice(0)
       handleData()
       lineChart.setOption(lineOption, true)
     } else {
@@ -102,7 +126,7 @@ onUnmounted(() => {
 <template>
   <div class="echarts-box">
     <div ref="echartsRef" style="width: 320px;height: 300px"></div>
-    <span class="vis-tips">今天{{commonUtils.determineVisibility(weatherStore.daysWeather_10[0].vis)}}</span>
+    <span class="vis-tips">{{commonUtils.handleTipsAboutT_and_H(weatherStore.weather.temp,weatherStore.weather.humidity)}}</span>
   </div>
 </template>
 <style>

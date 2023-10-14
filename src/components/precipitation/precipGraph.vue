@@ -44,6 +44,9 @@ let lineOption = ({
         backgroundColor: '#6a7985'
       }
     },
+    valueFormatter:(val) => {
+      return val + 'mm/h'
+    }
   }
 })
 

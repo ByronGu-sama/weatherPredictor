@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ApparentTemp: typeof import('./src/components/apparentTemp/apparentTemp.vue')['default']
+    ApparentTempGraph: typeof import('./src/components/apparentTemp/apparentTempGraph.vue')['default']
     DaysPredictorComponent: typeof import('./src/components/daysPredictor/daysPredictorComponent.vue')['default']
     Divider: typeof import('./src/components/utils/divider.vue')['default']
     ElDivider: typeof import('element-plus/es')['ElDivider']
