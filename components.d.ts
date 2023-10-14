@@ -31,6 +31,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TempTrend: typeof import('./src/components/tempTrend/tempTrend.vue')['default']
+    TempTrendGraph: typeof import('./src/components/tempTrend/tempTrendGraph.vue')['default']
     Test: typeof import('./src/components/test/test.vue')['default']
     TipsPage: typeof import('./src/components/tips/tipsPage.vue')['default']
     TrackSun: typeof import('./src/components/trackSun/trackSun.vue')['default']

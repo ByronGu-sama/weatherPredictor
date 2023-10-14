@@ -1,9 +1,17 @@
 <script setup lang="ts">
 import {useWeatherStore} from "../../store/weatherEditor";
-import {watch} from "vue";
+import { ClickOutside as vClickOutside } from 'element-plus'
+import tempTrendGraph from './tempTrendGraph.vue'
+import {ref, unref, watch} from "vue";
 
+const popoverRef = ref()
 const weatherStore = useWeatherStore()
+let bodyRef = ref()
+let render = ref(false)
 
+const onClickOutside = () => {
+  unref(popoverRef).popperRef?.delayHide?.()
+}
 /*
 * @Author:ByronGu
 * @Date:2023/09/18
@@ -52,25 +60,57 @@ watch(()=>weatherStore.historicalWeather.length>=7,() => {
 
 <template>
   <div class="module-main" v-if="weatherStore.daysWeather_10?.length > 9">
-    <div class="module-title">
-      <img src="../../assets/icons/trend.svg">&emsp;平均
-    </div>
-    <div class="trend-middle">
-      <div class="trend-average">
-        <span>{{handleTempDiff()}}˚</span>
-        <br>
-        <span>{{processTips()}}</span>
+    <div class="temp-main" v-click-outside="onClickOutside" ref="bodyRef">
+      <div class="module-title">
+        <img src="../../assets/icons/trend.svg">&emsp;平均
       </div>
-      <div class="trend-tips">
-        <span>今天:{{weatherStore.daysWeather_10[0].tempMax}}˚</span>
-        <br>
-        <span>平均值:{{Math.round(calcGap())}}˚</span>
+      <div class="trend-middle">
+        <div class="trend-average">
+          <span>{{handleTempDiff()}}˚</span>
+          <br>
+          <span>{{processTips()}}</span>
+        </div>
+        <div class="trend-tips">
+          <span>今天:{{weatherStore.daysWeather_10[0].tempMax}}˚</span>
+          <br>
+          <span>平均值:{{Math.round(calcGap())}}˚</span>
+        </div>
       </div>
     </div>
+
+    <el-popover
+        ref="popoverRef"
+        :virtual-ref="bodyRef"
+        trigger="click"
+        placement="left"
+        virtual-triggering
+        width="350"
+        transition="el-fade-in-linear"
+        @after-enter="render = true"
+        @after-leave="render = false"
+    >
+      <el-scrollbar :max-height="260">
+        <div class="vis-popup">
+          <div class="vis-popup-middle">
+            <tempTrendGraph width="320px" height="300px" :render="render"></tempTrendGraph>
+          </div>
+          <el-divider />
+          <div class="vis-popup-bottom">
+            <span class="popup-title">关于能见度</span>
+            <br>
+            <span class="popup-tips">能见度，是指人能将目标物从背景中识别出来的最大距离。不考虑光照强度或障碍物，能见度10公里以上为良好</span>
+          </div>
+        </div>
+      </el-scrollbar>
+    </el-popover>
   </div>
 </template>
 
 <style scoped>
+.temp-main{
+  width: 100%;
+  height: 100%;
+}
 .trend-middle{
   width: 100%;
   height: calc(100% - 30px);
