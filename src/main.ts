@@ -1,13 +1,15 @@
-import { createApp } from 'vue'
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
+import { createApp } from 'vue';
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
+import keys from './keys';
 import axios from "axios";
-import keys from './keys'
-import router from './router/index'
-import './style.css'
-import 'qweather-icons/font/qweather-icons.css'
-import App from './App.vue'
+import router from './router/index';
+import './style.css';
+import 'qweather-icons/font/qweather-icons.css';
+import App from './App.vue';
 import {createPinia} from "pinia";
+import baiduMap from 'vue-baidu-map-3x';
+import key from './keys.ts';
 
 axios.interceptors.request.use((config) => {
     config.url+=`${config.url!.slice(-1) === '?'?'':'&'}key=${keys.qweatherAPI_Key}`
@@ -19,4 +21,5 @@ createApp(App)
     .use(ElementPlus)
     .use(router)
     .use(createPinia())
+    .use(baiduMap,{ak:key.BMap})
     .mount('#app')

@@ -2,7 +2,7 @@
 import {onMounted, ref, unref} from "vue";
 import {useWeatherStore} from "../../store/weatherEditor.ts";
 import { ClickOutside as vClickOutside } from 'element-plus'
-import DaysPredictorGraph from "./daysPredictorGraph.vue";
+import hourlyPredictorGraph from "./hourlyPredictorGraph.vue";
 
 const weatherStore = useWeatherStore()
 const popoverRef = ref()
@@ -108,13 +108,7 @@ onMounted(() => {
       <el-scrollbar :max-height="400">
         <div class="vis-popup">
           <div class="vis-popup-middle">
-            <days-predictor-graph width="320px" height="400px" :render="render"></days-predictor-graph>
-          </div>
-          <el-divider />
-          <div class="vis-popup-bottom">
-            <span class="popup-title">关于</span>
-            <br>
-            <span class="popup-tips">能见度，是指人能将目标物从背景中识别出来的最大距离。不考虑光照强度或障碍物，能见度10公里以上为良好</span>
+            <hourlyPredictorGraph width="320px" height="400px" :render="render"></hourlyPredictorGraph>
           </div>
         </div>
       </el-scrollbar>

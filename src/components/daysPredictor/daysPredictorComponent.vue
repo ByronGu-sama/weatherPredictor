@@ -197,6 +197,12 @@ watch(() => weatherStore.daysWeather_10,() => {
    display: flex;
    flex-wrap: nowrap;
    height: 52px;
+   transition: linear all 0.1s;
+   border-radius: 5px;
+   margin: 2px;
+ }
+ .dpcMain > div:active{
+    background-color: rgba(255, 255, 255, 0.20);
  }
  .dpc-left,.dpc-middle,.dpc-right{
    display: flex;

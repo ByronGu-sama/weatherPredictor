@@ -9,8 +9,9 @@ declare module 'vue' {
   export interface GlobalComponents {
     ApparentTemp: typeof import('./src/components/apparentTemp/apparentTemp.vue')['default']
     ApparentTempGraph: typeof import('./src/components/apparentTemp/apparentTempGraph.vue')['default']
+    BMap: typeof import('./src/components/map/bMap.vue')['default']
     DaysPredictorComponent: typeof import('./src/components/daysPredictor/daysPredictorComponent.vue')['default']
-    DaysPredictorGraph: typeof import('./src/components/hourlyPredictor/daysPredictorGraph.vue')['default']
+    DaysPredictorGraph: typeof import('./src/components/daysPredictor/daysPredictorGraph.vue')['default']
     Divider: typeof import('./src/components/utils/divider.vue')['default']
     ElDivider: typeof import('element-plus/es')['ElDivider']
     ElOption: typeof import('element-plus/es')['ElOption']
@@ -20,6 +21,7 @@ declare module 'vue' {
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     Home: typeof import('./src/components/home.vue')['default']
+    HourlyPredictorGraph: typeof import('./src/components/hourlyPredictor/hourlyPredictorGraph.vue')['default']
     HourlyWeatherPredictorComponent: typeof import('./src/components/hourlyPredictor/hourlyWeatherPredictorComponent.vue')['default']
     Humidity: typeof import('./src/components/humidity/humidity.vue')['default']
     HumidityGraph: typeof import('./src/components/humidity/humidityGraph.vue')['default']

@@ -16,7 +16,8 @@
     "pinia": "^2.1.6",
     "pinia-plugin-persist": "^1.0.0",
     "qweather-icons": "^1.4.0",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "vue-baidu-map-3x": "^1.0.35"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",

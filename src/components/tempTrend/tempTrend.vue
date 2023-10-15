@@ -96,9 +96,9 @@ watch(()=>weatherStore.historicalWeather.length>=7,() => {
           </div>
           <el-divider />
           <div class="vis-popup-bottom">
-            <span class="popup-title">关于能见度</span>
+            <span class="popup-title">关于温度趋势</span>
             <br>
-            <span class="popup-tips">能见度，是指人能将目标物从背景中识别出来的最大距离。不考虑光照强度或障碍物，能见度10公里以上为良好</span>
+            <span class="popup-tips">温度趋势展示了未来7天的气温大致变化，通常前三天的温度趋势能较为准确地反应现实世界的温度变化，之后的趋势仅作参考</span>
           </div>
         </div>
       </el-scrollbar>

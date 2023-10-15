@@ -10,6 +10,7 @@ import moonPhase from './moonPhase/moonPhase.vue'
 import pressure from './pressure/pressure.vue'
 import humidity from './humidity/humidity.vue'
 import trackSun from './trackSun/trackSun.vue'
+import bMap from './map/bMap.vue'
 import uvi from './uvi/uvi.vue'
 
 import {useWeatherIndicesStore} from "../store/weatherIndicesEditor.ts";
@@ -144,7 +145,10 @@ const toTips = () => {
             <hourlyWeatherPredictor :code="locationVal.value" :location-name="locationVal.label"></hourlyWeatherPredictor>
           </div>
 
-          <div class="bottom-ct2">2</div>
+<!--          地图组件-->
+          <div class="bottom-ct2">
+            <bMap></bMap>
+          </div>
 
   <!--        未来7天天气预报-->
           <div class="bottom-ct3">
@@ -408,6 +412,7 @@ const toTips = () => {
   .home-bottom > div{
     border-radius: 8px;
     background-color: rgba(255,255,255,0.2);
+    overflow: hidden;
   }
   .bottom-ct1{
     grid-column: 1/5;
