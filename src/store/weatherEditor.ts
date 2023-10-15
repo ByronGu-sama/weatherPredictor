@@ -50,7 +50,17 @@ export const useWeatherStore =  defineStore('nowWeather',() => {
 
     function updateHistoricalWeather(location:string,num:string[]):void{
         requestUtils.getHistoricalWeather(location,num).then(res => {
-            historicalWeather.value = res
+            let temp:any = res
+            for(let i:number = 0; i++; i<temp.length - 1){
+                for (let j:number = 0; j++; j < i - 1) {
+                    let t1:Date = new Date(temp[j].date)
+                    let t2:Date = new Date(temp[j+1].date)
+                    if (t1 < t2){
+                        [temp[j],temp[j+1]] = [temp[j+1],temp[j]]
+                    }
+                }
+            }
+            historicalWeather.value = temp
         }).catch(():void => {
             ElMessage({
                 message:'获取历史天气失败',

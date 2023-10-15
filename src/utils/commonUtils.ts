@@ -1,6 +1,5 @@
 import {ElMessage, ElNotification} from "element-plus";
 
-
 /*
 * @Author:ByronGu
 * @Date:2023/09/17
@@ -217,6 +216,7 @@ const handleTipsAboutT_and_H = (t:number | string,h:number | string) => {
         }
     }
 }
+
 export default {
     pushNotification,
     calcPreviousDays,

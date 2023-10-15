@@ -37,10 +37,10 @@ const onClickOutside = () => {
         transition="el-fade-in-linear"
         @after-enter="render = true"
         @after-leave="render = false">
-      <el-scrollbar :max-height="260">
+      <el-scrollbar :max-height="400">
         <div class="humidity-popup">
           <div class="humidity-popup-middle">
-            <humidityGraph width="350px" height="300px" :render="render"></humidityGraph>
+            <humidityGraph width="350px" height="400px" :render="render"></humidityGraph>
           </div>
           <el-divider />
           <div class="humidity-popup-bottom">

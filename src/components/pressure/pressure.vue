@@ -64,10 +64,10 @@ const calcAngle = (pressure:any) => {
         @after-enter="render = true"
         @after-leave="render = false"
     >
-      <el-scrollbar :max-height="260">
+      <el-scrollbar :max-height="400">
         <div class="vis-popup">
           <div class="vis-popup-middle">
-            <pressureGraph width="330px" height="300px" :render="render"></pressureGraph>
+            <pressureGraph width="330px" height="400px" :render="render"></pressureGraph>
           </div>
           <el-divider />
           <div class="vis-popup-bottom">

@@ -10,6 +10,7 @@ declare module 'vue' {
     ApparentTemp: typeof import('./src/components/apparentTemp/apparentTemp.vue')['default']
     ApparentTempGraph: typeof import('./src/components/apparentTemp/apparentTempGraph.vue')['default']
     DaysPredictorComponent: typeof import('./src/components/daysPredictor/daysPredictorComponent.vue')['default']
+    DaysPredictorGraph: typeof import('./src/components/hourlyPredictor/daysPredictorGraph.vue')['default']
     Divider: typeof import('./src/components/utils/divider.vue')['default']
     ElDivider: typeof import('element-plus/es')['ElDivider']
     ElOption: typeof import('element-plus/es')['ElOption']

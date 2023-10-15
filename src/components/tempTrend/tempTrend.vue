@@ -89,10 +89,10 @@ watch(()=>weatherStore.historicalWeather.length>=7,() => {
         @after-enter="render = true"
         @after-leave="render = false"
     >
-      <el-scrollbar :max-height="260">
+      <el-scrollbar :max-height="400">
         <div class="vis-popup">
           <div class="vis-popup-middle">
-            <tempTrendGraph width="320px" height="300px" :render="render"></tempTrendGraph>
+            <tempTrendGraph width="320px" height="400px" :render="render"></tempTrendGraph>
           </div>
           <el-divider />
           <div class="vis-popup-bottom">

@@ -1,24 +1,23 @@
 <script setup>
 import * as echarts from "echarts";
 import {onUnmounted, ref, watch,defineProps} from "vue";
-import {useWeatherStore} from "../../store/weatherEditor";
-import commonUtils from "../../utils/commonUtils";
+import {useWeatherStore} from "../../store/weatherEditor.ts";
+import commonUtils from "../../utils/commonUtils.ts";
 
 const weatherStore = useWeatherStore()
 let echartsRef = ref()
 let props = defineProps(['render'])
 let hour = []
-let AT = []
 let temperature = []
 let lineChart = null
 
 let lineOption = ({
   title: {
-    text: '体感温度'
+    text: '天气状况'
   },
   xAxis: {
-    data: hour,
     name:'时间',
+    data: hour,
     boundaryGap:false,
     nameTextStyle:{
       padding:[0,0,0,-10],
@@ -26,29 +25,27 @@ let lineOption = ({
     }
   },
   yAxis: {
-    name:'温度',
+    name:'˚C'
   },
   series: [
     {
-      name:'气温',
       type: 'line',
       data: temperature,
       smooth:true,
       symbol:'none',
-      areaStyle:{
-        color:'#c6fff6'
-      },
       lineStyle:{
-        color:'#97e5ff'
-      }
-    },{
-      name:'体感温度',
-      type: 'line',
-      data: AT,
-      smooth:true,
-      symbol:'none',
+        width:'0'
+      },
       areaStyle:{
-        color:'#d7ffc3'
+        color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+          {
+            offset: 0,
+            color: 'rgb(142,255,250)'
+          }, {
+            offset: 1,
+            color: 'rgb(255,200,166)'
+          }
+        ])
       }
     }
   ],
@@ -68,48 +65,50 @@ let lineOption = ({
       }
     },
     valueFormatter:(val) => {
-      return val+'˚C'
+      return val + '˚C'
     }
   }
 })
 
+const handleTodayData = () => {
+  const NUM = 24
+  let todayHistoricalData = weatherStore.historicalWeather[0]?.weatherHourly
+  let todayFutureData = weatherStore.hourlyWeather_24.slice(0,NUM - todayHistoricalData - 1)
+  let temp = []
+  for(let i of todayHistoricalData){
+    temp.push(i)
+  }
+  for (let i of todayFutureData){
+    temp.push(i)
+  }
+  return temp
+}
+
 //处理天气数据
 const handleData = () => {
-  if(weatherStore.hourlyWeather_24?.length > 23){
-    let t = weatherStore.hourlyWeather_24
+  if(weatherStore.historicalWeather?.length > 5 && weatherStore.hourlyWeather_24?.length > 23){
+    let t = handleTodayData()
     for(let i of t){
-      let tempHour = new Date(i.fxTime)
+      console.log(i)
+      let tempHour = new Date(i.time)
       hour.push(tempHour.getHours())
-      if(i.temp && i.windSpeed && i.humidity){
-        AT.push(getAT(i.temp,i.windSpeed,i.humidity).toFixed(1))
-        temperature.push(i.temp)
-      }else{
-        AT.push(20)
-        temperature.push(20)
-      }
+      temperature.push(i.temp || 20)
     }
   }
 }
 
-//获取体感温度
-const getAT = (a,b,c) => {
-  let t = parseInt(a)
-  let v = parseInt(b)/60/60*1000
-  let rh = parseInt(c)
-  return commonUtils.calcApparentTemperature(t,v,rh)
-}
-
 const createChart = () => {
-  lineChart = echarts.init(echartsRef.value);
-  lineChart.setOption(lineOption,true)
+  if(!lineChart){
+    lineChart = echarts.init(echartsRef.value);
+    lineChart.setOption(lineOption,true)
+  }
 }
 
 watch(() => props.render,(n) => {
-  if (n && weatherStore.hourlyWeather_24?.length > 23) {
+  if (n && weatherStore.daysWeather_10?.length > 6) {
     //已初始化过的图表通过重新设置数据触发更新
     if (lineChart) {
       hour.splice(0)
-      AT.splice(0)
       temperature.splice(0)
       handleData()
       lineChart.setOption(lineOption, true)
@@ -131,7 +130,7 @@ onUnmounted(() => {
 <template>
   <div class="echarts-box">
     <div ref="echartsRef" style="width: 320px;height: 300px"></div>
-    <span class="vis-tips">{{commonUtils.handleTipsAboutT_and_H(weatherStore.weather.temp,weatherStore.weather.humidity)}}</span>
+    <span class="vis-tips">今天{{commonUtils.determineVisibility(weatherStore.daysWeather_10[0]?.vis)}}</span>
   </div>
 </template>
 <style>

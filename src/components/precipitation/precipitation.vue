@@ -57,10 +57,10 @@ const calcFuturePrecipitation_24h = (data:any) => {
         @after-enter="render = true"
         @after-leave="render = false"
     >
-      <el-scrollbar :max-height="260">
+      <el-scrollbar :max-height="400">
         <div class="vis-popup">
           <div class="vis-popup-middle">
-            <precipGraph width="320px" height="300px" :render="render"></precipGraph>
+            <precipGraph width="320px" height="400px" :render="render"></precipGraph>
           </div>
           <div class="vis-popup-bottom">
             <span class="popup-tips">未来24小时降水总量预计为{{(parseFloat(calcFuturePrecipitation_24h(weatherStore.hourlyWeather_24))*24).toFixed(1)}}毫米</span>

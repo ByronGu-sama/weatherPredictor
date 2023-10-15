@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted, ref, unref} from "vue";
 import {useWeatherStore} from "../../store/weatherEditor.ts";
+import { ClickOutside as vClickOutside } from 'element-plus'
+import DaysPredictorGraph from "./daysPredictorGraph.vue";
 
+const weatherStore = useWeatherStore()
+const popoverRef = ref()
 let hourPredictor = ref<any>('')                          //24小时天气预报
 let hourlyPredictorTitle = ref<string>('')                  //24小时天气预报总结标题
-const weatherStore = useWeatherStore()
+let bodyRef = ref()
+let render = ref(false)
 
+const onClickOutside = () => {
+  unref(popoverRef).popperRef?.delayHide?.()
+}
 //根据24小时天气预报总结未来大致天气情况
 const summarize24HWeather = (data:any) => {
   let tempList = []
@@ -16,9 +24,9 @@ const summarize24HWeather = (data:any) => {
     })
   }
 
-  let count = 0                          //相同天气连续出现次数
+  let count = 0                              //相同天气连续出现次数
   let keyword = tempList[0].weather          //天气名称
-  let temp = []                          //
+  let temp = []                              //
   let timespan = [tempList[0].time,'']       //天气持续时间段
   tempList.push({weather:'aaa',time:'aaa'})  //占位数据，防止判断出错
 
@@ -55,8 +63,6 @@ const choiceVerbByWeather = (word:string) => {
   }
 }
 
-
-
 onMounted(() => {
   let weather = weatherStore.hourlyWeather_24
   if(weather){
@@ -68,27 +74,59 @@ onMounted(() => {
 
 <template>
   <div v-if="weatherStore.hourlyWeather_24?.length>23">
-    <div class="predictor24Wrapper-title">
-      <span>{{ hourlyPredictorTitle }}</span>
-    </div>
-    <hr class="divider">
-    <div class="predictor24Area">
-      <div v-for="i in weatherStore.hourlyWeather_24" class="predictor24Wrapper">
-        <div class="predictor24Wrapper-m1">
-          {{(new Date(i.fxTime).getHours())}}:00
+   <div class="daysPredictor-main" v-click-outside="onClickOutside" ref="bodyRef">
+     <div class="predictor24Wrapper-title">
+       <span>{{ hourlyPredictorTitle }}</span>
+     </div>
+     <hr class="divider">
+     <div class="predictor24Area">
+       <div v-for="i in weatherStore.hourlyWeather_24" class="predictor24Wrapper">
+         <div class="predictor24Wrapper-m1">
+           {{(new Date(i.fxTime).getHours())}}:00
+         </div>
+         <div class="predictor24Wrapper-m2">
+           <i :class="'qi-'+i.icon"/>
+         </div>
+         <div class="predictor24Wrapper-m3">
+           {{i.temp}}°
+         </div>
+       </div>
+     </div>
+   </div>
+
+    <el-popover
+        ref="popoverRef"
+        :virtual-ref="bodyRef"
+        trigger="click"
+        placement="left"
+        virtual-triggering
+        width="350"
+        transition="el-fade-in-linear"
+        @after-enter="render = true"
+        @after-leave="render = false"
+    >
+      <el-scrollbar :max-height="400">
+        <div class="vis-popup">
+          <div class="vis-popup-middle">
+            <days-predictor-graph width="320px" height="400px" :render="render"></days-predictor-graph>
+          </div>
+          <el-divider />
+          <div class="vis-popup-bottom">
+            <span class="popup-title">关于</span>
+            <br>
+            <span class="popup-tips">能见度，是指人能将目标物从背景中识别出来的最大距离。不考虑光照强度或障碍物，能见度10公里以上为良好</span>
+          </div>
         </div>
-        <div class="predictor24Wrapper-m2">
-          <i :class="'qi-'+i.icon"/>
-        </div>
-        <div class="predictor24Wrapper-m3">
-          {{i.temp}}°
-        </div>
-      </div>
-    </div>
+      </el-scrollbar>
+    </el-popover>
   </div>
 </template>
 
 <style scoped>
+.daysPredictor-main{
+  width: 100%;
+  height: 100%;
+}
 ::-webkit-scrollbar{
   display: none;
 }

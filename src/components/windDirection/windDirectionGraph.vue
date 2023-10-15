@@ -15,7 +15,9 @@ let windSpeed = []
 let lineChart = null
 
 let lineOption = ({
-  title: {},
+  title: {
+    text:'风向'
+  },
   xAxis: {
     name:'时间',
     data: hour,

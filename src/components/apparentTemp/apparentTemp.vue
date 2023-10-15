@@ -39,10 +39,10 @@ const onClickOutside = () => {
       @after-enter="render = true"
       @after-leave="render = false"
   >
-    <el-scrollbar :max-height="260">
+    <el-scrollbar :max-height="400">
       <div class="vis-popup">
         <div class="vis-popup-middle">
-          <apparentTempGraph width="320px" height="300px" :render="render"></apparentTempGraph>
+          <apparentTempGraph width="320px" height="400px" :render="render"></apparentTempGraph>
         </div>
         <el-divider />
         <div class="vis-popup-bottom">

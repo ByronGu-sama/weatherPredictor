@@ -18,6 +18,7 @@ let lineOption = ({
   xAxis: {
     data: hour,
     name:'时间',
+    boundaryGap:false,
     nameTextStyle:{
       padding:[0,0,0,-10],
       verticalAlign:'top'
