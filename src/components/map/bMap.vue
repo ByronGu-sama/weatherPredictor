@@ -3,13 +3,15 @@ import {onMounted, reactive, ref} from "vue";
 import mapStyle from '../../utils/custom_map_config.json'
 import {useWeatherStore} from "../../store/weatherEditor";
 import requestUtils from "../../utils/requestUtils";
+import color from '../../utils/colorStore'
+import typhoonIcon from '../../assets/pic/typhoon.png'
 
 const weatherStore = useWeatherStore()
 const center = ref({lng: 0, lat: 0});
 const zoom = ref(3);
 let hasTyphoon = ref(false)              //当前是否有活跃台风
-let activeTyphoon = ref<any>([])           //活跃台风列表
-let track = ref<any>([])             //台风轨迹
+let activeTyphoon = reactive<any>([])           //活跃台风列表
+let track = reactive<any>([])             //台风轨迹
 
 // 地图准备完成后的操作
 const handler = () => {
@@ -63,32 +65,37 @@ const handleTyphoonList = () => {
       let route = weatherStore.typhoonList
 
       for(let i of route){
+        //测试
         if(i.id == 'NP_2314'){
-          activeTyphoon.value.push(i)
-          track.value.push({
+          activeTyphoon.push(i)
+          track.push({
             id:i.id,
             name:i.name,
-            track:[{
-              editing:false,
-              paths:[[]]
-            }]
+            lastLocation:0,
+            route:{
+              editing: false,
+              paths: [[]]
+            }
           })
         }
       }
 
-      for(let i = 0;i<track.value.length;i++){
-        requestUtils.getTyphoonRoute(track.value[i].id).then((res:any) => {
-          for(let j of res.track){
-            track.value[i].track[0].paths[0].push({
-              lng:j.lon,
-              lat:j.lat
+      for(let i = 0;i<track.length;i++){
+        requestUtils.getTyphoonRoute(track[i].id).then((res:any) => {
+
+          for(let j = 0;j<res.track.length;j++){
+            track[i].route.paths[0].push({
+              lng:res.track[j].lon,
+              lat:res.track[j].lat
             })
+            if(j == res.track.length - 1){
+              track[i].lastLocation = {lng:res.track[j].lon,lat:res.track[j].lat}
+            }
           }
+
         })
       }
-
-      console.log(track.value)
-      hasTyphoon.value = activeTyphoon.value.length != 0;
+      hasTyphoon.value = activeTyphoon.length != 0;
     },1000)
   }
 }
@@ -113,9 +120,11 @@ onMounted(() => {
         :mapStyle="{styleJson:mapStyle}"
         :scroll-wheel-zoom="true"
     >
+
 <!--      警戒线-->
       <bm-polyline :path="path" v-for="path of polyline1.paths" :key="path" stroke-color="#ff484c"></bm-polyline>
       <bm-polyline :path="path" v-for="path of polyline2.paths" :key="path" stroke-color="#00b7ff" stroke-style="dashed"></bm-polyline>
+
 <!--      警戒线标识-->
       <bm-overlay pane="floatPane" :class="{guardLine24: true}" @draw="draw24">
         <div style="writing-mode: vertical-lr">24小时警戒线</div>
@@ -123,6 +132,18 @@ onMounted(() => {
       <bm-overlay pane="floatPane" :class="{guardLine48: true}" @draw="draw48">
         <div style="writing-mode: vertical-lr">48小时警戒线</div>
       </bm-overlay>
+
+      <div v-for="typhoon in track" class="track-wrap">
+  <!--      台风轨迹-->
+        <bm-polyline :path="route" v-for="route in typhoon.route.paths" :key="route" :stroke-color="color[Math.floor(Math.random()*18)]"></bm-polyline>
+
+  <!--      台风循转图标-->
+        <bm-marker
+            :position="typhoon.lastLocation"
+            :icon="{url: typhoonIcon, size: {width: 30, height: 30}}"
+        ></bm-marker>
+
+      </div>
 
     </baidu-map>
 
