@@ -217,6 +217,15 @@ const handleTipsAboutT_and_H = (t:number | string,h:number | string) => {
     }
 }
 
+const require = (imgPath:string) => {
+    try {
+        const handlePath:string = imgPath.replace('@', '..');
+        return new URL(handlePath, import.meta.url).href;
+    } catch (error) {
+        console.warn(error);
+    }
+}
+
 export default {
     pushNotification,
     calcPreviousDays,
@@ -225,5 +234,5 @@ export default {
     determineHumidity,
     calcApparentTemperature,
     handleTipsAboutT_and_H,
-
+    require,
 }

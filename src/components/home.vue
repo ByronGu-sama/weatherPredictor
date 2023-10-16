@@ -13,7 +13,8 @@ import trackSun from './trackSun/trackSun.vue'
 import bMap from './map/bMap.vue'
 import uvi from './uvi/uvi.vue'
 
-import {useWeatherIndicesStore} from "../store/weatherIndicesEditor.ts";
+import {useWeatherIndicesStore} from "../store/weatherIndicesEditor";
+import {useAstronomyStore} from "../store/astronomyEditor";
 import {useLocationStore} from "../store/locationEditor";
 import {useWeatherStore} from "../store/weatherEditor";
 import requestUtils from "../utils/requestUtils";
@@ -26,6 +27,7 @@ import router from "../router";
 const weatherStore = useWeatherStore()
 const locationStore = useLocationStore()
 const weatherIndicesStore = useWeatherIndicesStore()
+const astronomyStore = useAstronomyStore()
 
 interface ListItem {
   value: string
@@ -66,6 +68,7 @@ const changeLocation = () => {
   weatherStore.update24HoursWeather(tempLocation.value.value)
   weatherStore.updateHistoricalWeather(tempLocation.value.value,commonUtils.calcPreviousDays(7)!)
   weatherIndicesStore.updateUvi(tempLocation.value.value)
+  astronomyStore.updateMoonPhase(tempLocation.value.value)
   locationName.value = tempLocation.value.label
   getWeatherWarning(tempLocation.value.value)
 }
@@ -87,11 +90,6 @@ const getWeatherWarning = (location:string) => {
   })
 }
 
-//切换显示效果
-const shiftGraph = () => {
-  router.push('/weatherChart')
-}
-
 const toTips = () => {
   router.push('/tips')
 }
@@ -99,7 +97,6 @@ const toTips = () => {
 
 <template>
   <div class="home-wrap">
-    <button @click="shiftGraph()" class="home-shift-button" style="z-index: 999">风云图</button>
     <div class="home-main" v-if="!showChart">
       <div class="home-top">
         <div class="home-top-left">
@@ -320,23 +317,6 @@ const toTips = () => {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-  }
-  .home-shift-button{
-    width: 80px;
-    height: 40px;
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    background-color: transparent;
-    color: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 15px;
-    transition: linear 0.1s;
-  }
-  .home-shift-button:hover {
-    color: #e3fafa;
   }
   .home-main{
     width: 80vw;

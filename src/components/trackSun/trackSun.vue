@@ -40,7 +40,7 @@ const calcYAxis = (x:number) =>{
   //y轴坐标百分比
   let yPercent = (3/5*Math.sin(xPercentWithPI))/1.5707
   //y轴坐标  40为y轴高度
-  yAxis.value = 40*(1-yPercent)-5+'px'
+  yAxis.value = 35*(1-yPercent)-5+'px'
 }
 
 watch(() => weatherStore.daysWeather_10,() => {

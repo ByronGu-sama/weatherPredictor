@@ -8,6 +8,7 @@ const popoverRef = ref()
 const weatherStore = useWeatherStore()
 let bodyRef = ref()
 let render = ref(false)
+let mark = ref(false)
 
 const onClickOutside = () => {
   unref(popoverRef).popperRef?.delayHide?.()
@@ -31,7 +32,7 @@ const calcGap = () => {
 * @Description 计算温差
 */
 const handleTempDiff = () => {
-  let tempDiff = Math.round(weatherStore.daysWeather_10[0].tempMax - calcGap())
+  let tempDiff = Math.round(weatherStore.daysWeather_10[0].tempMax - calcGap()!)
   return tempDiff >= 0?'+'+tempDiff.toFixed(0):tempDiff.toFixed(0)
 }
 
@@ -41,7 +42,7 @@ const handleTempDiff = () => {
 * @Description 根据温差返回特定语句
 */
 const processTips = () => {
-  let tempDiff = Math.round(weatherStore.daysWeather_10[0].tempMax - calcGap())
+  let tempDiff = Math.round(weatherStore.daysWeather_10[0].tempMax - calcGap()!)
     if (tempDiff > 0){
       return '高于周均最高温'
     }else if(tempDiff < 0){
@@ -51,10 +52,10 @@ const processTips = () => {
     }
 }
 
-watch(()=>weatherStore.historicalWeather.length>=7,() => {
+watch(()=>weatherStore.historicalWeather?.length>6,() => {
   calcGap()
 },{
-  immediate:true
+  immediate:true,
 })
 </script>
 
