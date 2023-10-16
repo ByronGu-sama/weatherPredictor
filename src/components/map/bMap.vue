@@ -65,8 +65,7 @@ const handleTyphoonList = () => {
       let route = weatherStore.typhoonList
 
       for(let i of route){
-        //测试
-        if(i.id == 'NP_2314'){
+        if(i.isActive == '1'){
           activeTyphoon.push(i)
           track.push({
             id:i.id,
@@ -110,7 +109,7 @@ onMounted(() => {
 <template>
   <div class="map-main">
     <div class="map-top-tips" v-show="!hasTyphoon">
-      <span>当前没有台风哦</span>
+      <span>我国附近暂时没有台风哦</span>
     </div>
     <baidu-map
         :center="center"
@@ -140,16 +139,16 @@ onMounted(() => {
   <!--      台风循转图标-->
         <bm-marker
             :position="typhoon.lastLocation"
-            :icon="{url: typhoonIcon, size: {width: 30, height: 30}}"
+            :icon="{url: typhoonIcon, size: {width: 30, height: 30}, animation:'rotation 5s linear infinite'}"
         ></bm-marker>
 
       </div>
 
     </baidu-map>
 
-    <div class="map-controller">
-      <img src="../../assets/icons/rain.svg" alt="" class="map-controller-icons">
-      <img src="../../assets/icons/wind.svg" alt="" class="map-controller-icons">
+    <div class="map-controller" :style="{top:hasTyphoon?'5px':'30px'}">
+<!--      <img src="../../assets/icons/rain.svg" alt="" class="map-controller-icons">-->
+<!--      <img src="../../assets/icons/wind.svg" alt="" class="map-controller-icons">-->
       <img src="../../assets/icons/typhoon.svg" alt="" class="map-controller-icons">
     </div>
   </div>
@@ -187,10 +186,9 @@ onMounted(() => {
   }
   .map-controller{
     position: absolute;
-    top: 5px;
     right: 5px;
     width: 30px;
-    height: 90px;
+    height: 30px;
     border-radius: 15px;
     background-color: rgba(220, 219, 219, 0.3);
     display: flex;
