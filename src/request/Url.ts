@@ -10,4 +10,6 @@ export default<any>{
     GET_WEATHER_WARNING:API+'/v7/warning/now?',                    //获取灾害预警
     GET_HISTORICAL_WEATHER_10D:API+'/v7/historical/weather?',      //获取历史天气数据
     GET_MOON_PHASE:API+'/v7/astronomy/moon?',                      //月相
+    GET_TYPHOON_LIST:API+'/v7/tropical/storm-list?',               //台风列表
+    GET_TYPHOON_ROUTE:API+'/v7/tropical/storm-track?',             //台风轨迹
 }

@@ -12,11 +12,15 @@ export const useWeatherStore =  defineStore('nowWeather',() => {
     const hourlyWeather_24 = ref<any>()
     //10天历史天气
     const historicalWeather = ref<any>()
+    //台风列表
+    const typhoonList = ref<any>()
 
     const getNowWeather = computed(() => weather.value)
     const getDaysWeather_10 = computed(() => daysWeather_10.value)
     const getHourlyWeather_24 = computed(() => hourlyWeather_24.value)
     const getHistoricalWeather = computed(() => historicalWeather.value)
+    const getTyphoonList = computed(() => {typhoonList.value})
+
     function updateNowWeather(location:string):void{
         requestUtils.getNowWeather(location).then(res => {
             weather.value = res
@@ -68,18 +72,33 @@ export const useWeatherStore =  defineStore('nowWeather',() => {
             })
         })
     }
+
+    function updateTyphoonList():void{
+        requestUtils.getTyphoonList().then(res => {
+            typhoonList.value = res
+        }).catch(():void => {
+            ElMessage({
+                message:'获取台风列表失败',
+                type:'warning'
+            })
+        })
+    }
+
     return {
         weather,
         daysWeather_10,
         hourlyWeather_24,
         historicalWeather,
+        typhoonList,
         getNowWeather,
         getDaysWeather_10,
         getHourlyWeather_24,
         getHistoricalWeather,
+        getTyphoonList,
         updateNowWeather,
         update10DaysWeather,
         update24HoursWeather,
         updateHistoricalWeather,
+        updateTyphoonList,
     }
 })

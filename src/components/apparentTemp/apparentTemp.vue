@@ -3,6 +3,7 @@ import {useWeatherStore} from "../../store/weatherEditor";
 import { ClickOutside as vClickOutside } from 'element-plus'
 import apparentTempGraph from './apparentTempGraph.vue'
 import {ref, unref} from "vue";
+import commonUtils from "../../utils/commonUtils.ts";
 
 const popoverRef = ref()
 const weatherStore = useWeatherStore()
@@ -23,7 +24,7 @@ const onClickOutside = () => {
         {{weatherStore.weather.feelsLike}}˚
       </div>
       <div class="bottom-tips">
-        潮湿使人感觉更热
+        {{commonUtils.handleTipsAboutT_and_H(weatherStore.weather.temp,weatherStore.weather.humidity)}}
       </div>
     </div>
     </div>

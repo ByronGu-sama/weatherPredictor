@@ -13,6 +13,7 @@ declare module 'vue' {
     DaysPredictorComponent: typeof import('./src/components/daysPredictor/daysPredictorComponent.vue')['default']
     DaysPredictorGraph: typeof import('./src/components/daysPredictor/daysPredictorGraph.vue')['default']
     Divider: typeof import('./src/components/utils/divider.vue')['default']
+    ElAlert: typeof import('element-plus/es')['ElAlert']
     ElDivider: typeof import('element-plus/es')['ElDivider']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPopover: typeof import('element-plus/es')['ElPopover']

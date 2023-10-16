@@ -131,6 +131,38 @@ const getMoonPhase = (location:string) => {
         })
     })
 }
+
+//获取台风列表（仅支持西太平洋地区）
+const getTyphoonList = () => {
+    let today:Date = new Date()
+    const year:number = today.getFullYear()
+    return new Promise((resolve, reject) => {
+        axios.get(`${request.GET_TYPHOON_LIST}year=${year}&basin=NP`).then(res => {
+            if(res.data.code == 200){
+                resolve(res.data.storm)
+            }else{
+                reject(new Error('get typhoon list failed'))
+            }
+        }).catch(err => {
+            reject(err)
+        })
+    })
+}
+
+//获取台风路径
+const getTyphoonRoute = (stormId:string) => {
+    return new Promise((resolve, reject) => {
+        axios.get(`${request.GET_TYPHOON_ROUTE}stormid=${stormId}`).then(res => {
+            if(res.data.code == 200){
+                resolve(res.data)
+            }else{
+                reject(new Error('get typhoon route failed'))
+            }
+        }).catch(err => {
+            reject(err)
+        })
+    })
+}
 export default {
     getNowWeather,
     getUvi,
@@ -140,4 +172,6 @@ export default {
     getHistoricalWeather,
     getMoonPhase,
     getClothIndex,
+    getTyphoonList,
+    getTyphoonRoute,
 }

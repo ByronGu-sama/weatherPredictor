@@ -36,9 +36,9 @@ onMounted(() => {
     weatherStore.update10DaysWeather(location)
     weatherStore.update24HoursWeather(location)
     weatherStore.updateHistoricalWeather(location,commonUtils.calcPreviousDays(7)!)
+    weatherStore.updateTyphoonList()
     weatherIndicesStore.updateUvi(location)
     astronomyStore.updateMoonPhase(location)
-
   }else{
     locationStore.updateLocation('101010100')
     weatherStore.updateNowWeather('101010100')
@@ -46,6 +46,7 @@ onMounted(() => {
     weatherStore.update24HoursWeather('101010100')
     weatherStore.updateHistoricalWeather('101010100',commonUtils.calcPreviousDays(7)!)
     weatherIndicesStore.updateUvi('101010100')
+    weatherStore.updateTyphoonList()
     astronomyStore.updateMoonPhase('101010100')
   }
   getLocation()
