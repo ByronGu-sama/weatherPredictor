@@ -105,7 +105,7 @@ onUnmounted(() => {
 
 <template>
   <div class="echarts-box">
-    <div ref="echartsRef" style="width: 320px;height: 300px"></div>
+    <div ref="echartsRef" style="width: 320px;height: 400px"></div>
     <span class="vis-tips">今天{{commonUtils.determineVisibility(weatherStore.daysWeather_10[0]?.vis)}}</span>
   </div>
 </template>

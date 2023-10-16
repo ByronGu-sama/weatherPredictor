@@ -131,7 +131,7 @@ onUnmounted(() => {
 <template>
   <div class="echarts-box">
     <div ref="echartsRef" style="width: 320px;height: 300px"></div>
-    <span class="vis-tips">今日天气{{weatherStore.weather.text}},{{weatherStore.weather.windDir}}{{weatherStore.weather.windScale}}级。温度{{weatherStore.daysWeather_10[0].tempMin}}至{{weatherStore.daysWeather_10[0].tempMax}}度</span>
+    <span class="vis-tips">今日天气{{weatherStore.weather.text}},{{weatherStore.weather.windDir}}{{weatherStore.weather.windScale}}级。温度{{weatherStore.daysWeather_10[0].tempMin}}至{{weatherStore.daysWeather_10[0].tempMax}}度{{weatherStore.daysWeather_10[0].tempMax - weatherStore.daysWeather_10[0].tempMin >= 15?'今天昼夜温差较大，及时预防感冒哦':''}}</span>
   </div>
 </template>
 <style>

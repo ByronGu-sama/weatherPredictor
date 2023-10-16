@@ -73,7 +73,7 @@ const calcAngle = (pressure:any) => {
           <div class="vis-popup-bottom">
             <span class="popup-title">关于大气压强</span>
             <br>
-            <span class="popup-tips"></span>
+            <span class="popup-tips">气压和天气密切相关。一般来说，地面上高气压的地区往往是晴天，地面上低气压的地区往往是阴雨天。这里所说的高气压和低气压是相对的，不是指大气压的绝对值</span>
           </div>
         </div>
       </el-scrollbar>

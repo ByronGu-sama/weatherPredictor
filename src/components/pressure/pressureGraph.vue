@@ -13,7 +13,7 @@ let lineChart = null
 
 let lineOption = ({
   title: {
-    text: '大气压强'
+    text: '气压'
   },
   xAxis: {
     data: hour,
@@ -116,7 +116,7 @@ onUnmounted(() => {
 <template>
   <div class="echarts-box">
     <div ref="echartsRef" style="width: 330px;height: 300px"></div>
-    <span class="vis-tips">今天{{commonUtils.determineVisibility(weatherStore.daysWeather_10[0].vis)}}</span>
+    <span class="vis-tips">{{weatherStore.weather.pressure?'当前气压'+weatherStore.weather.pressure+'百帕':'暂无数据'}}</span>
   </div>
 </template>
 <style scoped>
