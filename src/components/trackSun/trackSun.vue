@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useWeatherStore} from "../../store/weatherEditor";
-import {nextTick, onMounted, onUnmounted, ref, watch} from "vue";
+import {onUnmounted, ref, watch} from "vue";
 
 const weatherStore = useWeatherStore()
 let xAxis:any = ref('5px')
@@ -10,7 +10,7 @@ const INIT_X = 10    //x轴左右安全距离
 
 // 计算太阳的x轴坐标
 const calcXAxis = () => {
-  let now = new Date()
+  let now:any = new Date()
   let today = weatherStore.daysWeather_10[0]
   let sunrise = today.sunrise.split(':')
   sunrise = [parseInt(sunrise[0]),parseInt(sunrise[1])]
@@ -24,23 +24,24 @@ const calcXAxis = () => {
   // 日出到日落时差（分钟）
   let toMinute = completeHour*60+completeMinute
   // 日出到现在的时差（分钟）
-  let nowMinute = (now.getHours()-sunrise[0])*60+now.getMinutes()
+  let nowMinute = (now.getHours()-sunrise[0])*60+now.getMinutes()-sunrise[1]
   // 从日出开始过了多长时间（百分比）
   let percentage = parseFloat((nowMinute / toMinute).toFixed(4))
   //太阳在x轴上的位置  5:太阳半径
-  let X_Axis_Coordinate = INIT_X+160*percentage-5
+  let X_Axis_Coordinate = INIT_X+170*percentage-5
   xAxis.value = X_Axis_Coordinate+'px'
+
   calcYAxis(X_Axis_Coordinate)
 }
 
 // 计算太阳的y轴坐标
 const calcYAxis = (x:number) =>{
   //x轴坐标百分比和PI的乘积
-  let xPercentWithPI = (x-INIT_X+5)/160*Math.PI
+  let xPercentWithPI = (x-INIT_X+5)/170*Math.PI
   //y轴坐标百分比
-  let yPercent = (3/5*Math.sin(xPercentWithPI))/1.5707
-  //y轴坐标  40为y轴高度
-  yAxis.value = 35*(1-yPercent)-5+'px'
+  let yPercent = (9/10*Math.sin(xPercentWithPI))
+  //y轴坐标  50为y轴高度
+  yAxis.value = 50*(1-yPercent)+'px'
 }
 
 watch(() => weatherStore.daysWeather_10,() => {
@@ -108,14 +109,14 @@ onUnmounted(() => {
   height: 1px;
   border: none;
   background-color: #dcdbdb;
-  margin-top: 40px;
+  margin-top: 50px;
 }
 .trackSun-sun{
   width: 10px;
   height: 10px;
   border-radius: 5px;
   background-color: #ffffff;
-  box-shadow: 0 0 8px white;
+  box-shadow: 0 0 6px white;
   transition: linear all 0.1s;
   position: absolute;
   top: 0;

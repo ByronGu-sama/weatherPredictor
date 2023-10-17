@@ -91,25 +91,6 @@ const getWeatherWarning = (location:string) => {
     })
 }
 
-//获取历史天气数据
-const getHistoricalWeather = (location:string,days:string[]) => {
-    return new Promise((resolve, reject) => {
-        let daysList:any[] = []
-        for(let i of days){
-            axios.get(`${request.GET_HISTORICAL_WEATHER_10D}location=${location}&date=${i}`).then(res => {
-                if(res.data.code == 200){
-                    daysList.push(res.data)
-                }else{
-                    reject(new Error('get historical weather failed'))
-                }
-            }).catch(err => {
-                reject(err)
-            })
-        }
-        resolve(daysList)
-    })
-}
-
 //获取月相
 const getMoonPhase = (location:string) => {
     let date:Date = new Date(new Date())
@@ -169,7 +150,6 @@ export default {
     get10DaysWeatherPredictor,
     get24HWeatherPredictor,
     getWeatherWarning,
-    getHistoricalWeather,
     getMoonPhase,
     getClothIndex,
     getTyphoonList,

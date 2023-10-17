@@ -66,12 +66,17 @@ let lineOption = ({
 
 //处理天气数据
 const handleData = () => {
-  if(weatherStore.daysWeather_10?.length > 7){
-    let temp = weatherStore.daysWeather_10.slice(0,7)
+  if(weatherStore.daysWeather_10?.length > 9){
+    let temp = weatherStore.daysWeather_10
+    let num = 0
     for(let i of temp){
-      week.push(commonUtils.processWeek(i.fxDate))
+      if(num === 0){
+        week.push('今天')
+      }else
+        week.push(commonUtils.processWeek(i.fxDate))
       tempMax.push(i.tempMax || 20)
       tempMin.push(i.tempMin || 10)
+      num++
     }
   }
 }
@@ -84,7 +89,7 @@ const createChart = () => {
 }
 
 watch(() => props.render,(n) => {
-  if (n && weatherStore.daysWeather_10?.length > 6) {
+  if (n && weatherStore.daysWeather_10?.length > 9) {
     //已初始化过的图表通过重新设置数据触发更新
     if (lineChart) {
       week.splice(0)

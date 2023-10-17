@@ -10,15 +10,12 @@ export const useWeatherStore =  defineStore('nowWeather',() => {
     const daysWeather_10 = ref<any>()
     //24小时预报
     const hourlyWeather_24 = ref<any>()
-    //10天历史天气
-    const historicalWeather = ref<any>()
     //台风列表
     const typhoonList = ref<any>()
 
     const getNowWeather = computed(() => weather.value)
     const getDaysWeather_10 = computed(() => daysWeather_10.value)
     const getHourlyWeather_24 = computed(() => hourlyWeather_24.value)
-    const getHistoricalWeather = computed(() => historicalWeather.value)
     const getTyphoonList = computed(() => {typhoonList.value})
 
     function updateNowWeather(location:string):void{
@@ -52,27 +49,6 @@ export const useWeatherStore =  defineStore('nowWeather',() => {
         })
     }
 
-    function updateHistoricalWeather(location:string,num:string[]):void{
-        requestUtils.getHistoricalWeather(location,num).then(res => {
-            let temp:any = res
-            for(let i:number = 0; i++; i<temp.length - 1){
-                for (let j:number = 0; j++; j < i - 1) {
-                    let t1:Date = new Date(temp[j].date)
-                    let t2:Date = new Date(temp[j+1].date)
-                    if (t1 < t2){
-                        [temp[j],temp[j+1]] = [temp[j+1],temp[j]]
-                    }
-                }
-            }
-            historicalWeather.value = temp
-        }).catch(():void => {
-            ElMessage({
-                message:'获取历史天气失败',
-                type:'warning'
-            })
-        })
-    }
-
     function updateTyphoonList():void{
         requestUtils.getTyphoonList().then(res => {
             typhoonList.value = res
@@ -88,17 +64,14 @@ export const useWeatherStore =  defineStore('nowWeather',() => {
         weather,
         daysWeather_10,
         hourlyWeather_24,
-        historicalWeather,
         typhoonList,
         getNowWeather,
         getDaysWeather_10,
         getHourlyWeather_24,
-        getHistoricalWeather,
         getTyphoonList,
         updateNowWeather,
         update10DaysWeather,
         update24HoursWeather,
-        updateHistoricalWeather,
         updateTyphoonList,
     }
 })

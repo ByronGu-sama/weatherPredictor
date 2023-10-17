@@ -8,7 +8,6 @@ const popoverRef = ref()
 const weatherStore = useWeatherStore()
 let bodyRef = ref()
 let render = ref(false)
-let mark = ref(false)
 
 const onClickOutside = () => {
   unref(popoverRef).popperRef?.delayHide?.()
@@ -16,14 +15,16 @@ const onClickOutside = () => {
 /*
 * @Author:ByronGu
 * @Date:2023/09/18
-* @Description 计算过去七天平均最高温
+* @Description 计算未来10天平均最高温
 */
 const calcGap = () => {
   let temp = 0
-  for (let i = 0; i < weatherStore.historicalWeather.length; i++){
-    temp += parseFloat(weatherStore.historicalWeather[i].weatherDaily.tempMax)
+  if(weatherStore.daysWeather_10?.length > 9){
+    for (let i of weatherStore.daysWeather_10){
+      temp += parseFloat(i.tempMax)
+    }
+    return temp / 10
   }
-  return temp / 7
 }
 
 /*
@@ -44,15 +45,15 @@ const handleTempDiff = () => {
 const processTips = () => {
   let tempDiff = Math.round(weatherStore.daysWeather_10[0].tempMax - calcGap()!)
     if (tempDiff > 0){
-      return '高于周均最高温'
+      return '高于未来10天日均最高温'
     }else if(tempDiff < 0){
-      return '低于周均最高温'
+      return '低于未来10天日均最高温'
     }else{
-      return '持平周均最高温'
+      return '持平未来10天日均最高温'
     }
 }
 
-watch(()=>weatherStore.historicalWeather?.length>6,() => {
+watch(()=>weatherStore.daysWeather_10?.length > 9,() => {
   calcGap()
 },{
   immediate:true,
@@ -99,7 +100,7 @@ watch(()=>weatherStore.historicalWeather?.length>6,() => {
           <div class="vis-popup-bottom">
             <span class="popup-title">关于温度趋势</span>
             <br>
-            <span class="popup-tips">温度趋势展示了未来7天的气温大致变化，通常前三天的温度趋势能较为准确地反应现实世界的温度变化，之后的趋势仅作参考</span>
+            <span class="popup-tips">温度趋势展示了未来10天的气温大致变化，通常前三天的温度趋势能较为准确地反应现实世界的温度变化，之后的趋势仅作参考</span>
           </div>
         </div>
       </el-scrollbar>

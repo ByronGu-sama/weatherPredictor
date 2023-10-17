@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {ref, unref} from "vue";
 import {useWeatherIndicesStore} from "../../store/weatherIndicesEditor";
-import {useWeatherStore} from "../../store/weatherEditor";
 import { ClickOutside as vClickOutside } from 'element-plus'
 import uviGraph from './uviGraph.vue'
 
@@ -10,7 +9,6 @@ let barWrap = ref<HTMLElement>()
 let bodyRef = ref()
 const popoverRef = ref()
 const weatherIndicesStore = useWeatherIndicesStore()
-const weatherStore = useWeatherStore()
 
 const onClickOutside = () => {
   unref(popoverRef).popperRef?.delayHide?.()
@@ -35,19 +33,19 @@ const defenseTip = (level:string) => {
 //计算指示点左边距
 const calcMargin = (level:string) => {
   let barWidth = barWrap.value?.clientWidth
-  return 25*(parseInt(level)-1)/100*(barWidth!-6)+'px'
+  return 12.5*(parseInt(level)-1)/50*(barWidth!-6)+'px'
 }
 </script>
 
 <template>
-  <div class="module-main" v-if="weatherStore.daysWeather_10?.length > 9">
+  <div class="module-main" v-if="weatherIndicesStore.uviIndex?.level">
     <div class="uvi-main" v-click-outside="onClickOutside" ref="bodyRef">
       <div class="module-title">
         <i class="qi-100"></i>&nbsp;紫外线指数
       </div>
       <div class="uviBody-middle">
         <div class="uviBody-middle-top">
-          <span style="font-size: 20px;margin-left: 15px">{{weatherIndicesStore.uviIndex.level*2}}</span>
+          <span style="font-size: 20px;margin-left: 15px">{{weatherIndicesStore.uviIndex.level}}</span>
           <br>
           <span style="font-size: 25px;margin-left: 10px">{{weatherIndicesStore.uviIndex.category}}</span>
         </div>
