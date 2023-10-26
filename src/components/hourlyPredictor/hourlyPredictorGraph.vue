@@ -2,7 +2,6 @@
 import * as echarts from "echarts";
 import {onUnmounted, ref, watch,defineProps} from "vue";
 import {useWeatherStore} from "../../store/weatherEditor.ts";
-import commonUtils from "../../utils/commonUtils.ts";
 
 const weatherStore = useWeatherStore()
 let echartsRef = ref()
@@ -70,31 +69,12 @@ let lineOption = ({
   }
 })
 
-const handleTodayData = () => {
-  const NUM = 24
-  let todayHistoricalData = weatherStore.historicalWeather[0]?.weatherHourly
-  let todayFutureData = weatherStore.hourlyWeather_24.slice(0,NUM - todayHistoricalData - 1)
-  let temp = []
-  for(let i of todayHistoricalData){
-    temp.push(i)
-  }
-  for (let i of todayFutureData){
-    temp.push(i)
-  }
-  console.log(temp)
-  return temp
-}
-
 //处理天气数据
 const handleData = () => {
-  if(weatherStore.historicalWeather?.length > 5 && weatherStore.hourlyWeather_24?.length > 23){
-    let t = handleTodayData()
-    for(let i of t){
-      console.log(i)
-      let tempHour = new Date(i.time)
-      hour.push(tempHour.getHours())
-      temperature.push(i.temp || 20)
-    }
+  for(let i of weatherStore.hourlyWeather_24){
+    let tempHour = new Date(i.fxTime)
+    hour.push(tempHour.getHours())
+    temperature.push(i.temp || 20)
   }
 }
 
@@ -106,7 +86,7 @@ const createChart = () => {
 }
 
 watch(() => props.render,(n) => {
-  if (n && weatherStore.daysWeather_10?.length > 6) {
+  if (n && weatherStore.hourlyWeather_24?.length > 23) {
     //已初始化过的图表通过重新设置数据触发更新
     if (lineChart) {
       hour.splice(0)

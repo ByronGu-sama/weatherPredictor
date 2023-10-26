@@ -20,17 +20,18 @@ const getLocation = () => {
       },
       err => {
         ElMessage({
-          message:err.code == 1?'无法获取定位权限，请手动选择城市':err.code == 2?'获取定位失败，请手动选择城市':'获取位置超时，请手动选择城市',
-          type:'warning'
+          message: err.code == 1 ? '无法获取定位权限，请手动选择城市' : err.code == 2 ? '获取定位失败，请手动选择城市' : '获取位置超时，请手动选择城市',
+          type: 'warning'
         });
+      },
+      {
+      timeout:5000
       }
   )
 }
 
 onMounted(() => {
-  navigator.geolocation.getCurrentPosition((position) => {
-    console.log(position)
-  })
+  getLocation()
   if(location){
     weatherStore.updateNowWeather(location)
     weatherStore.update10DaysWeather(location)
@@ -47,7 +48,6 @@ onMounted(() => {
     weatherStore.updateTyphoonList()
     astronomyStore.updateMoonPhase('101010100')
   }
-  getLocation()
 })
 </script>
 

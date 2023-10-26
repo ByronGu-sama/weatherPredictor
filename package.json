@@ -14,6 +14,7 @@
     "axios": "^1.4.0",
     "echarts": "^5.4.3",
     "element-plus": "^2.3.9",
+    "fs": "^0.0.1-security",
     "pinia": "^2.1.6",
     "pinia-plugin-persist": "^1.0.0",
     "qweather-icons": "^1.4.0",

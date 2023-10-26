@@ -38,7 +38,6 @@ let tempLocation = ref<{value:string,label:string}>({value:'',label:''})        
 let locationVal = ref<{value:string,label:string}>({value:'',label:''})                       //用户选中的地址代号
 let locationName = ref<string>('')                                                            //用户选中的地址名称
 let loadingLocation = ref<boolean>(false)                                                     //是否正在获取地址模糊搜索信息
-let showChart = ref<boolean>(false)                                                           //显示风云图
 
 //获取手动定位数据集
 const getRemoteLocation = (val:string) => {
@@ -66,7 +65,6 @@ const changeLocation = () => {
   weatherStore.updateNowWeather(tempLocation.value.value)
   weatherStore.update10DaysWeather(tempLocation.value.value)
   weatherStore.update24HoursWeather(tempLocation.value.value)
-  weatherStore.updateHistoricalWeather(tempLocation.value.value,commonUtils.calcPreviousDays(7)!)
   weatherIndicesStore.updateUvi(tempLocation.value.value)
   astronomyStore.updateMoonPhase(tempLocation.value.value)
   locationName.value = tempLocation.value.label
@@ -97,7 +95,7 @@ const toTips = () => {
 
 <template>
   <div class="home-wrap">
-    <div class="home-main" v-if="!showChart">
+    <div class="home-main">
       <div class="home-top">
         <div class="home-top-left">
           <el-select

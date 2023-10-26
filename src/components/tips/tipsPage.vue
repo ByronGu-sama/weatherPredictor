@@ -46,7 +46,7 @@
             <h3>周均最高温</h3>
             <img src="../../assets/tipsPic/5.png" alt="" style="width: 20%;">
             <div class="tips-wrapper">
-              <p>周均最高温会以包含今天在内的过去七天的最高温度为基准，算出今日最高温在过去七天的平均最高温上的增减。能一定程度上反应天气变化</p>
+              <p>周均最高温会以包含今天在内的未来十天最高温度为基准，算出今日最高温在未来十天平均最高温上的增减。能一定程度上反应天气变化</p>
             </div>
             <br>
             <h3>体感温度</h3>
@@ -64,7 +64,7 @@
         </el-scrollbar>
       </el-tab-pane>
       <el-tab-pane label="终点">
-        <span>前路漫漫，万物皆可期待。2024/6毕业 ByronGu留于2023/10/16</span>
+        <span>2024/06毕业  ByronGu留于2023/10/16</span>
         <br>
         🦊<a href="https://github.com/Hanserr/weatherPredictor" target="_blank" style="font-size: 20px">项目地址（暂时封存中）</a>
       </el-tab-pane>

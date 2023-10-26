@@ -11,4 +11,6 @@ export default<any>{
     GET_MOON_PHASE:API+'/v7/astronomy/moon?',                      //月相
     GET_TYPHOON_LIST:API+'/v7/tropical/storm-list?',               //台风列表
     GET_TYPHOON_ROUTE:API+'/v7/tropical/storm-track?',             //台风轨迹
+    GET_NOW_AIR_QUALITY:API+'/v7/air/now?',                        //空气质量
+    GET_AIR_QUALITY_PREDICTOR:API+'/v7/air/5d?'                    //5天空气质量预报
 }

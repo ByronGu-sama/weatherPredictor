@@ -18,7 +18,7 @@ const onClickOutside = () => {
 const defenseTip = (level:string) => {
   switch (level){
     case '1':
-      return '紫外线较弱,做好基础防晒'
+      return '紫外线强度很低'
     case '2':
       return '紫外线弱,做好一般防晒'
     case '3':
