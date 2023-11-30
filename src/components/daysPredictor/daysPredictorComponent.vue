@@ -70,18 +70,18 @@ const calcTempTrend = async (val:{day:string,tempMin:number,tempMax:number,iconD
   //整理
   for(let i = 0;i < val.length;i++){
     conclusionRank.push({
-      date:val[i].day,
-      maxTemp:val[i].tempMax,
-      minTemp:val[i].tempMin,
-      maxTempRank:0,
-      minTempRank:0,
-      tempDiff:val[i].tempMax - val[i].tempMin,
-      tempDiffRank:0,
-      iconDay:val[i].iconDay,
-      averageTemp:(val[i].tempMax - val[i].tempMin)/2,
-      averageTempRank:0,
-      barWidth:'',
-      offset:''
+      date:val[i].day,  //日期
+      maxTemp:val[i].tempMax,  //最高温
+      minTemp:val[i].tempMin,  //最低温
+      maxTempRank:0,  //最高温排名
+      minTempRank:0,  //最低温排名
+      tempDiff:val[i].tempMax - val[i].tempMin,  //温差
+      tempDiffRank:0,  //温差排名
+      iconDay:val[i].iconDay,  //图标
+      averageTemp:(val[i].tempMax - val[i].tempMin)/2,  //平均温度
+      averageTempRank:0,  //平均温度排行
+      barWidth:'',  //指示条宽度
+      offset:''  //指示条偏移量
     })
   }
   for (let i of conclusionRank){

@@ -35,12 +35,25 @@ let lineOption = ({
       data: tempMax,
       smooth:true,
       symbol:'none',
+      color:'blue',
+      areaStyle:{
+        color:'#3eede7',
+        origin:'start',
+        opacity:0.5
+      }
     },{
       name:'最低温',
       type: 'line',
       data: tempMin,
       smooth:true,
       symbol:'none',
+      color: 'yellow',
+      areaStyle: {
+        color: '#fff',
+        origin: 'start',
+        shadowColor: '#fff',
+        shadowOffsetX: 1
+      },
     }
   ],
   tooltip: {
