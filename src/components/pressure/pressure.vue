@@ -34,7 +34,7 @@ const calcAngle = (pressure:any) => {
   <div class="module-main" v-if="weatherStore.hourlyWeather_24?.length > 23">
     <div class="pressure-main" v-click-outside="onClickOutside" ref="bodyRef">
       <div class="module-title">
-        <img src="../../assets/icons/pressure.svg">&nbsp;气压
+        <img src="../../assets/icons/pressure.svg" alt="">&nbsp;气压
       </div>
       <div class="pressure-body-wrap">
         <div class="pressure-body">

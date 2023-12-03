@@ -126,7 +126,7 @@
 .title-404{
   font-size: 70px;
   position: absolute;
-  top: 50px;
+  top: 30px;
   left: 50px;
   color: #484F59;
   text-shadow: 3px 3px 3px 3px  white;
@@ -141,7 +141,7 @@
   font-size: 16px;
   cursor: pointer;
   position: absolute;
-  top: 160px;
+  top: 130px;
   left: 50px;
   transition: linear 100ms;
 }

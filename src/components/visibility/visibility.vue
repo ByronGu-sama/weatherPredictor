@@ -20,7 +20,7 @@ const onClickOutside = () => {
   <div class="module-main" v-if="weatherStore.weather?.vis">
     <div class="vis-main" v-click-outside="onClickOutside" ref="bodyRef">
       <div class="module-title">
-        <img src="../../assets/icons/visibility.svg" style="width: 13px;height: 13px">&nbsp;能见度
+        <img src="../../assets/icons/visibility.svg" style="width: 13px;height: 13px" alt="">&nbsp;能见度
       </div>
       <div class="visibility-middle">
         {{weatherStore.weather.vis}}公里

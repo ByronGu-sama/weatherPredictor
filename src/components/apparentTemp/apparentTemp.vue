@@ -18,7 +18,7 @@ const onClickOutside = () => {
   <div class="module-main" v-if="weatherStore.weather?.feelsLike">
     <div class="AT-main" v-click-outside="onClickOutside" ref="bodyRef">
       <div class="module-title">
-        <img src="../../assets/icons/thermometer.svg" style="width: 13px;height: 13px"/>&nbsp;体感温度
+        <img src="../../assets/icons/thermometer.svg" style="width: 13px;height: 13px" alt=""/>&nbsp;体感温度
       </div>
       <div class="apparentTemp-body">
         {{weatherStore.weather.feelsLike}}˚

@@ -64,7 +64,7 @@ watch(()=>weatherStore.daysWeather_10?.length > 9,() => {
   <div class="module-main" v-if="weatherStore.daysWeather_10?.length > 9">
     <div class="temp-main" v-click-outside="onClickOutside" ref="bodyRef">
       <div class="module-title">
-        <img src="../../assets/icons/trend.svg">&emsp;平均
+        <img src="../../assets/icons/trend.svg" alt="">&emsp;平均
       </div>
       <div class="trend-middle">
         <div class="trend-average">
