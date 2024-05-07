@@ -119,8 +119,8 @@ const getTyphoonList = () => {
     const year:number = today.getFullYear()
     return new Promise((resolve, reject) => {
         axios.get(`${request.GET_TYPHOON_LIST}year=${year}&basin=NP`).then(res => {
-            if(res.data.code == 200){
-                resolve(res.data.storm)
+            if(res.data.code == 200 || res.data.code == 204){
+                resolve(res.data.storm || '')
             }else{
                 reject(new Error('get typhoon list failed'))
             }

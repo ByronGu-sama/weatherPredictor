@@ -13,7 +13,7 @@ interface notification{
     type:any
 }
 const pushNotification = (data:notification[],gap:number):void => {
-    let timer:any = null
+    let timer:any = null;
     if(data.length>0){
         let i:number = 0
         ElNotification({
@@ -22,7 +22,7 @@ const pushNotification = (data:notification[],gap:number):void => {
             type:data[i].type,
             duration:gap
         })
-        i++
+        i++;
         timer = setInterval(() => {
             if (i !== data.length){
                 ElNotification({
@@ -31,7 +31,7 @@ const pushNotification = (data:notification[],gap:number):void => {
                     type:data[i].type,
                     duration:gap
                 })
-                i++
+                i++;
             }else
                 clearInterval(timer)
         },gap+50)
@@ -117,9 +117,9 @@ const determineHumidity = (humidity:any) => {
             case humidity < 70:
                 return '潮湿'
             case humidity < 80:
-                return '较湿润'
+                return '较潮湿'
             default:
-                return '特别湿润'
+                return '特别潮湿'
         }
     }else{
         return '偏潮'
@@ -162,7 +162,7 @@ const handleTipsAboutT_and_H = (t:number | string,h:number | string) => {
             case t > 10:
                 return '潮湿使人感觉更冷'
             default:
-                return '湿冷空气来临，记得多添一件衣服'
+                return '湿冷空气来临'
         }
     }else if(h < 30){
         if(t < 15){

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {onMounted, reactive, ref} from "vue";
-import mapStyle from '../../utils/custom_map_config.json'
 import {useWeatherStore} from "../../store/weatherEditor";
 import requestUtils from "../../utils/requestUtils";
 import color from '../../utils/colorStore'
-import typhoonIcon from '../../assets/pic/typhoon.png'
+import mapStyle from '../../utils/custom_map_config.json'
+import typhoneIcon from '../../assets/pic/typhoon.png'
 
 const weatherStore = useWeatherStore()
 const center = ref({lng: 0, lat: 0});
@@ -93,12 +93,6 @@ const handleTyphoonList = () => {
   }
 }
 
-const draw = ({ el, BMap, map }) => {
-  const pixel = map.pointToOverlayPixel(new BMap.Point(116.404, 39.915))
-  el.style.left = pixel.x - 60 + 'px'
-  el.style.top = pixel.y - 20 + 'px'
-};
-
 onMounted(() => {
   setTimeout(() => {
     handleTyphoonList()
@@ -135,7 +129,7 @@ onMounted(() => {
   <!--      台风图标-->
         <bm-marker
             :position="typhoon.lastLocation"
-            :icon="{url: typhoonIcon, size: {width: 30, height: 30}, animation:'rotation 5s linear infinite'}"
+            :icon="{url: typhoneIcon, size: {width: 30, height: 30}, animation:'rotation 5s linear infinite'}"
         ></bm-marker>
       </div>
     </baidu-map>

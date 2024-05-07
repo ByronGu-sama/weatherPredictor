@@ -7,7 +7,7 @@ const routes = [
         component:() => import("../components/home.vue")
     },{
         path:'/tips',
-        name:'解疑',
+        name:'help',
         component:() => import("../components/tips/tipsPage.vue")
     },{
         path:'/:catchAll(.*)',

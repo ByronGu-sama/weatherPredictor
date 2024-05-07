@@ -4,34 +4,13 @@ import {useWeatherStore} from "./store/weatherEditor";
 import {useWeatherIndicesStore} from "./store/weatherIndicesEditor.ts";
 import {useAstronomyStore} from "./store/astronomyEditor.ts";
 import {onMounted} from "vue";
-// import {ElMessage} from "element-plus";
-// import commonUtils from "./utils/commonUtils.ts";
-
 const locationStore = useLocationStore()
 const weatherStore = useWeatherStore()
 const weatherIndicesStore = useWeatherIndicesStore()
 const astronomyStore = useAstronomyStore()
 let location = locationStore.getLocation
 
-//获取定位
-// const getLocation = () => {
-//   navigator.geolocation.getCurrentPosition((position) => {
-//         console.log(position)
-//       },
-//       err => {
-//         ElMessage({
-//           message: err.code == 1 ? '无法获取定位权限，请手动选择城市' : err.code == 2 ? '获取定位失败，请手动选择城市' : '获取位置超时，请手动选择城市',
-//           type: 'warning'
-//         });
-//       },
-//       {
-//       timeout:5000
-//       }
-//   )
-// }
-
 onMounted(() => {
-  // getLocation()
   if(location){
     weatherStore.updateNowWeather(location)
     weatherStore.update10DaysWeather(location)
@@ -49,6 +28,7 @@ onMounted(() => {
     astronomyStore.updateMoonPhase('101010100')
   }
 })
+
 </script>
 
 <template>

@@ -17,7 +17,7 @@ body::-webkit-scrollbar{
   height: 100%;
   color: white;
   overflow: hidden;
-  text-shadow: 1px 1px 30px rgba(0, 0, 0, 0.7);
+  text-shadow: 1px 1px 30px rgb(154, 171, 226);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -51,7 +51,7 @@ body::-webkit-scrollbar{
   font-weight: bold;
 }
 .popup-tips{
-  font-size: 10px;
+  font-size: 12px;
   font-weight: bold;
 }
 h2,h3{

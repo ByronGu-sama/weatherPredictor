@@ -11,5 +11,5 @@ export default [
     {color:'rgb(213,136,48)',desc:'烈风',scope:'75-88'},
     {color:'rgb(213,93,40)',desc:'狂风',scope:'89-102'},
     {color:'rgb(212,64,57)',desc:'暴风',scope:'103-117'},
-    {color:'rgb(213,53,87)',desc:'飓风',scope:'>=118'},
+    {color:'rgb(213,53,87)',desc:'飓风',scope:'>=118'}
 ]

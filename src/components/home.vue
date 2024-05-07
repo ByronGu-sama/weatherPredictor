@@ -71,7 +71,7 @@ const changeLocation = () => {
   getWeatherWarning(tempLocation.value.value)
 }
 
-//获取灾害预警
+//推送灾害预警
 const getWeatherWarning = (location:string) => {
   requestUtils.getWeatherWarning(location).then((res:any) => {
     if(res.length > 0){
@@ -83,7 +83,7 @@ const getWeatherWarning = (location:string) => {
           type:'warning',
         })
       }
-      commonUtils.pushNotification(temp,5000)
+      commonUtils.pushNotification(temp,8000)
     }
   })
 }
@@ -106,6 +106,7 @@ const toTips = () => {
               :remote-method="getRemoteLocation"
               :loading="loadingLocation"
               @change="changeLocation"
+              style="float:left; position: relative; left: 15px"
           >
             <el-option
                 v-for="item in locationOptions"
@@ -296,7 +297,6 @@ const toTips = () => {
     display: none;
   }
   body{
-    background:url("../assets/pic/bg.jpg") fixed no-repeat;
     background-size: cover;
     margin: 0;
     padding: 0;
@@ -309,7 +309,7 @@ const toTips = () => {
   .home-wrap{
     width: 100vw;
     height: 100vh;
-    background:url("../assets/pic/bg.jpg") fixed no-repeat;
+    background:url("../assets/pic/bg.png") top right no-repeat;
     background-size: cover;
     display: flex;
     justify-content: center;
@@ -320,7 +320,7 @@ const toTips = () => {
     width: 80vw;
     height: 80vh;
     border-radius: 10px;
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(255,255,255,0.1);
     min-width: 80vw;
     padding-bottom: 10px;
   }
@@ -344,7 +344,7 @@ const toTips = () => {
     border: none;
     cursor: pointer;
     background-color: transparent;
-    color: rgba(255, 255, 255, 0.59);
+    color: rgba(255, 255, 255, 0.5);
     font-size: 16px;
     float: right;
   }
@@ -389,7 +389,7 @@ const toTips = () => {
   }
   .home-bottom > div{
     border-radius: 8px;
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(255,255,255,0.1);
     overflow: hidden;
   }
   .bottom-ct1{

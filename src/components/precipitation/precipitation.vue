@@ -19,7 +19,7 @@ const calcFuturePrecipitation_24h = (data:any) => {
   for (let i of data){
     precipSum+=parseFloat(i.precip)
   }
-  let precip = (precipSum/24).toFixed(1)
+  let precip = precipSum.toFixed(1)
   if(precip == '0.0'){
     return '0'
   }
@@ -41,7 +41,8 @@ const calcFuturePrecipitation_24h = (data:any) => {
           <span>当前</span>
         </div>
         <div class="precip-content-bottom">
-          <span>预计未来24小时内降水量为{{calcFuturePrecipitation_24h(weatherStore.hourlyWeather_24)}}毫米</span>
+          <span>预计未来24小时</span>
+          <span style="font-weight: bold">降水量{{calcFuturePrecipitation_24h(weatherStore.hourlyWeather_24)}}毫米</span>
         </div>
       </div>
     </div>
@@ -82,7 +83,7 @@ const calcFuturePrecipitation_24h = (data:any) => {
 }
 .precip-content-top{
   width: 100%;
-  height: 80px;
+  height: 110px;
   text-align: left;
 }
 .precip-content-top span:nth-child(1){
@@ -96,12 +97,12 @@ const calcFuturePrecipitation_24h = (data:any) => {
   margin-left: 5px;
 }
 .precip-content-bottom{
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 13px;
   width: 100%;
-  height: 70px;
+  height: 40px;
   text-align: left;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
 }
 .precip-content-bottom span{

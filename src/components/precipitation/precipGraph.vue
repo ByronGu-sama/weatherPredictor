@@ -100,7 +100,6 @@ onUnmounted(() => {
 <template>
   <div class="echarts-box">
     <div ref="echartsRef" style="width: 320px;height: 300px"></div>
-    <span></span>
   </div>
 </template>
 <style>

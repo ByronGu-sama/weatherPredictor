@@ -191,7 +191,6 @@ watch(() => weatherStore.daysWeather_10,() => {
    height: 100%;
    font-weight: bold;
    color: white;
-   text-shadow: 1px 1px 30px rgba(0, 0, 0, 0.7);
  }
  .dpcMain > div{
    display: flex;

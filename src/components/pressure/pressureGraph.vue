@@ -2,7 +2,6 @@
 import * as echarts from "echarts";
 import {onUnmounted, ref, watch, defineProps} from "vue";
 import {useWeatherStore} from "../../store/weatherEditor";
-import commonUtils from "../../utils/commonUtils";
 
 const weatherStore = useWeatherStore()
 let props = defineProps(['render'])
