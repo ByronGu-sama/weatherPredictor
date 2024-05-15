@@ -5,6 +5,7 @@ import requestUtils from "../../utils/requestUtils";
 import color from '../../utils/colorStore'
 import mapStyle from '../../utils/custom_map_config.json'
 import typhoneIcon from '../../assets/pic/typhoon.png'
+import {typhoon} from "/src/utils/testDataList.ts"
 
 const weatherStore = useWeatherStore()
 const center = ref({lng: 0, lat: 0});
@@ -60,37 +61,55 @@ const polyline2 = ref({
 
 //处理活跃台风路径信息
 const handleTyphoonList = () => {
-  if(weatherStore.typhoonList?.length > 0){
-    let route = weatherStore.typhoonList
-    for(let i of route){
-      if(i.isActive == '1'){
-        activeTyphoon.push(i)
-        track.push({
-          id:i.id,
-          name:i.name,
-          lastLocation:0,
-          route:{
-            editing: false,
-            paths: [[]]
-          }
-        })
+  // if(weatherStore.typhoonList?.length > 0){
+  //   let route = weatherStore.typhoonList
+  //   for(let i of route){
+  //     if(i.isActive == '1'){
+  //       activeTyphoon.push(i)
+  //       track.push({
+  //         id:i.id,
+  //         name:i.name,
+  //         lastLocation:0,
+  //         route:{
+  //           editing: false,
+  //           paths: [[]]
+  //         }
+  //       })
+  //     }
+  //   }
+    // for(let i = 0;i<track.length;i++){
+    //   requestUtils.getTyphoonRoute(track[i].id).then((res:any) => {
+    //     for(let j = 0;j<res.track.length;j++){
+    //       track[i].route.paths[0].push({
+    //         lng:res.track[j].lon,
+    //         lat:res.track[j].lat
+    //       })
+    //       if(j == res.track.length - 1){
+    //         track[i].lastLocation = {lng:res.track[j].lon,lat:res.track[j].lat}
+    //       }
+    //     }
+    //   })
+    // }
+    track.push({
+      id:11111,
+      name:'test',
+      lastLocation:0,
+      route:{
+        editing: false,
+        paths: [[]]
+      }
+    })
+    for(let j = 0;j<typhoon.track.length;j++){
+      track[0].route.paths[0].push({
+        lng:typhoon.track[j].lon,
+        lat:typhoon.track[j].lat
+      })
+      if(j == typhoon.track.length - 1){
+        track[0].lastLocation = {lng:typhoon.track[j].lon,lat:typhoon.track[j].lat}
       }
     }
-    for(let i = 0;i<track.length;i++){
-      requestUtils.getTyphoonRoute(track[i].id).then((res:any) => {
-        for(let j = 0;j<res.track.length;j++){
-          track[i].route.paths[0].push({
-            lng:res.track[j].lon,
-            lat:res.track[j].lat
-          })
-          if(j == res.track.length - 1){
-            track[i].lastLocation = {lng:res.track[j].lon,lat:res.track[j].lat}
-          }
-        }
-      })
-    }
-    hasTyphoon.value = activeTyphoon.length != 0;
-  }
+    // hasTyphoon.value = activeTyphoon.length != 0;
+  // }
 }
 
 onMounted(() => {
@@ -134,8 +153,6 @@ onMounted(() => {
       </div>
     </baidu-map>
     <div class="map-controller" :style="{top:hasTyphoon?'5px':'30px'}">
-<!--      <img src="../../assets/icons/rain.svg" alt="" class="map-controller-icons">-->
-<!--      <img src="../../assets/icons/wind.svg" alt="" class="map-controller-icons">-->
       <img src="../../assets/icons/typhoon.svg" alt="" class="map-controller-icons">
     </div>
   </div>

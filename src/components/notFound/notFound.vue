@@ -103,7 +103,7 @@
 .drop{
   position: absolute;
   top: 40px;
-  background-color: #05a2eb;
+  background-color: #026793;
   width: 2px;
   height: 10px;
   transform-origin: bottom;

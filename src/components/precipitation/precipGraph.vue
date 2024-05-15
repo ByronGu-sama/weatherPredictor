@@ -76,7 +76,7 @@ const createChart = () => {
 
 watch(() => props.render,(n) => {
   if (n && weatherStore.hourlyWeather_24?.length > 23) {
-    //已初始化过的图表通过重新设置数据触发更新
+    // 已初始化过的图表通过重新设置数据触发更新
     if (lineChart) {
       hour.splice(0)
       precip.splice(0)

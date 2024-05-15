@@ -1,5 +1,6 @@
 const GEOAPI:string = 'https://geoapi.qweather.com'
 const API:string = 'https://api.qweather.com'
+
 export default<any>{
     LOCATION_FUZZY_SEARCH:GEOAPI+'/v2/city/lookup?',               //城市名称模糊搜索
     GET_NOW_WEATHER:API+'/v7/weather/now?',                        //获取实时天气

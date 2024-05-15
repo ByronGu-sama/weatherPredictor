@@ -4,6 +4,7 @@ import {useWeatherStore} from "./store/weatherEditor";
 import {useWeatherIndicesStore} from "./store/weatherIndicesEditor.ts";
 import {useAstronomyStore} from "./store/astronomyEditor.ts";
 import {onMounted} from "vue";
+
 const locationStore = useLocationStore()
 const weatherStore = useWeatherStore()
 const weatherIndicesStore = useWeatherIndicesStore()

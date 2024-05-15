@@ -24,7 +24,7 @@ const pushNotification = (data:notification[],gap:number):void => {
         })
         i++;
         timer = setInterval(() => {
-            if (i !== data.length){
+            if (i <= data.length){
                 ElNotification({
                     title:data[i].title,
                     message:data[i].content,
@@ -177,11 +177,11 @@ const handleTipsAboutT_and_H = (t:number | string,h:number | string) => {
             case t > 25:
                 return '天气温热，适合放松哦'
             case t > 20:
-                return '温度宜人，多出门亲近大自然吧'
+                return '温度宜人，出门活动吧'
             case t > 10:
                 return '气温较低，注意别感冒哦'
             default:
-                return '天气寒冷，记得多添一件衣服'
+                return '降温了，记得多添一件衣服'
         }
     }
 }

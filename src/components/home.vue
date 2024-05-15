@@ -12,6 +12,7 @@ import humidity from './humidity/humidity.vue'
 import trackSun from './trackSun/trackSun.vue'
 import bMap from './map/bMap.vue'
 import uvi from './uvi/uvi.vue'
+import controller from './controller/controller.vue'
 
 import {useWeatherIndicesStore} from "../store/weatherIndicesEditor";
 import {useAstronomyStore} from "../store/astronomyEditor";
@@ -128,9 +129,9 @@ const toTips = () => {
           <p style="font-size: 20px;line-height: 15px;margin: 15px">{{locationName||'北京'}}</p>
           <p style="font-size: 31px;line-height: 20px;margin: 15px">{{weatherStore.weather.temp}}°</p>
           <div class="tempWrapper" v-if="weatherStore.daysWeather_10">
-            <span class="tempTitle">最高温度</span>
+            <img src="/src/assets/pic/highest_temp.png" alt="" class="tempIcon">
             <span class="tempBody">{{weatherStore.daysWeather_10[0].tempMax}}°</span>
-            <span class="tempTitle">最低温度</span>
+            <img src="/src/assets/pic/lowest_temp.png" alt="" class="tempIcon">
             <span class="tempBody">{{weatherStore.daysWeather_10[0].tempMin}}°</span>
           </div>
         </div>
@@ -203,103 +204,22 @@ const toTips = () => {
         </div>
       </div>
     </div>
+    <controller></controller>
   </div>
 </template>
 
 <style scoped>
-  .m1-enter-from{
-    left: -150%;
-    top: -150%;
-  }
-  .m1-enter-active{
-    animation: cloudMove1 1s;
-  }
-  .m1-enter-to{
-    left: -20%;
-    top: -40%;
-  }
-  .m1-leave-active{
-    animation: cloudMove1 1s reverse;
-  }
-  .m2-enter-from{
-    left: -150%;
-    top: -150%;
-  }
-  .m2-enter-active{
-    animation: cloudMove2 1s;
-  }
-  .m2-enter-to{
-    left: -5%;
-    top: -50%;
-  }
-  .m2-leave-active{
-    animation: cloudMove2 1s reverse;
-  }
-  .m3-enter-from{
-    left: -150%;
-    top: -150%;
-  }
-  .m3-enter-active{
-    animation: cloudMove3 1s;
-  }
-  .m3-enter-to{
-    left: -10%;
-    top: 5%;
-    rotate: 10deg;
-  }
-  .m3-leave-active{
-    animation: cloudMove3 1s reverse;
-  }
-  .m4-enter-from{
-    right: -150%;
-    top: -150%;
-  }
-  .m4-enter-active{
-    animation: cloudMove4 1s;
-  }
-  .m4-enter-to{
-    right: -40%;
-    top: -15%;
-    rotate: 10deg;
-  }
-  .m4-leave-active{
-    animation: cloudMove4 1s reverse;
-  }
-  .m5-enter-from{
-    right: -150%;
-    top: -150%;
-  }
-  .m5-enter-active{
-    animation: cloudMove5 1s;
-  }
-  .m5-enter-to{
-    right: -80%;
-    top: 5%;
-  }
-  .m5-leave-active{
-    animation: cloudMove5 1s reverse;
-  }
-  .m6-enter-from{
-    right: -150%;
-    top: -150%;
-  }
-  .m6-enter-active{
-    animation: cloudMove6 1s;
-  }
-  .m6-enter-to{
-    right: 10%;
-    top: 5%;
-  }
-  .m6-leave-active{
-    animation: cloudMove6 1s reverse;
-  }
   ::-webkit-scrollbar{
     display: none;
   }
-  body{
+  body {
     background-size: cover;
     margin: 0;
     padding: 0;
+  }
+  .tempIcon{
+    width: 20px;
+    height: 20px;
   }
   .el-select{
     margin-left: 10px;
@@ -322,7 +242,8 @@ const toTips = () => {
     border-radius: 10px;
     background-color: rgba(255,255,255,0.1);
     min-width: 80vw;
-    padding-bottom: 10px;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
   }
   .home-top{
     display: flex;
@@ -381,11 +302,11 @@ const toTips = () => {
     justify-content: center;
   }
   .home-bottom {
-    height: 300px;
     display: grid;
     grid-template-rows: repeat(4,180px);
     grid-template-columns: repeat(6,180px);
     grid-gap: 15px;
+    padding-bottom: 10px;
   }
   .home-bottom > div{
     border-radius: 8px;
@@ -395,6 +316,7 @@ const toTips = () => {
   .bottom-ct1{
     grid-column: 1/5;
     grid-row: 1/2;
+    cursor: pointer;
   }
   .bottom-ct2{
     grid-column: 5/7;
@@ -407,6 +329,7 @@ const toTips = () => {
   .bottom-ct4{
     grid-column: 3/4;
     grid-row: 2/3;
+    cursor: pointer;
   }
   .bottom-ct5{
     grid-column: 4/5;
@@ -415,6 +338,7 @@ const toTips = () => {
   .bottom-ct6{
     grid-column: 3/4;
     grid-row: 3/4;
+    cursor: pointer;
   }
   .bottom-ct7{
     grid-column: 4/5;
@@ -423,25 +347,31 @@ const toTips = () => {
   .bottom-ct8{
     grid-column: 5/6;
     grid-row: 3/4;
+    cursor: pointer;
   }
   .bottom-ct9{
     grid-column: 6/7;
     grid-row: 3/4;
+    cursor: pointer;
   }
   .bottom-ct10{
     grid-column: 3/4;
     grid-row: 4/5;
+    cursor: pointer;
   }
   .bottom-ct11{
     grid-column: 4/5;
     grid-row: 4/5;
+    cursor: pointer;
   }
   .bottom-ct12{
     grid-column: 5/6;
     grid-row: 4/5;
+    cursor: pointer;
   }
   .bottom-ct13{
     grid-column: 6/7;
     grid-row: 4/5;
+    cursor: pointer;
   }
 </style>
