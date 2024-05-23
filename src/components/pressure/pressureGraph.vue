@@ -25,7 +25,8 @@ let lineOption = ({
   },
   yAxis: {
     name:'百帕',
-    min:600,
+    max: 'dataMax',
+    min: 'dataMin',
     axisLabel:{
       formatter:(val) => {
         return val + ' '
@@ -76,11 +77,12 @@ const handleData = () => {
   for(let i of temp){
     let tempHour = new Date(i.fxTime)
     hour.push(tempHour.getHours())
-    if(i.pressure){
       pressure.push(i.pressure)
-    }else{
-      pressure.push(1015)
-    }
+    // if(i.pressure){
+    //   pressure.push(i.pressure)
+    // }else{
+    //   pressure.push(1015)
+    // }
   }
 }
 

@@ -12,7 +12,7 @@
 
             <h2>怎么看懂页面数据代表的不同含义呢？🧐</h2>
             <h3>小时天气预报</h3>
-            <img src="../../assets/tipsPic/1.png" alt="" style="width: 70%;">
+            <img src="../../assets/tipsPic/1.webp" alt="" style="width: 70%;">
             <div class="tips-wrapper">
               <p>可以看到顶部文字代表着对未来几个小时天气的总结</p>
               <p>第二行的数字显然代表着未来24小时的时间</p>
@@ -21,7 +21,7 @@
             </div>
             <br>
             <h3>每日天气预报</h3>
-            <img src="../../assets/tipsPic/2.png" alt="" style="width: 20%;">
+            <img src="../../assets/tipsPic/2.webp" alt="" style="width: 20%;">
             <div class="tips-wrapper">
               <p>每日天气预报中右侧区域可以代表好几个信息</p>
               <p>首先是左边和右边的温度分别意味着这一天的预测最低温和最低温</p>
@@ -31,32 +31,32 @@
             </div>
             <br>
             <h3>紫外线指数</h3>
-            <img src="../../assets/tipsPic/3.png" alt="" style="width: 20%;">
+            <img src="../../assets/tipsPic/3.webp" alt="" style="width: 20%;">
             <div class="tips-wrapper">
               <p>紫外线指数分为1-10级</p>
               <p>底部的文字会跟随紫外线等级作出相应的改变</p>
             </div>
             <br>
             <h3>太阳轨迹</h3>
-            <img src="../../assets/tipsPic/4.png" alt="" style="width: 20%;">
+            <img src="../../assets/tipsPic/4.webp" alt="" style="width: 20%;">
             <div class="tips-wrapper">
               <p>太阳轨迹能较好的模拟出太阳跟随时间变化的运动轨迹，但仅作参考</p>
             </div>
             <br>
             <h3>周均最高温</h3>
-            <img src="../../assets/tipsPic/5.png" alt="" style="width: 20%;">
+            <img src="../../assets/tipsPic/5.webp" alt="" style="width: 20%;">
             <div class="tips-wrapper">
               <p>周均最高温会以包含今天在内的未来十天最高温度为基准，算出今日最高温在未来十天平均最高温上的增减。能一定程度上反应天气变化</p>
             </div>
             <br>
             <h3>体感温度</h3>
-            <img src="../../assets/tipsPic/6.png" alt="" style="width: 20%;">
+            <img src="../../assets/tipsPic/6.webp" alt="" style="width: 20%;">
             <div class="tips-wrapper">
               <p>体感温度的计算受到气温，风速和空气相对湿度的影响，粗略地说就是在高湿度的条件下，冷得更冷、热得更热</p>
             </div>
             <br>
             <h3>台风轨迹</h3>
-            <img src="../../assets/tipsPic/7.png" alt="" style="width: 20%;">
+            <img src="../../assets/tipsPic/7.webp" alt="" style="width: 20%;">
             <div class="tips-wrapper">
               <p>目前只能显示西太平洋区域的台风</p>
             </div>

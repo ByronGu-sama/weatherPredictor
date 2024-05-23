@@ -7,7 +7,7 @@ const astronomyStore = useAstronomyStore()
 const getSpecificMoonPhase = () => {
   let temp = new Date()
   let hour = temp.getHours()
-  return ["@/assets/pic/moonPhase/"+astronomyStore.moonPhase.moonPhase[hour].icon+".png",astronomyStore.moonPhase.moonPhase[hour].name]
+  return ["@/assets/pic/moonPhase/"+astronomyStore.moonPhase.moonPhase[hour].icon+".webp",astronomyStore.moonPhase.moonPhase[hour].name]
 }
 
 </script>

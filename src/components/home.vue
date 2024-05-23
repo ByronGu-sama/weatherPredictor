@@ -129,9 +129,9 @@ const toTips = () => {
           <p style="font-size: 20px;line-height: 15px;margin: 15px">{{locationName||'北京'}}</p>
           <p style="font-size: 31px;line-height: 20px;margin: 15px">{{weatherStore.weather.temp}}°</p>
           <div class="tempWrapper" v-if="weatherStore.daysWeather_10">
-            <img src="/src/assets/pic/highest_temp.png" alt="" class="tempIcon">
+            <img src="/src/assets/pic/highest_temp.webp" alt="" class="tempIcon">
             <span class="tempBody">{{weatherStore.daysWeather_10[0].tempMax}}°</span>
-            <img src="/src/assets/pic/lowest_temp.png" alt="" class="tempIcon">
+            <img src="/src/assets/pic/lowest_temp.webp" alt="" class="tempIcon">
             <span class="tempBody">{{weatherStore.daysWeather_10[0].tempMin}}°</span>
           </div>
         </div>
@@ -152,14 +152,14 @@ const toTips = () => {
             <daysWeatherPredictor></daysWeatherPredictor>
           </div>
 
-  <!--        紫外线强度-->
+  <!--        太阳轨迹-->
           <div class="bottom-ct4">
-            <uvi></uvi>
+            <trackSun></trackSun>
           </div>
 
-  <!--        太阳轨迹-->
+  <!--        紫外线强度-->
           <div class="bottom-ct5">
-            <trackSun></trackSun>
+            <uvi></uvi>
           </div>
 
   <!--        风向/风力-->
@@ -167,24 +167,24 @@ const toTips = () => {
             <windDirection></windDirection>
           </div>
 
-  <!--        月相-->
-          <div class="bottom-ct7">
-            <moonPhase></moonPhase>
-          </div>
-
   <!--        降水-->
-          <div class="bottom-ct8">
+          <div class="bottom-ct7">
             <precipitation></precipitation>
           </div>
 
-  <!--        体感温度-->
-          <div class="bottom-ct9">
-            <apparentTemp></apparentTemp>
+  <!--        月相-->
+          <div class="bottom-ct8">
+            <moonPhase></moonPhase>
           </div>
 
   <!--        湿度/露点-->
-          <div class="bottom-ct10">
+          <div class="bottom-ct9">
             <humidity></humidity>
+          </div>
+
+  <!--        体感温度-->
+          <div class="bottom-ct10">
+            <apparentTemp></apparentTemp>
           </div>
 
   <!--        可见度-->
@@ -229,7 +229,7 @@ const toTips = () => {
   .home-wrap{
     width: 100vw;
     height: 100vh;
-    background:url("../assets/pic/bg.png") top right no-repeat;
+    background:url("../assets/pic/bg.webp") top right no-repeat;
     background-size: cover;
     display: flex;
     justify-content: center;
@@ -282,11 +282,6 @@ const toTips = () => {
     align-items: center;
     justify-content: center;
   }
-  .tempTitle{
-    writing-mode: vertical-lr;
-    letter-spacing: 2px;
-    font-size: 1rem;
-  }
   .tempBody{
     font-size: 28px;
     text-align: center;
@@ -329,11 +324,11 @@ const toTips = () => {
   .bottom-ct4{
     grid-column: 3/4;
     grid-row: 2/3;
-    cursor: pointer;
   }
   .bottom-ct5{
     grid-column: 4/5;
     grid-row: 2/3;
+    cursor: pointer;
   }
   .bottom-ct6{
     grid-column: 3/4;
@@ -343,11 +338,11 @@ const toTips = () => {
   .bottom-ct7{
     grid-column: 4/5;
     grid-row: 3/4;
+    cursor: pointer;
   }
   .bottom-ct8{
     grid-column: 5/6;
     grid-row: 3/4;
-    cursor: pointer;
   }
   .bottom-ct9{
     grid-column: 6/7;

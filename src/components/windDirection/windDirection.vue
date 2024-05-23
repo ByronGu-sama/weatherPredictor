@@ -31,7 +31,7 @@ const onClickOutside = () => {
             <span>北</span>
           </div>
           <div class="arrow">
-            <img src="../../assets/pic/arrow.png" :style="{transform:`rotate(${weatherStore.weather?weatherStore.weather.wind360:'0'}deg)`}" alt="">
+            <img src="../../assets/pic/arrow.webp" :style="{transform:`rotate(${weatherStore.weather?weatherStore.weather.wind360:'0'}deg)`}" alt="">
           </div>
           <div class="wind-dashboard" v-if="weatherStore.weather">
             {{weatherStore.weather.windScale}}级

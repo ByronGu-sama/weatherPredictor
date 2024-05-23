@@ -4,7 +4,7 @@ import {useWeatherStore} from "../../store/weatherEditor";
 import requestUtils from "../../utils/requestUtils";
 import color from '../../utils/colorStore'
 import mapStyle from '../../utils/custom_map_config.json'
-import typhoneIcon from '../../assets/pic/typhoon.png'
+import typhoneIcon from '../../assets/pic/typhoon.webp'
 import {typhoon} from "/src/utils/testDataList.ts"
 
 const weatherStore = useWeatherStore()
@@ -61,55 +61,55 @@ const polyline2 = ref({
 
 //处理活跃台风路径信息
 const handleTyphoonList = () => {
-  // if(weatherStore.typhoonList?.length > 0){
-  //   let route = weatherStore.typhoonList
-  //   for(let i of route){
-  //     if(i.isActive == '1'){
-  //       activeTyphoon.push(i)
-  //       track.push({
-  //         id:i.id,
-  //         name:i.name,
-  //         lastLocation:0,
-  //         route:{
-  //           editing: false,
-  //           paths: [[]]
-  //         }
-  //       })
-  //     }
-  //   }
-    // for(let i = 0;i<track.length;i++){
-    //   requestUtils.getTyphoonRoute(track[i].id).then((res:any) => {
-    //     for(let j = 0;j<res.track.length;j++){
-    //       track[i].route.paths[0].push({
-    //         lng:res.track[j].lon,
-    //         lat:res.track[j].lat
-    //       })
-    //       if(j == res.track.length - 1){
-    //         track[i].lastLocation = {lng:res.track[j].lon,lat:res.track[j].lat}
-    //       }
-    //     }
-    //   })
-    // }
-    track.push({
-      id:11111,
-      name:'test',
-      lastLocation:0,
-      route:{
-        editing: false,
-        paths: [[]]
-      }
-    })
-    for(let j = 0;j<typhoon.track.length;j++){
-      track[0].route.paths[0].push({
-        lng:typhoon.track[j].lon,
-        lat:typhoon.track[j].lat
-      })
-      if(j == typhoon.track.length - 1){
-        track[0].lastLocation = {lng:typhoon.track[j].lon,lat:typhoon.track[j].lat}
+  if(weatherStore.typhoonList?.length > 0){
+    let route = weatherStore.typhoonList
+    for(let i of route){
+      if(i.isActive == '1'){
+        activeTyphoon.push(i)
+        track.push({
+          id:i.id,
+          name:i.name,
+          lastLocation:0,
+          route:{
+            editing: false,
+            paths: [[]]
+          }
+        })
       }
     }
-    // hasTyphoon.value = activeTyphoon.length != 0;
-  // }
+    for(let i = 0;i<track.length;i++){
+      requestUtils.getTyphoonRoute(track[i].id).then((res:any) => {
+        for(let j = 0;j<res.track.length;j++){
+          track[i].route.paths[0].push({
+            lng:res.track[j].lon,
+            lat:res.track[j].lat
+          })
+          if(j == res.track.length - 1){
+            track[i].lastLocation = {lng:res.track[j].lon,lat:res.track[j].lat}
+          }
+        }
+      })
+    }
+    // track.push({
+    //   id:11111,
+    //   name:'test',
+    //   lastLocation:0,
+    //   route:{
+    //     editing: false,
+    //     paths: [[]]
+    //   }
+    // })
+    // for(let j = 0;j<typhoon.track.length;j++){
+    //   track[0].route.paths[0].push({
+    //     lng:typhoon.track[j].lon,
+    //     lat:typhoon.track[j].lat
+    //   })
+    //   if(j == typhoon.track.length - 1){
+    //     track[0].lastLocation = {lng:typhoon.track[j].lon,lat:typhoon.track[j].lat}
+    //   }
+    // }
+    hasTyphoon.value = activeTyphoon.length != 0;
+  }
 }
 
 onMounted(() => {
@@ -144,11 +144,11 @@ onMounted(() => {
       </bm-overlay>
       <div v-for="typhoon in track" class="track-wrap">
   <!--      台风轨迹-->
-        <bm-polyline :path="route" v-for="route in typhoon.route.paths" :key="route" :stroke-color="color[Math.floor(Math.random()*18)]"></bm-polyline>
+        <bm-polyline :path="route" v-for="route in typhoon.route.paths" :key="route" :stroke-color="color[Math.floor(Math.random()*6)]" :stroke-opacity="1"></bm-polyline>
   <!--      台风图标-->
         <bm-marker
             :position="typhoon.lastLocation"
-            :icon="{url: typhoneIcon, size: {width: 30, height: 30}, animation:'rotation 5s linear infinite'}"
+            :icon="{url: typhoneIcon, size: {width: 30, height: 30}}"
         ></bm-marker>
       </div>
     </baidu-map>
