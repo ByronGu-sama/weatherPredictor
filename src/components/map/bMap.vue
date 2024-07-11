@@ -90,24 +90,6 @@ const handleTyphoonList = () => {
         }
       })
     }
-    // track.push({
-    //   id:11111,
-    //   name:'test',
-    //   lastLocation:0,
-    //   route:{
-    //     editing: false,
-    //     paths: [[]]
-    //   }
-    // })
-    // for(let j = 0;j<typhoon.track.length;j++){
-    //   track[0].route.paths[0].push({
-    //     lng:typhoon.track[j].lon,
-    //     lat:typhoon.track[j].lat
-    //   })
-    //   if(j == typhoon.track.length - 1){
-    //     track[0].lastLocation = {lng:typhoon.track[j].lon,lat:typhoon.track[j].lat}
-    //   }
-    // }
     hasTyphoon.value = activeTyphoon.length != 0;
   }
 }

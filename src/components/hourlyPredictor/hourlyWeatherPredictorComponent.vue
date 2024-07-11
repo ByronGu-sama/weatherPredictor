@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref, unref} from "vue";
+import {onMounted, ref, unref, watch} from "vue";
 import {useWeatherStore} from "../../store/weatherEditor.ts";
 import { ClickOutside as vClickOutside } from 'element-plus'
 import hourlyPredictorGraph from "./hourlyPredictorGraph.vue";
@@ -52,6 +52,8 @@ const summarize24HWeather = (data:any) => {
     hourlyPredictorTitle.value = `${new Date(temp[0].span[0]).getHours()}点至${new Date(temp[0].span[1]).getHours()}点会${choiceVerbByWeather(temp[0].weather)}${temp[0].weather}`
   else
     hourlyPredictorTitle.value = `${new Date(temp[0].span[0]).getHours()}点至${new Date(temp[0].span[1]).getHours()}点会${choiceVerbByWeather(temp[0].weather)}${temp[0].weather},${new Date(temp[1].span[0]).getHours()}点至${new Date(temp[1].span[1]).getHours()}点可能转${temp[1].weather}`
+  console.log(hourlyPredictorTitle.value)
+
 }
 
 //根据天气选择动词
@@ -62,6 +64,13 @@ const choiceVerbByWeather = (word:string) => {
     return '是'
   }
 }
+
+watch(() => weatherStore.hourlyWeather_24,() => {
+  summarize24HWeather(weatherStore.hourlyWeather_24)
+},{
+  immediate:true,
+  deep:true
+})
 
 onMounted(() => {
   let weather = weatherStore.hourlyWeather_24

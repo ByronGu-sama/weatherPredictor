@@ -12,7 +12,6 @@ import humidity from './humidity/humidity.vue'
 import trackSun from './trackSun/trackSun.vue'
 import bMap from './map/bMap.vue'
 import uvi from './uvi/uvi.vue'
-import controller from './controller/controller.vue'
 
 import {useWeatherIndicesStore} from "../store/weatherIndicesEditor";
 import {useAstronomyStore} from "../store/astronomyEditor";
@@ -204,7 +203,6 @@ const toTips = () => {
         </div>
       </div>
     </div>
-    <controller></controller>
   </div>
 </template>
 

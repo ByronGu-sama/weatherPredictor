@@ -64,7 +64,7 @@
         </el-scrollbar>
       </el-tab-pane>
       <el-tab-pane label="终点">
-        <span>2024/06毕业  ByronGu留于2023/10/16</span>
+        <span>顾骁俊   2023/10/16</span>
         <br>
         🦊<a href="https://github.com/Hanserr/weatherPredictor" target="_blank" style="font-size: 20px">项目地址（暂时封存中）</a>
       </el-tab-pane>

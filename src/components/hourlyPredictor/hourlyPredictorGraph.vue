@@ -99,7 +99,8 @@ watch(() => props.render,(n) => {
     }
   }
 },{
-  immediate:true
+  immediate:true,
+  deep:true
 })
 
 onUnmounted(() => {
